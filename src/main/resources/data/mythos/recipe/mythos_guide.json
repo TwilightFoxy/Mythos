@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:lapis_lazuli"
+  ],
+  "result": {
+    "id": "mythos:mythos_guide",
+    "count": 1
+  }
+}

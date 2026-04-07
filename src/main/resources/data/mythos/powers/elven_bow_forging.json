@@ -1,0 +1,5 @@
+{
+  "type": "smithing_recipe_unlock",
+  "result_marker": "mythos_elven_bow",
+  "deny_message": "message.mythos.elf_only_forge"
+}

@@ -1,0 +1,22 @@
+{
+  "icon": "minecraft:feather",
+  "order": 30,
+  "complexity": 3,
+  "description": "myth.mythos.fairy.description",
+  "advantages": [
+    "myth.mythos.fairy.advantage.tiny_frame",
+    "myth.mythos.fairy.advantage.low_flight",
+    "myth.mythos.fairy.advantage.firework_glide"
+  ],
+  "disadvantages": [
+    "myth.mythos.fairy.disadvantage.fragile_body",
+    "myth.mythos.fairy.disadvantage.melee_weakness"
+  ],
+  "guide_features": [
+    "myth.mythos.fairy.guide.feature.tiny_frame",
+    "myth.mythos.fairy.guide.feature.low_flight",
+    "myth.mythos.fairy.guide.feature.firework_glide"
+  ],
+  "guide_crafting": [],
+  "powers": []
+}

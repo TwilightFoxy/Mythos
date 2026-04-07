@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:bow",
+  "addition": "minecraft:netherite_ingot",
+  "result": {
+    "id": "minecraft:bow",
+    "components": {
+      "minecraft:item_name": {
+        "translate": "item.mythos.elven_bow",
+        "color": "green",
+        "italic": false
+      },
+      "minecraft:rarity": "rare",
+      "minecraft:custom_data": "{mythos_elven_bow:1b}",
+      "minecraft:enchantments": {
+        "minecraft:looting": 3
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "type": "item_damage_multiplier",
+  "item_tag": "minecraft:axes",
+  "multiplier": 0.7
+}

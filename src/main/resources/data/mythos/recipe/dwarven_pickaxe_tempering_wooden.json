@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:wooden_pickaxe",
+  "addition": "minecraft:netherite_ingot",
+  "result": {
+    "id": "minecraft:wooden_pickaxe"
+  }
+}

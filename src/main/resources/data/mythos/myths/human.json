@@ -1,0 +1,23 @@
+{
+  "icon": "minecraft:emerald",
+  "order": 0,
+  "complexity": 1,
+  "description": "myth.mythos.human.description",
+  "advantages": [
+    "myth.mythos.human.advantage.full_height",
+    "myth.mythos.human.advantage.heroic_reputation",
+    "myth.mythos.human.advantage.extended_trades",
+    "myth.mythos.human.advantage.trade_insight"
+  ],
+  "disadvantages": [
+    "myth.mythos.human.disadvantage.village_dependence"
+  ],
+  "guide_features": [
+    "myth.mythos.human.guide.feature.full_height",
+    "myth.mythos.human.guide.feature.heroic_reputation",
+    "myth.mythos.human.guide.feature.extended_trades",
+    "myth.mythos.human.guide.feature.trade_insight"
+  ],
+  "guide_crafting": [],
+  "powers": []
+}

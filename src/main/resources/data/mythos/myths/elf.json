@@ -1,0 +1,30 @@
+{
+  "icon": "minecraft:bow",
+  "order": 10,
+  "complexity": 2,
+  "description": "myth.mythos.elf.description",
+  "advantages": [
+    "myth.mythos.elf.advantage.full_height",
+    "myth.mythos.elf.advantage.forest_stride",
+    "myth.mythos.elf.advantage.archery_mastery",
+    "myth.mythos.elf.advantage.elven_bow_forging"
+  ],
+  "disadvantages": [
+    "myth.mythos.elf.disadvantage.axe_fragility"
+  ],
+  "guide_features": [
+    "myth.mythos.elf.guide.feature.full_height",
+    "myth.mythos.elf.guide.feature.forest_stride",
+    "myth.mythos.elf.guide.feature.archery_mastery",
+    "myth.mythos.elf.guide.feature.ale_reaction"
+  ],
+  "guide_crafting": [
+    "myth.mythos.elf.guide.crafting.elven_bow"
+  ],
+  "powers": [
+    "mythos:forest_stride",
+    "mythos:archery_mastery",
+    "mythos:axe_fragility",
+    "mythos:elven_bow_forging"
+  ]
+}
