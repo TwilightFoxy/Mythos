@@ -19,7 +19,7 @@ public final class MythosAttachments {
         "current_myth",
         () -> AttachmentType.builder(() -> "none")
             .serialize(Codec.STRING.fieldOf("myth"))
-            .sync((holder, player) -> holder == player, ByteBufCodecs.STRING_UTF8)
+            .sync((holder, player) -> true, ByteBufCodecs.STRING_UTF8)
             .copyOnDeath()
             .build()
     );
@@ -28,6 +28,20 @@ public final class MythosAttachments {
         "dwarf_sober_ticks",
         () -> AttachmentType.builder(() -> 0)
             .serialize(Codec.INT.fieldOf("ticks_without_ale"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> FAIRY_ELYTRA_MODE = ATTACHMENT_TYPES.register(
+        "fairy_elytra_mode",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("elytra_mode"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> FAIRY_VISION_COOLDOWN = ATTACHMENT_TYPES.register(
+        "fairy_vision_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("vision_cooldown"))
             .build()
     );
 

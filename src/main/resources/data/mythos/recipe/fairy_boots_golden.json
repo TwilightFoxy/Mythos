@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:golden_boots",
+  "addition": "minecraft:wind_charge",
+  "result": {
+    "id": "minecraft:golden_boots"
+  }
+}

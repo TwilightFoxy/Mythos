@@ -6,17 +6,23 @@
   "advantages": [
     "myth.mythos.fairy.advantage.tiny_frame",
     "myth.mythos.fairy.advantage.low_flight",
-    "myth.mythos.fairy.advantage.firework_glide"
+    "myth.mythos.fairy.advantage.wind_artifacts",
+    "myth.mythos.fairy.advantage.shared_vision"
   ],
   "disadvantages": [
     "myth.mythos.fairy.disadvantage.fragile_body",
+    "myth.mythos.fairy.disadvantage.frail_defense",
     "myth.mythos.fairy.disadvantage.melee_weakness"
   ],
   "guide_features": [
     "myth.mythos.fairy.guide.feature.tiny_frame",
     "myth.mythos.fairy.guide.feature.low_flight",
-    "myth.mythos.fairy.guide.feature.firework_glide"
+    "myth.mythos.fairy.guide.feature.wind_artifacts",
+    "myth.mythos.fairy.guide.feature.shared_vision"
   ],
-  "guide_crafting": [],
+  "guide_crafting": [
+    "myth.mythos.fairy.guide.crafting.fairy_boots",
+    "myth.mythos.fairy.guide.crafting.fairy_minecart"
+  ],
   "powers": []
 }

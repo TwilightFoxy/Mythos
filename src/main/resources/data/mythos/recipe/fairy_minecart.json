@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:minecart",
+  "addition": "minecraft:wind_charge",
+  "result": {
+    "id": "mythos:fairy_minecart"
+  }
+}

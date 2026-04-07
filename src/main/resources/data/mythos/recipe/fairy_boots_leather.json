@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:leather_boots",
+  "addition": "minecraft:wind_charge",
+  "result": {
+    "id": "minecraft:leather_boots"
+  }
+}

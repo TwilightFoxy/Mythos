@@ -45,9 +45,12 @@ The mod already includes:
 ### Fairy
 - tiny body size
 - half maximum health
-- reduced melee damage
+- reduced defense and melee damage
 - low-altitude free flight
-- soft glide and firework boosting above the flight limit
+- fairy wings as a visible player layer
+- access to `Fairy Boots`
+- access to the `Fairy Minecart`
+- active group night vision
 
 ## In-Game Systems
 
@@ -66,7 +69,15 @@ The mod already includes:
   - `Elven Bow`
   - `Dwarven Pickaxe`
   - `Dwarven Ale`
+  - `Fairy Boots`
+  - `Fairy Minecart`
 - custom tooltips for special items
+
+### Fairy Utility
+- `Fairy Boots` forged with a `wind_charge`
+- `Fairy Minecart` that removes the usual powered-rail speed cap
+- active `Fairy Vision` ability on key press
+- visible fairy wings on player models
 
 ## Project Layout
 
@@ -95,13 +106,13 @@ build/libs/
 ```
 
 Current mod version:
-- `0.2.5`
+- `0.3.0`
 
 ## Roadmap
 
 - add more myths
 - expand the data-driven myth framework
-- polish movement-heavy myths such as Fairy
+- polish fairy visuals and movement further
 - improve special economy loops between myths
 - keep refining the in-game guide and selection UX
 

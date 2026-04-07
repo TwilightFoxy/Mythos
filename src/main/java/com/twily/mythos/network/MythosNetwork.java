@@ -2,6 +2,7 @@ package com.twily.mythos.network;
 
 import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
+import com.twily.mythos.gameplay.FairyMythHandler;
 import com.twily.mythos.myth.MythState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,6 +26,7 @@ public final class MythosNetwork {
         registrar.playToClient(OpenMythGuidePayload.TYPE, OpenMythGuidePayload.STREAM_CODEC);
         registrar.playToClient(OpenMythSelectionPayload.TYPE, OpenMythSelectionPayload.STREAM_CODEC);
         registrar.playToServer(ChooseMythPayload.TYPE, ChooseMythPayload.STREAM_CODEC, MythosNetwork::handleChooseMyth);
+        registrar.playToServer(UseFairyVisionPayload.TYPE, UseFairyVisionPayload.STREAM_CODEC, MythosNetwork::handleUseFairyVision);
     }
 
     public static void openGuide(ServerPlayer player) {
@@ -54,5 +56,12 @@ public final class MythosNetwork {
 
         MythState.set(player, payload.mythId());
         player.sendSystemMessage(Component.translatable("command.mythos.set_myth", MythState.displayName(payload.mythId())));
+    }
+
+    private static void handleUseFairyVision(UseFairyVisionPayload payload, IPayloadContext context) {
+        Player contextPlayer = context.player();
+        if (contextPlayer instanceof ServerPlayer player) {
+            FairyMythHandler.activateFairyVision(player);
+        }
     }
 }

@@ -13,6 +13,7 @@ public final class MythosTooltipHandler {
 
     private static final String ELVEN_BOW_MARKER = "mythos_elven_bow";
     private static final String DWARVEN_PICKAXE_MARKER = "mythos_dwarven_pickaxe";
+    private static final String FAIRY_BOOTS_MARKER = "mythos_fairy_boots";
 
     private MythosTooltipHandler() {
     }
@@ -25,6 +26,14 @@ public final class MythosTooltipHandler {
 
         if (MythItemMarkerHelper.hasMarker(event.getItemStack(), DWARVEN_PICKAXE_MARKER)) {
             event.getToolTip().add(Component.translatable("tooltip.mythos.dwarven_pickaxe").withStyle(ChatFormatting.GRAY));
+        }
+
+        if (MythItemMarkerHelper.hasMarker(event.getItemStack(), FAIRY_BOOTS_MARKER)) {
+            event.getToolTip().add(Component.translatable("tooltip.mythos.fairy_boots").withStyle(ChatFormatting.GRAY));
+        }
+
+        if (event.getItemStack().is(com.twily.mythos.registry.MythosItems.FAIRY_MINECART.asItem())) {
+            event.getToolTip().add(Component.translatable("tooltip.mythos.fairy_minecart").withStyle(ChatFormatting.GRAY));
         }
     }
 }
