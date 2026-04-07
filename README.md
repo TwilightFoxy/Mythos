@@ -10,7 +10,7 @@ The project does not try to port Origins directly. Instead, it builds its own my
 
 ## Stack
 
-- Minecraft `1.21.11`
+- Minecraft `1.26.1`
 - NeoForge `26.1.x`
 - Java `25`
 
