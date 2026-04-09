@@ -5,6 +5,7 @@ import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythosNetwork;
+import com.twily.mythos.registry.MythosItems;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -69,6 +70,8 @@ public final class ElfMythHandler {
                         MythosNetwork.openGuide(player);
                         return 1;
                     }))
+                // Tail debug command is intentionally disabled in normal builds.
+                // Keep the old item-grant branch nearby if we need fast in-game tail tuning again.
                 .then(literal("set")
                     .then(Commands.argument("myth", StringArgumentType.word())
                         .executes(context -> {
@@ -136,6 +139,30 @@ public final class ElfMythHandler {
                         context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(fairy)), false);
                         return 1;
                     }))
+                .then(literal("kitsune")
+                    .executes(context -> {
+                        if (context.getSource().getPlayer() == null) {
+                            return 0;
+                        }
+
+                        ServerPlayer player = context.getSource().getPlayerOrException();
+                        Identifier kitsune = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "kitsune");
+                        MythState.set(player, kitsune);
+                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(kitsune)), false);
+                        return 1;
+                    }))
+                .then(literal("siren")
+                    .executes(context -> {
+                        if (context.getSource().getPlayer() == null) {
+                            return 0;
+                        }
+
+                        ServerPlayer player = context.getSource().getPlayerOrException();
+                        Identifier siren = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "siren");
+                        MythState.set(player, siren);
+                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(siren)), false);
+                        return 1;
+                    }))
                 .then(literal("clear")
                     .executes(context -> {
                         if (context.getSource().getPlayer() == null) {
@@ -155,12 +182,25 @@ public final class ElfMythHandler {
         if (event.getEntity() instanceof ServerPlayer player && MythState.get(player).equals(MythState.NONE)) {
             player.sendSystemMessage(Component.translatable("message.mythos.choose_prompt"));
             MythosNetwork.openSelection(player, false);
+            player.connection.teleport(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot());
         }
     }
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+
+        if (MythState.get(player).equals(MythState.NONE)) {
+            if (player.tickCount < 200 && player.tickCount % 20 == 5) {
+                MythosNetwork.openSelection(player, false);
+            } else if (player.tickCount % 40 == 5) {
+                MythosNetwork.openSelection(player, false);
+            }
+            if (player.tickCount % 200 == 5) {
+                player.sendSystemMessage(Component.translatable("message.mythos.choose_prompt"));
+            }
             return;
         }
 

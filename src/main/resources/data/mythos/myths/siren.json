@@ -1,0 +1,25 @@
+{
+  "icon": "minecraft:nautilus_shell",
+  "order": 50,
+  "complexity": 2,
+  "description": "myth.mythos.siren.description",
+  "advantages": [
+    "myth.mythos.siren.advantage.full_height",
+    "myth.mythos.siren.advantage.water_breathing",
+    "myth.mythos.siren.advantage.swift_swim",
+    "myth.mythos.siren.advantage.siren_elixir"
+  ],
+  "disadvantages": [
+    "myth.mythos.siren.disadvantage.dry_land"
+  ],
+  "guide_features": [
+    "myth.mythos.siren.guide.feature.full_height",
+    "myth.mythos.siren.guide.feature.water_breathing",
+    "myth.mythos.siren.guide.feature.swift_swim",
+    "myth.mythos.siren.guide.feature.dry_land"
+  ],
+  "guide_crafting": [
+    "myth.mythos.siren.guide.crafting.siren_elixir"
+  ],
+  "powers": []
+}

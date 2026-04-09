@@ -20,7 +20,9 @@ public final class MythState {
         }
 
         try {
-            return Identifier.parse(raw);
+            return raw.contains(":")
+                ? Identifier.parse(raw)
+                : Identifier.fromNamespaceAndPath(Mythos.MOD_ID, raw);
         } catch (IllegalArgumentException ignored) {
             return NONE;
         }

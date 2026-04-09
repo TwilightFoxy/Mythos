@@ -17,7 +17,7 @@ public final class MythosAttachments {
 
     public static final Supplier<AttachmentType<String>> CURRENT_MYTH = ATTACHMENT_TYPES.register(
         "current_myth",
-        () -> AttachmentType.builder(() -> "none")
+        () -> AttachmentType.builder(() -> "mythos:none")
             .serialize(Codec.STRING.fieldOf("myth"))
             .sync((holder, player) -> true, ByteBufCodecs.STRING_UTF8)
             .copyOnDeath()
@@ -28,6 +28,13 @@ public final class MythosAttachments {
         "dwarf_sober_ticks",
         () -> AttachmentType.builder(() -> 0)
             .serialize(Codec.INT.fieldOf("ticks_without_ale"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> SIREN_DRY_TICKS = ATTACHMENT_TYPES.register(
+        "siren_dry_ticks",
+        () -> AttachmentType.builder(() -> -1)
+            .serialize(Codec.INT.fieldOf("ticks_without_water"))
             .build()
     );
 
@@ -42,6 +49,42 @@ public final class MythosAttachments {
         "fairy_vision_cooldown",
         () -> AttachmentType.builder(() -> 0)
             .serialize(Codec.INT.fieldOf("vision_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> KITSUNE_MASKED = ATTACHMENT_TYPES.register(
+        "kitsune_masked",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("masked"))
+            .sync((holder, player) -> true, ByteBufCodecs.BOOL)
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> KITSUNE_DASH_COOLDOWN = ATTACHMENT_TYPES.register(
+        "kitsune_dash_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("dash_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> KITSUNE_DASH_IMMUNITY = ATTACHMENT_TYPES.register(
+        "kitsune_dash_immunity",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("dash_immunity"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> KITSUNE_FOXFIRE_COOLDOWN = ATTACHMENT_TYPES.register(
+        "kitsune_foxfire_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("foxfire_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> KITSUNE_WRATH_COOLDOWN = ATTACHMENT_TYPES.register(
+        "kitsune_wrath_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("wrath_cooldown"))
             .build()
     );
 

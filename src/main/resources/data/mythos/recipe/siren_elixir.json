@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:potion",
+  "addition": "minecraft:nautilus_shell",
+  "result": {
+    "id": "mythos:siren_elixir"
+  }
+}

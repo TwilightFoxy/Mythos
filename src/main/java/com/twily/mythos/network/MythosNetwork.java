@@ -3,6 +3,7 @@ package com.twily.mythos.network;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.gameplay.FairyMythHandler;
+import com.twily.mythos.gameplay.KitsuneMythHandler;
 import com.twily.mythos.myth.MythState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +28,7 @@ public final class MythosNetwork {
         registrar.playToClient(OpenMythSelectionPayload.TYPE, OpenMythSelectionPayload.STREAM_CODEC);
         registrar.playToServer(ChooseMythPayload.TYPE, ChooseMythPayload.STREAM_CODEC, MythosNetwork::handleChooseMyth);
         registrar.playToServer(UseFairyVisionPayload.TYPE, UseFairyVisionPayload.STREAM_CODEC, MythosNetwork::handleUseFairyVision);
+        registrar.playToServer(UseKitsuneActionPayload.TYPE, UseKitsuneActionPayload.STREAM_CODEC, MythosNetwork::handleUseKitsuneAction);
     }
 
     public static void openGuide(ServerPlayer player) {
@@ -44,24 +46,45 @@ public final class MythosNetwork {
     }
 
     private static void handleChooseMyth(ChooseMythPayload payload, IPayloadContext context) {
-        Player contextPlayer = context.player();
-        if (!(contextPlayer instanceof ServerPlayer player)) {
-            return;
-        }
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (!(contextPlayer instanceof ServerPlayer player)) {
+                return;
+            }
 
-        if (!MythDataManager.hasMyth(payload.mythId()) || MythState.NONE.equals(payload.mythId())) {
-            player.sendSystemMessage(Component.translatable("command.mythos.unknown_myth", payload.mythId().toString()));
-            return;
-        }
+            if (!MythDataManager.hasMyth(payload.mythId()) || MythState.NONE.equals(payload.mythId())) {
+                player.sendSystemMessage(Component.translatable("command.mythos.unknown_myth", payload.mythId().toString()));
+                return;
+            }
 
-        MythState.set(player, payload.mythId());
-        player.sendSystemMessage(Component.translatable("command.mythos.set_myth", MythState.displayName(payload.mythId())));
+            MythState.set(player, payload.mythId());
+            player.sendSystemMessage(Component.translatable("command.mythos.set_myth", MythState.displayName(payload.mythId())));
+        });
     }
 
     private static void handleUseFairyVision(UseFairyVisionPayload payload, IPayloadContext context) {
-        Player contextPlayer = context.player();
-        if (contextPlayer instanceof ServerPlayer player) {
-            FairyMythHandler.activateFairyVision(player);
-        }
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (contextPlayer instanceof ServerPlayer player) {
+                FairyMythHandler.activateFairyVision(player);
+            }
+        });
+    }
+
+    private static void handleUseKitsuneAction(UseKitsuneActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (!(contextPlayer instanceof ServerPlayer player)) {
+                return;
+            }
+
+            switch (payload.action()) {
+                case "toggle_mask" -> KitsuneMythHandler.toggleMask(player);
+                case "dash" -> KitsuneMythHandler.performDash(player);
+                case "foxfire" -> KitsuneMythHandler.castFoxfire(player);
+                default -> {
+                }
+            }
+        });
     }
 }

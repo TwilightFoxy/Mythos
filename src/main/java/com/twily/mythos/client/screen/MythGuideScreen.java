@@ -1,6 +1,8 @@
 package com.twily.mythos.client.screen;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.twily.mythos.client.FairyVisionKeyHandler;
+import com.twily.mythos.client.KitsuneActionKeyHandler;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythGuideEntry;
@@ -261,7 +263,7 @@ public final class MythGuideScreen extends Screen {
 
     private int drawBullets(GuiGraphicsExtractor graphics, List<String> lines, int x, int y, int width, int color, String prefix) {
         for (String lineKey : lines) {
-            y = drawWrappedText(graphics, Component.literal(prefix + Component.translatable(lineKey).getString()), x, y, width, color, 2);
+            y = drawWrappedText(graphics, Component.literal(prefix).append(resolveGuideLine(lineKey)), x, y, width, color, 2);
         }
         return y;
     }
@@ -307,12 +309,26 @@ public final class MythGuideScreen extends Screen {
 
         int height = 11;
         for (String lineKey : lines) {
-            height += measureWrappedText(Component.literal("• " + Component.translatable(lineKey).getString()), width, 2);
+            height += measureWrappedText(Component.literal("• ").append(resolveGuideLine(lineKey)), width, 2);
         }
         return height + 4;
     }
 
     private int measureWrappedText(Component text, int width, int bottomSpacing) {
         return this.font.split(text, width).size() * 10 + bottomSpacing;
+    }
+
+    private Component resolveGuideLine(String lineKey) {
+        return switch (lineKey) {
+            case "myth.mythos.fairy.guide.feature.shared_vision" ->
+                Component.translatable(lineKey, FairyVisionKeyHandler.keyName());
+            case "myth.mythos.kitsune.guide.feature.night_mask" ->
+                Component.translatable(lineKey, KitsuneActionKeyHandler.maskKeyName());
+            case "myth.mythos.kitsune.guide.feature.foxfire" ->
+                Component.translatable(lineKey, KitsuneActionKeyHandler.foxfireKeyName());
+            case "myth.mythos.kitsune.guide.feature.fox_dash" ->
+                Component.translatable(lineKey, KitsuneActionKeyHandler.dashKeyName());
+            default -> Component.translatable(lineKey);
+        };
     }
 }

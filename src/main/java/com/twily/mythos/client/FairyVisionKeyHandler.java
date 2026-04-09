@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.twily.mythos.network.UseFairyVisionPayload;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.client.event.InputEvent;
@@ -16,7 +17,7 @@ public final class FairyVisionKeyHandler {
         "key.mythos.fairy_vision",
         InputConstants.Type.KEYSYM,
         GLFW.GLFW_KEY_V,
-        KeyMapping.Category.GAMEPLAY
+        MythosKeyCategory.MYTHOS
     );
 
     private FairyVisionKeyHandler() {
@@ -24,6 +25,10 @@ public final class FairyVisionKeyHandler {
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
         event.register(FAIRY_VISION_KEY);
+    }
+
+    public static Component keyName() {
+        return FAIRY_VISION_KEY.getTranslatedKeyMessage();
     }
 
     public static final class Handler {

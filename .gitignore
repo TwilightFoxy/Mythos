@@ -6,3 +6,5 @@ build/
 runs/
 out/
 *.iml
+texture_edit_kitsune/
+texture_edit_kitsune.zip

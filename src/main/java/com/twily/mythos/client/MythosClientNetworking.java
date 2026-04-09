@@ -20,12 +20,16 @@ public final class MythosClientNetworking {
     }
 
     private static void handleOpenGuide(OpenMythGuidePayload payload, IPayloadContext context) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.setScreen(new MythGuideScreen(payload.myths(), payload.currentMyth()));
+        context.enqueueWork(() -> {
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.setScreen(new MythGuideScreen(payload.myths(), payload.currentMyth()));
+        });
     }
 
     private static void handleOpenSelection(OpenMythSelectionPayload payload, IPayloadContext context) {
-        Minecraft minecraft = Minecraft.getInstance();
-        minecraft.setScreen(new MythSelectionScreen(payload.myths(), payload.currentMyth(), payload.canClose()));
+        context.enqueueWork(() -> {
+            Minecraft minecraft = Minecraft.getInstance();
+            minecraft.setScreen(new MythSelectionScreen(payload.myths(), payload.currentMyth(), payload.canClose()));
+        });
     }
 }

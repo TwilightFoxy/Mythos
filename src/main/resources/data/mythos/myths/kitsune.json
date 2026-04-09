@@ -1,0 +1,30 @@
+{
+  "icon": "minecraft:fire_charge",
+  "order": 40,
+  "complexity": 3,
+  "description": "myth.mythos.kitsune.description",
+  "advantages": [
+    "myth.mythos.kitsune.advantage.full_height",
+    "myth.mythos.kitsune.advantage.night_mask",
+    "myth.mythos.kitsune.advantage.fox_dash",
+    "myth.mythos.kitsune.advantage.fox_artifacts"
+  ],
+  "disadvantages": [
+    "myth.mythos.kitsune.disadvantage.day_mask_dormant",
+    "myth.mythos.kitsune.disadvantage.frail_defense",
+    "myth.mythos.kitsune.disadvantage.melee_weakness"
+  ],
+  "guide_features": [
+    "myth.mythos.kitsune.guide.feature.full_height",
+    "myth.mythos.kitsune.guide.feature.night_mask",
+    "myth.mythos.kitsune.guide.feature.foxfire",
+    "myth.mythos.kitsune.guide.feature.fox_dash",
+    "myth.mythos.kitsune.guide.feature.heavenly_wrath",
+    "myth.mythos.kitsune.guide.feature.fox_artifacts"
+  ],
+  "guide_crafting": [
+    "myth.mythos.kitsune.guide.crafting.fox_lantern",
+    "myth.mythos.kitsune.guide.crafting.fox_whistle"
+  ],
+  "powers": []
+}

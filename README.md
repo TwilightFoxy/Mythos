@@ -1,97 +1,123 @@
 # Mythos
 
-`Mythos` is a custom NeoForge mod for Entropia built around myth-based origins.
+`Mythos` is a custom NeoForge mod for Entropia built around myth-based races with distinct strengths, weaknesses, and social roles.
 
-The project does not try to port Origins directly. Instead, it builds its own myth system with an emphasis on:
-- clear myth identities
-- multiplayer roles and trade niches
-- readable in-game UX
-- myth-specific crafting, items, and progression hooks
+Instead of cloning Origins one-to-one, the mod builds its own myth system with an emphasis on:
+- readable myth identities
+- multiplayer trade niches
+- myth-specific crafting and artifacts
+- clear in-game UX through a selection screen and guide book
 
 ## Stack
 
-- Minecraft `1.26.1`
+- Minecraft `26.1`
 - NeoForge `26.1.x`
 - Java `25`
 
-## Current State
+## Current Version
 
-The mod already includes:
-- a myth selection screen
-- an in-game guide book
-- data-driven myth definitions
-- myth-specific crafting and item upgrades
-- several playable myths with different roles
+- `0.4.2`
+
+## Core Systems
+
+### Myth Selection
+
+- players who do not have a myth must choose one
+- myth choice is presented through a custom selection screen
+- selection summaries stay short and readable
+
+### Tome of Mythos
+
+- an in-game book explains each myth in plain language
+- the guide includes strengths, weaknesses, crafting, controls, and edge cases
+- selection stays brief, while the book gives the full breakdown
+
+### Data-Driven Myth Definitions
+
+- myth definitions are loaded from JSON
+- powers are still executed by code, but myth content is structured for expansion
+
+### Myth Artifacts and Forging
+
+- several myths can craft unique items that other players can use
+- forging is handled through custom smithing logic where needed
 
 ## Current Myths
 
 ### Human
-- near-minimum villager prices
-- doubled villager trade stock during trading
-- visible remaining trade count in the trade screen
+
+- receives near-minimum villager prices
+- temporarily doubles villager trade stock while trading
+- can see remaining uses of the selected villager trade
 
 ### Elf
-- speed in forest biomes and cherry grove
-- higher bow and arrow damage
-- reduced axe damage
-- access to the `Elven Bow`
+
+- gains speed in forest biomes and cherry groves
+- deals higher bow and arrow damage
+- deals reduced axe damage
+- can forge the `Elven Bow`
 
 ### Dwarf
-- reduced body size
-- faster mining, especially below `Y=0`
-- ale dependency
-- access to dwarven pickaxe tempering
+
+- has a shorter body
+- mines faster, especially below `Y=0`
+- depends on `Dwarven Ale`
+- can temper enchanted pickaxes with a netherite ingot
 
 ### Fairy
-- tiny body size
-- half maximum health
-- reduced defense and melee damage
-- low-altitude free flight
-- fairy wings as a visible player layer
-- access to `Fairy Boots`
-- access to the `Fairy Minecart`
-- active group night vision
 
-## In-Game Systems
+- is much smaller than a normal player
+- has half health, reduced defense, and reduced melee damage
+- can hover close to the ground and transition into elytra-style flight
+- can forge `Fairy Boots` and a `Fairy Minecart`
+- can grant nearby players temporary night vision
 
-### Myth Selection
-- myth choice UI inspired by Origins, but adapted for Mythos
-- brief myth summaries in selection
-- complexity display
+### Kitsune
 
-### Tome of Mythos
-- detailed myth guide book
-- explained mechanics in plain language
-- unique crafting and myth-specific notes
+- can toggle mask and tails together
+- at night, the mask unlocks night powers such as foxfire and heavenly wrath
+- has a directional dash that works even during the day
+- has reduced defense and reduced melee damage
+- can forge a placed `Fox Lantern` and a `Fox Whistle`
 
-### Myth Items
-- named myth-specific items such as:
-  - `Elven Bow`
-  - `Dwarven Pickaxe`
-  - `Dwarven Ale`
-  - `Fairy Boots`
-  - `Fairy Minecart`
-- custom tooltips for special items
+### Siren
 
-### Fairy Utility
-- `Fairy Boots` forged with a `wind_charge`
-- `Fairy Minecart` that removes the usual powered-rail speed cap
-- active `Fairy Vision` ability on key press
-- visible fairy wings on player models
+- always breathes underwater
+- swims much faster than normal players
+- sees clearly in water
+- dries out on land with an inverted bubble mechanic
+- can restore moisture with a plain water bottle
+- can forge a `Siren Elixir` from a water bottle and a nautilus shell
+
+## Myth Items and Utilities
+
+Current myth-specific gear and utilities include:
+- `Elven Bow`
+- `Dwarven Pickaxe`
+- `Dwarven Ale`
+- `Fairy Boots`
+- `Fairy Minecart`
+- `Fox Lantern`
+- `Fox Whistle`
+- `Siren Elixir`
+- `Tome of Mythos`
 
 ## Project Layout
 
-- `src/main/java/com/twily/mythos`  
-  Main mod code, gameplay handlers, client UI, networking
+- `src/main/java/com/twily/mythos`
+  Main gameplay logic, networking, client rendering, and UI
 
-- `src/main/resources/data/mythos/myths`  
+- `src/main/resources/data/mythos/myths`
   Myth definitions
 
-- `src/main/resources/assets/mythos/lang`  
+- `src/main/resources/data/mythos/recipe`
+  Myth-specific smithing and crafting recipes
+
+- `src/main/resources/assets/mythos/lang`
   Localizations
 
-- `src/main/resources/assets/mythos/textures/gui`  
-  GUI logos and myth art
+- `src/main/resources/assets/mythos/textures/gui`
+  Myth logos and GUI art
 
 ## Build
 
@@ -105,16 +131,12 @@ Build output:
 build/libs/
 ```
 
-Current mod version:
-- `0.3.0`
-
 ## Roadmap
 
-- add more myths
-- expand the data-driven myth framework
-- polish fairy visuals and movement further
-- improve special economy loops between myths
-- keep refining the in-game guide and selection UX
+- add more myths with distinct economies and environments
+- keep expanding the data-driven myth framework
+- keep polishing visuals, controls, and in-game explanations
+- refine social and multiplayer utility for each myth
 
 ## Author
 
