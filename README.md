@@ -1,11 +1,12 @@
 # Mythos
 
-`Mythos` is a custom NeoForge mod for Entropia built around myth-based races with distinct strengths, weaknesses, and social roles.
+`Mythos` is a custom NeoForge mod built around myth-based races with distinct strengths, weaknesses, artifacts, and multiplayer roles.
 
-Instead of cloning Origins one-to-one, the mod builds its own myth system with an emphasis on:
+Inspired by the general idea of fantasy origins and races, the mod builds its own myth system with an emphasis on:
 - readable myth identities
 - multiplayer trade niches
 - myth-specific crafting and artifacts
+- active abilities and visual identity
 - clear in-game UX through a selection screen and guide book
 
 ## Stack
@@ -16,7 +17,7 @@ Instead of cloning Origins one-to-one, the mod builds its own myth system with a
 
 ## Current Version
 
-- `0.4.2`
+- `0.4.12`
 
 ## Core Systems
 
@@ -24,6 +25,8 @@ Instead of cloning Origins one-to-one, the mod builds its own myth system with a
 
 - players who do not have a myth must choose one
 - myth choice is presented through a custom selection screen
+- admins can force, clear, or assign myths with commands
+- players can be reset through a one-use `Myth Sphere`
 - selection summaries stay short and readable
 
 ### Tome of Mythos
@@ -60,8 +63,8 @@ Instead of cloning Origins one-to-one, the mod builds its own myth system with a
 ### Dwarf
 
 - has a shorter body
-- mines faster, especially below `Y=0`
-- depends on `Dwarven Ale`
+- always has `Haste I`, and `Haste II` below `Y=0`
+- depends on `Dwarven Ale` and suffers visible withdrawal without it
 - can temper enchanted pickaxes with a netherite ingot
 
 ### Fairy
@@ -78,7 +81,7 @@ Instead of cloning Origins one-to-one, the mod builds its own myth system with a
 - at night, the mask unlocks night powers such as foxfire and heavenly wrath
 - has a directional dash that works even during the day
 - has reduced defense and reduced melee damage
-- can forge a placed `Fox Lantern` and a `Fox Whistle`
+- can forge a placed `Fox Lantern`
 
 ### Siren
 
@@ -88,6 +91,7 @@ Instead of cloning Origins one-to-one, the mod builds its own myth system with a
 - dries out on land with an inverted bubble mechanic
 - can restore moisture with a plain water bottle
 - can forge a `Siren Elixir` from a water bottle and a nautilus shell
+- can use marine enchantments in reverse on land
 
 ## Myth Items and Utilities
 
@@ -98,8 +102,8 @@ Current myth-specific gear and utilities include:
 - `Fairy Boots`
 - `Fairy Minecart`
 - `Fox Lantern`
-- `Fox Whistle`
 - `Siren Elixir`
+- `Myth Sphere`
 - `Tome of Mythos`
 
 ## Project Layout
@@ -133,6 +137,8 @@ build/libs/
 
 ## Roadmap
 
+- stabilize and freeze existing myths one by one
+- expand automated and manual test coverage for myth-specific systems
 - add more myths with distinct economies and environments
 - keep expanding the data-driven myth framework
 - keep polishing visuals, controls, and in-game explanations
