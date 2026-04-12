@@ -5,11 +5,12 @@ import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythosNetwork;
-import com.twily.mythos.registry.MythosItems;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
@@ -30,6 +31,18 @@ import static net.minecraft.commands.Commands.literal;
 @EventBusSubscriber(modid = Mythos.MOD_ID)
 public final class ElfMythHandler {
 
+    /*
+     * FROZEN CONTRACT
+     * Scope:
+     * - elf biome speed, elf combat tuning, and elven smithing access checks
+     * Guarantees:
+     * - forest speed stays data-driven
+     * - ranged damage bonus and axe penalty remain readable and stable
+     * - elven bow access remains gated through myth checks
+     * Note:
+     * - admin commands and mandatory myth selection flow share this class for now and are not part of this frozen contract.
+     * Do not change the frozen gameplay pieces without explicit request.
+     */
     private ElfMythHandler() {
     }
 
@@ -38,6 +51,16 @@ public final class ElfMythHandler {
         event.getDispatcher().register(
             literal("mythos")
                 .then(literal("current")
+                    .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
+                    .then(Commands.argument("target", EntityArgument.player())
+                        .executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                            context.getSource().sendSuccess(
+                                () -> Component.translatable("command.mythos.current_target", target.getDisplayName(), MythState.displayName(MythState.get(target))),
+                                false
+                            );
+                            return 1;
+                        }))
                     .executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             return 0;
@@ -51,6 +74,17 @@ public final class ElfMythHandler {
                         return 1;
                     }))
                 .then(literal("choose")
+                    .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
+                    .then(Commands.argument("target", EntityArgument.player())
+                        .executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                            MythosNetwork.openSelection(target, false);
+                            context.getSource().sendSuccess(
+                                () -> Component.translatable("command.mythos.force_choose", target.getDisplayName()),
+                                false
+                            );
+                            return 1;
+                        }))
                     .executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             return 0;
@@ -61,6 +95,17 @@ public final class ElfMythHandler {
                         return 1;
                     }))
                 .then(literal("guide")
+                    .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
+                    .then(Commands.argument("target", EntityArgument.player())
+                        .executes(context -> {
+                            ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                            MythosNetwork.openGuide(target);
+                            context.getSource().sendSuccess(
+                                () -> Component.translatable("command.mythos.open_guide", target.getDisplayName()),
+                                false
+                            );
+                            return 1;
+                        }))
                     .executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             return 0;
@@ -73,13 +118,11 @@ public final class ElfMythHandler {
                 // Tail debug command is intentionally disabled in normal builds.
                 // Keep the old item-grant branch nearby if we need fast in-game tail tuning again.
                 .then(literal("set")
-                    .then(Commands.argument("myth", StringArgumentType.word())
+                    .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN) || source.getEntity() == null)
+                    .then(Commands.argument("targets", EntityArgument.players())
+                        .then(Commands.argument("myth", StringArgumentType.word())
                         .executes(context -> {
-                            if (context.getSource().getPlayer() == null) {
-                                return 0;
-                            }
-
-                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            var targets = EntityArgument.getPlayers(context, "targets");
                             String rawMyth = StringArgumentType.getString(context, "myth");
                             Identifier mythId = parseMythId(rawMyth);
                             if (!MythDataManager.hasMyth(mythId)) {
@@ -87,83 +130,30 @@ public final class ElfMythHandler {
                                 return 0;
                             }
 
-                            MythState.set(player, mythId);
-                            context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(mythId)), false);
-                            return 1;
-                        })))
-                .then(literal("elf")
-                    .executes(context -> {
-                        if (context.getSource().getPlayer() == null) {
-                            return 0;
-                        }
+                            for (ServerPlayer target : targets) {
+                                MythState.set(target, mythId);
+                            }
 
-                        ServerPlayer player = context.getSource().getPlayerOrException();
-                        Identifier elf = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "elf");
-                        MythState.set(player, elf);
-                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(elf)), false);
-                        return 1;
-                    }))
-                .then(literal("dwarf")
-                    .executes(context -> {
-                        if (context.getSource().getPlayer() == null) {
-                            return 0;
-                        }
-
-                        ServerPlayer player = context.getSource().getPlayerOrException();
-                        Identifier dwarf = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarf");
-                        MythState.set(player, dwarf);
-                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(dwarf)), false);
-                        return 1;
-                    }))
-                .then(literal("human")
-                    .executes(context -> {
-                        if (context.getSource().getPlayer() == null) {
-                            return 0;
-                        }
-
-                        ServerPlayer player = context.getSource().getPlayerOrException();
-                        Identifier human = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "human");
-                        MythState.set(player, human);
-                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(human)), false);
-                        return 1;
-                    }))
-                .then(literal("fairy")
-                    .executes(context -> {
-                        if (context.getSource().getPlayer() == null) {
-                            return 0;
-                        }
-
-                        ServerPlayer player = context.getSource().getPlayerOrException();
-                        Identifier fairy = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy");
-                        MythState.set(player, fairy);
-                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(fairy)), false);
-                        return 1;
-                    }))
-                .then(literal("kitsune")
-                    .executes(context -> {
-                        if (context.getSource().getPlayer() == null) {
-                            return 0;
-                        }
-
-                        ServerPlayer player = context.getSource().getPlayerOrException();
-                        Identifier kitsune = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "kitsune");
-                        MythState.set(player, kitsune);
-                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(kitsune)), false);
-                        return 1;
-                    }))
-                .then(literal("siren")
-                    .executes(context -> {
-                        if (context.getSource().getPlayer() == null) {
-                            return 0;
-                        }
-
-                        ServerPlayer player = context.getSource().getPlayerOrException();
-                        Identifier siren = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "siren");
-                        MythState.set(player, siren);
-                        context.getSource().sendSuccess(() -> Component.translatable("command.mythos.set_myth", MythState.displayName(siren)), false);
-                        return 1;
-                    }))
+                            context.getSource().sendSuccess(
+                                () -> Component.translatable("command.mythos.set_target_myth", targets.size(), MythState.displayName(mythId)),
+                                false
+                            );
+                            return targets.size();
+                        }))))
                 .then(literal("clear")
+                    .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN) || source.getEntity() == null)
+                    .then(Commands.argument("targets", EntityArgument.players())
+                        .executes(context -> {
+                            var targets = EntityArgument.getPlayers(context, "targets");
+                            for (ServerPlayer target : targets) {
+                                MythState.clear(target);
+                            }
+                            context.getSource().sendSuccess(
+                                () -> Component.translatable("command.mythos.clear_target", targets.size()),
+                                false
+                            );
+                            return targets.size();
+                        }))
                     .executes(context -> {
                         if (context.getSource().getPlayer() == null) {
                             return 0;

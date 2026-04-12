@@ -29,6 +29,11 @@ public final class MythosClientNetworking {
     private static void handleOpenSelection(OpenMythSelectionPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Minecraft minecraft = Minecraft.getInstance();
+            if (minecraft.screen instanceof MythSelectionScreen existing) {
+                existing.refresh(payload.myths(), payload.currentMyth(), payload.canClose());
+                return;
+            }
+
             minecraft.setScreen(new MythSelectionScreen(payload.myths(), payload.currentMyth(), payload.canClose()));
         });
     }

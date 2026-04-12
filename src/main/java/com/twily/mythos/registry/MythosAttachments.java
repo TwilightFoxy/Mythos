@@ -38,6 +38,48 @@ public final class MythosAttachments {
             .build()
     );
 
+    public static final Supplier<AttachmentType<Integer>> SIREN_DRY_STAGE = ATTACHMENT_TYPES.register(
+        "siren_dry_stage",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("dry_stage"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> SIREN_DRY_FATIGUE_ACTIVE = ATTACHMENT_TYPES.register(
+        "siren_dry_fatigue_active",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("dry_fatigue_active"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> SIREN_WATER_BUFFS_ACTIVE = ATTACHMENT_TYPES.register(
+        "siren_water_buffs_active",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("water_buffs_active"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> SIREN_WATER_BREATHING_OWNED = ATTACHMENT_TYPES.register(
+        "siren_water_breathing_owned",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("water_breathing_owned"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> SIREN_DOLPHINS_GRACE_OWNED = ATTACHMENT_TYPES.register(
+        "siren_dolphins_grace_owned",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("dolphins_grace_owned"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> SIREN_NIGHT_VISION_OWNED = ATTACHMENT_TYPES.register(
+        "siren_night_vision_owned",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("night_vision_owned"))
+            .build()
+    );
+
     public static final Supplier<AttachmentType<Boolean>> FAIRY_ELYTRA_MODE = ATTACHMENT_TYPES.register(
         "fairy_elytra_mode",
         () -> AttachmentType.builder(() -> false)

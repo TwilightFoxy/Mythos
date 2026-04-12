@@ -7,7 +7,7 @@
     "myth.mythos.kitsune.advantage.full_height",
     "myth.mythos.kitsune.advantage.night_mask",
     "myth.mythos.kitsune.advantage.fox_dash",
-    "myth.mythos.kitsune.advantage.fox_artifacts"
+    "myth.mythos.kitsune.advantage.fox_lantern"
   ],
   "disadvantages": [
     "myth.mythos.kitsune.disadvantage.day_mask_dormant",
@@ -20,11 +20,10 @@
     "myth.mythos.kitsune.guide.feature.foxfire",
     "myth.mythos.kitsune.guide.feature.fox_dash",
     "myth.mythos.kitsune.guide.feature.heavenly_wrath",
-    "myth.mythos.kitsune.guide.feature.fox_artifacts"
+    "myth.mythos.kitsune.guide.feature.fox_lantern"
   ],
   "guide_crafting": [
-    "myth.mythos.kitsune.guide.crafting.fox_lantern",
-    "myth.mythos.kitsune.guide.crafting.fox_whistle"
+    "myth.mythos.kitsune.guide.crafting.fox_lantern"
   ],
   "powers": []
 }

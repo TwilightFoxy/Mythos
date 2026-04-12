@@ -3,6 +3,7 @@ package com.twily.mythos.registry;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.world.item.DwarvenAleItem;
 import com.twily.mythos.world.item.KitsuneTailTunerItem;
+import com.twily.mythos.world.item.MythSphereItem;
 import com.twily.mythos.world.item.MythosGuideItem;
 import com.twily.mythos.world.item.SirenElixirItem;
 import net.minecraft.core.registries.Registries;
@@ -21,6 +22,7 @@ public final class MythosItems {
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Mythos.MOD_ID);
     private static final ResourceKey<Item> DWARVEN_ALE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarven_ale"));
     private static final ResourceKey<Item> MYTHOS_GUIDE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "mythos_guide"));
+    private static final ResourceKey<Item> MYTH_SPHERE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "myth_sphere"));
     private static final ResourceKey<Item> FAIRY_MINECART_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy_minecart"));
     private static final ResourceKey<Item> KITSUNE_MASK_VISUAL_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "kitsune_mask_visual"));
     private static final ResourceKey<Item> KITSUNE_TAIL_VISUAL_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "kitsune_tail_visual"));
@@ -44,6 +46,15 @@ public final class MythosItems {
                 .setId(MYTHOS_GUIDE_KEY)
                 .stacksTo(1)
                 .rarity(Rarity.UNCOMMON)
+        )
+    );
+    public static final DeferredItem<Item> MYTH_SPHERE = ITEMS.register(
+        "myth_sphere",
+        () -> new MythSphereItem(
+            new Item.Properties()
+                .setId(MYTH_SPHERE_KEY)
+                .stacksTo(16)
+                .rarity(Rarity.RARE)
         )
     );
     public static final DeferredItem<Item> FAIRY_MINECART = ITEMS.register(

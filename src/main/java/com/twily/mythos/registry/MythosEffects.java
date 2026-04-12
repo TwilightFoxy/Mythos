@@ -19,6 +19,38 @@ public final class MythosEffects {
         "dwarven_ale",
         DwarvenAleEffect::new
     );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> DWARF_ALE_SLOWED = MOB_EFFECTS.register(
+        "dwarf_ale_slowed",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x8A6B43)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> DWARF_ALE_WITHDRAWAL = MOB_EFFECTS.register(
+        "dwarf_ale_withdrawal",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0xB67E31)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> DWARF_ACUTE_ALE_WITHDRAWAL = MOB_EFFECTS.register(
+        "dwarf_acute_ale_withdrawal",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x8E4B17)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SIREN_DRY_SLOW_I = MOB_EFFECTS.register(
+        "siren_dry_slow_i",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x4C8FB6)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SIREN_DRY_SLOW_II = MOB_EFFECTS.register(
+        "siren_dry_slow_ii",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x3D79A0)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SIREN_DRY_SLOW_III = MOB_EFFECTS.register(
+        "siren_dry_slow_iii",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x2E627F)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SIREN_DRY_FATIGUE = MOB_EFFECTS.register(
+        "siren_dry_fatigue",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x6E8F97)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SIREN_ELIXIR_GRACE = MOB_EFFECTS.register(
+        "siren_elixir_grace",
+        () -> new SimpleDisplayEffect(MobEffectCategory.BENEFICIAL, 0x2AC7D7)
+    );
     public static final DeferredHolder<MobEffect, SimpleDisplayEffect> KITSUNE_DASH_COOLDOWN = MOB_EFFECTS.register(
         "kitsune_dash_cooldown",
         () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0xCFA5FF)

@@ -12,9 +12,11 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +26,6 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.List;
@@ -36,11 +37,20 @@ public final class DwarfMythHandler {
     private static final Identifier DWARF = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarf");
     private static final Identifier FAIRY = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy");
     private static final Identifier LEGACY_DWARF_SCALE = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarf_scale");
+    private static final Identifier DWARF_ALE_SLOWNESS = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarf_ale_slowness");
     private static final String DWARVEN_PICKAXE_MARKER = "mythos_dwarven_pickaxe";
+
+    /*
+     * FROZEN SECTION: myth-driven player scale
+     * This block owns player size for standard, dwarf, and fairy forms.
+     * It is considered stable and should not be changed without explicit request.
+     */
     private static final double NORMAL_SCALE = 1.0D;
     private static final double DWARF_SCALE = 0.75D;
     private static final double FAIRY_SCALE = 0.5D;
-    private static final int BLINDNESS_THRESHOLD_TICKS = 20 * 60 * 30;
+    private static final int BLINDNESS_THRESHOLD_TICKS = 20 * 60 * 5;
+    private static final int DWARF_PERSISTENT_STATUS_TICKS = 20 * 60 * 60;
+    private static final double DWARF_ALE_SLOWNESS_AMOUNT = -0.35D;
 
     private DwarfMythHandler() {
     }
@@ -55,38 +65,35 @@ public final class DwarfMythHandler {
         syncScale(player.getAttribute(Attributes.SCALE), targetScale(player));
 
         if (MythState.is(player, DWARF)) {
+            int hasteAmplifier = player.getBlockY() < 0 ? 1 : 0;
+            player.addEffect(new MobEffectInstance(MobEffects.HASTE, 40, hasteAmplifier, false, true, true));
+
             if (player.hasEffect(MythosEffects.DWARVEN_ALE)) {
-                resetAlePenalty(player);
+                clearAlePenaltyState(player);
             } else {
                 int soberTicks = player.getData(MythosAttachments.DWARF_SOBER_TICKS) + 1;
                 player.setData(MythosAttachments.DWARF_SOBER_TICKS, soberTicks);
 
-                if (player.tickCount % 40 == 0) {
-                    player.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 60, 0, false, true, true));
-                    if (soberTicks >= BLINDNESS_THRESHOLD_TICKS) {
-                        player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 0, false, true, true));
-                    }
+                syncAleSlowness(player, true);
+                ensureDisplayEffect(player, MythosEffects.DWARF_ALE_SLOWED, DWARF_PERSISTENT_STATUS_TICKS);
+
+                int remainingUntilBlindness = Math.max(0, BLINDNESS_THRESHOLD_TICKS - soberTicks);
+                if (remainingUntilBlindness > 0) {
+                    ensureDisplayEffect(player, MythosEffects.DWARF_ALE_WITHDRAWAL, remainingUntilBlindness);
+                    player.removeEffect(MythosEffects.DWARF_ACUTE_ALE_WITHDRAWAL);
+                } else {
+                    player.removeEffect(MythosEffects.DWARF_ALE_WITHDRAWAL);
+                    ensureDisplayEffect(player, MythosEffects.DWARF_ACUTE_ALE_WITHDRAWAL, DWARF_PERSISTENT_STATUS_TICKS);
+                    ensureDisplayEffect(player, MobEffects.BLINDNESS, DWARF_PERSISTENT_STATUS_TICKS);
                 }
             }
         } else {
-            resetAlePenalty(player);
+            clearAlePenaltyState(player);
         }
 
         if (player.containerMenu instanceof SmithingMenu smithingMenu) {
             handleSmithing(player, smithingMenu, MythState.is(player, DWARF));
         }
-    }
-
-    @SubscribeEvent
-    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        if (!MythState.is(event.getEntity(), DWARF)) {
-            return;
-        }
-
-        float multiplier = event.getPosition()
-            .map(pos -> pos.getY() < 0 ? 1.4F : 1.2F)
-            .orElse(1.2F);
-        event.setNewSpeed(event.getNewSpeed() * multiplier);
     }
 
     private static void syncScale(AttributeInstance scale, double targetScale) {
@@ -112,12 +119,25 @@ public final class DwarfMythHandler {
 
         return NORMAL_SCALE;
     }
+    // END FROZEN SECTION: myth-driven player scale
 
-    private static void resetAlePenalty(net.minecraft.world.entity.player.Player player) {
+    public static void clearAlePenaltyState(net.minecraft.world.entity.player.Player player) {
         player.setData(MythosAttachments.DWARF_SOBER_TICKS, 0);
+        player.removeEffect(MythosEffects.DWARF_ALE_SLOWED);
+        player.removeEffect(MythosEffects.DWARF_ALE_WITHDRAWAL);
+        player.removeEffect(MythosEffects.DWARF_ACUTE_ALE_WITHDRAWAL);
         player.removeEffect(MobEffects.BLINDNESS);
-        if (player.hasEffect(MythosEffects.DWARVEN_ALE)) {
-            player.removeEffect(MobEffects.SLOWNESS);
+        syncAleSlowness(player, false);
+    }
+
+    private static void syncAleSlowness(net.minecraft.world.entity.player.Player player, boolean active) {
+        MythStatusHelper.syncModifier(player, Attributes.MOVEMENT_SPEED, DWARF_ALE_SLOWNESS, DWARF_ALE_SLOWNESS_AMOUNT, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL, active);
+    }
+
+    private static void ensureDisplayEffect(net.minecraft.world.entity.player.Player player, Holder<MobEffect> effect, int duration) {
+        MobEffectInstance current = player.getEffect(effect);
+        if (current == null) {
+            player.addEffect(new MobEffectInstance(effect, duration, 0, false, true, true));
         }
     }
 

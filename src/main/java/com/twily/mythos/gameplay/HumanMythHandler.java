@@ -21,6 +21,15 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 @EventBusSubscriber(modid = Mythos.MOD_ID)
 public final class HumanMythHandler {
 
+    /*
+     * FROZEN CONTRACT
+     * Scope:
+     * - human trading bonuses, near-minimum pricing, trade stock extension, and villager state cleanup
+     * Guarantees:
+     * - human keeps strong villager economy identity
+     * - trade stock is boosted only during the active trading session and collapses afterward
+     * Do not change without explicit request.
+     */
     private static final Identifier HUMAN = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "human");
     private static final int HERO_DURATION = 40;
     private static final int HERO_LEVEL = 4;

@@ -28,12 +28,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.Optional;
@@ -52,10 +52,6 @@ public final class KitsuneMythHandler {
     private static final int DASH_IMMUNITY_TICKS = 20;
     private static final int FOXFIRE_COOLDOWN_TICKS = 20 * 4;
     private static final int WRATH_COOLDOWN_TICKS = 20 * 12;
-    private static final int FOX_WHISTLE_RADIUS = 18;
-    private static final int FOX_WHISTLE_COOLDOWN_TICKS = 20 * 20;
-    private static final String FOX_WHISTLE_MARKER = "mythos_fox_whistle";
-
     private KitsuneMythHandler() {
     }
 
@@ -83,10 +79,14 @@ public final class KitsuneMythHandler {
             return;
         }
 
-        if (player.getData(MythosAttachments.KITSUNE_MASKED) && canUseMaskPowers(player.level() instanceof ServerLevel serverLevel ? serverLevel : null, player)) {
+        if (player.getData(MythosAttachments.KITSUNE_MASKED) && canUseMaskPowers(player.level(), player)) {
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, MASK_DURATION_TICKS, 0, false, false, true));
             if (player.isCrouching()) {
                 player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, INVISIBILITY_DURATION_TICKS, 0, false, false, true));
+            }
+
+            if (player.level().isClientSide() && player.tickCount % 2 == 0) {
+                spawnMaskParticles(player);
             }
         }
     }
@@ -128,33 +128,11 @@ public final class KitsuneMythHandler {
             event.setNewDamage(event.getNewDamage() * KITSUNE_MELEE_DAMAGE_MULTIPLIER);
             if (player instanceof ServerPlayer serverPlayer
                 && player.getData(MythosAttachments.KITSUNE_MASKED)
-                && canUseMaskPowers((ServerLevel) player.level(), player)
+                && canUseMaskPowers(player.level(), player)
                 && event.getEntity() instanceof LivingEntity target) {
                 triggerHeavenlyWrath(serverPlayer, target);
             }
         }
-    }
-
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        Player player = event.getEntity();
-        if (player.level().isClientSide() || !(player instanceof ServerPlayer serverPlayer)) {
-            return;
-        }
-
-        ItemStack stack = player.getItemInHand(event.getHand());
-        if (!MythItemMarkerHelper.hasMarker(stack, FOX_WHISTLE_MARKER)) {
-            return;
-        }
-
-        if (player.getCooldowns().isOnCooldown(stack)) {
-            return;
-        }
-
-        ringFoxWhistle(serverPlayer);
-        player.getCooldowns().addCooldown(stack, FOX_WHISTLE_COOLDOWN_TICKS);
-        event.setCancellationResult(InteractionResult.SUCCESS);
-        event.setCanceled(true);
     }
 
     public static void toggleMask(ServerPlayer player) {
@@ -164,10 +142,8 @@ public final class KitsuneMythHandler {
 
         boolean newState = !player.getData(MythosAttachments.KITSUNE_MASKED);
         player.setData(MythosAttachments.KITSUNE_MASKED, newState);
-        if (newState && !canUseMaskPowers((ServerLevel) player.level(), player)) {
+        if (newState && !canUseMaskPowers(player.level(), player)) {
             player.sendSystemMessage(Component.translatable("message.mythos.kitsune_mask_day_visual"));
-        } else if (!newState) {
-            player.removeEffect(MobEffects.INVISIBILITY);
         }
     }
 
@@ -193,7 +169,7 @@ public final class KitsuneMythHandler {
     public static void castFoxfire(ServerPlayer player) {
         if (!MythState.is(player, KITSUNE)
             || !player.getData(MythosAttachments.KITSUNE_MASKED)
-            || !canUseMaskPowers((ServerLevel) player.level(), player)) {
+            || !canUseMaskPowers(player.level(), player)) {
             return;
         }
 
@@ -264,8 +240,6 @@ public final class KitsuneMythHandler {
         Optional<ItemStack> result = Optional.empty();
         if (isFoxLanternInputs(base, addition)) {
             result = createFoxLantern(base);
-        } else if (isFoxWhistleInputs(base, addition)) {
-            result = createFoxWhistle(base);
         } else {
             return;
         }
@@ -293,26 +267,11 @@ public final class KitsuneMythHandler {
         return base.is(Items.LANTERN) && addition.is(Items.GLOW_INK_SAC);
     }
 
-    private static boolean isFoxWhistleInputs(ItemStack base, ItemStack addition) {
-        return base.is(Items.GOAT_HORN) && addition.is(Items.FIRE_CHARGE);
-    }
-
     private static Optional<ItemStack> createFoxLantern(ItemStack base) {
         if (base.is(MythosItems.FOX_LANTERN.asItem())) {
             return Optional.empty();
         }
         return Optional.of(new ItemStack(MythosItems.FOX_LANTERN.asItem()));
-    }
-
-    private static Optional<ItemStack> createFoxWhistle(ItemStack base) {
-        if (MythItemMarkerHelper.hasMarker(base, FOX_WHISTLE_MARKER)) {
-            return Optional.empty();
-        }
-
-        ItemStack result = base.copyWithCount(1);
-        result.set(net.minecraft.core.component.DataComponents.CUSTOM_NAME, Component.translatable("item.mythos.fox_whistle").withStyle(ChatFormatting.GOLD));
-        MythItemMarkerHelper.setMarker(result, FOX_WHISTLE_MARKER);
-        return Optional.of(result);
     }
 
     private static void clearSmithingResult(SmithingMenu smithingMenu) {
@@ -329,7 +288,7 @@ public final class KitsuneMythHandler {
         }
     }
 
-    private static boolean canUseMaskPowers(ServerLevel level, Player player) {
+    private static boolean canUseMaskPowers(Level level, Player player) {
         if (level == null || !level.dimensionType().hasSkyLight()) {
             return true;
         }
@@ -337,10 +296,25 @@ public final class KitsuneMythHandler {
         return level.getSkyDarken() >= 8;
     }
 
-    private static void ringFoxWhistle(ServerPlayer player) {
-        AABB area = player.getBoundingBox().inflate(FOX_WHISTLE_RADIUS);
-        player.level()
-            .getEntitiesOfClass(Mob.class, area, Mob::isAlive)
-            .forEach(mob -> mob.setTarget(player));
+    private static void spawnMaskParticles(Player player) {
+        float[][] offsets = {
+            {-0.55F, -0.08F, -0.18F},
+            {0.55F, -0.2F, -0.14F},
+            {0.0F, -0.62F, -0.08F}
+        };
+
+        for (int i = 0; i < offsets.length; i++) {
+            double bob = Mth.sin((player.tickCount + i * 7) * 0.12F) * 0.05D;
+            double sway = Mth.sin((player.tickCount + i * 11) * 0.07F) * 0.03D;
+            player.level().addParticle(
+                ParticleTypes.SOUL_FIRE_FLAME,
+                player.getX() + offsets[i][0] + sway,
+                player.getEyeY() + offsets[i][1] + bob,
+                player.getZ() + offsets[i][2],
+                0.0D,
+                0.005D,
+                0.0D
+            );
+        }
     }
 }

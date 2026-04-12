@@ -28,9 +28,9 @@ public final class MythSelectionScreen extends Screen {
     private static final int DOT_ACTIVE = 0xFF9146FF;
     private static final int DOT_INACTIVE = 0x803B4051;
 
-    private final List<MythSelectionEntry> myths;
-    private final Identifier currentMyth;
-    private final boolean canClose;
+    private List<MythSelectionEntry> myths;
+    private Identifier currentMyth;
+    private boolean canClose;
     private int selectedIndex;
     private Button previousButton;
     private Button nextButton;
@@ -43,6 +43,21 @@ public final class MythSelectionScreen extends Screen {
         this.currentMyth = currentMyth;
         this.canClose = canClose;
         this.selectedIndex = indexFor(currentMyth);
+    }
+
+    public void refresh(List<MythSelectionEntry> myths, Identifier currentMyth, boolean canClose) {
+        Identifier selectedMythId = this.selectedMyth() != null ? this.selectedMyth().id() : currentMyth;
+        this.myths = List.copyOf(myths);
+        this.currentMyth = currentMyth;
+        this.canClose = canClose;
+        this.selectedIndex = indexFor(selectedMythId);
+
+        if (this.selectedIndex < 0 || this.selectedIndex >= this.myths.size()) {
+            this.selectedIndex = indexFor(currentMyth);
+        }
+
+        this.clearWidgets();
+        this.init();
     }
 
     @Override

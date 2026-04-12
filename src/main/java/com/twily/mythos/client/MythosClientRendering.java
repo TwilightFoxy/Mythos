@@ -19,7 +19,6 @@ public final class MythosClientRendering {
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(KitsuneAdornmentModel.TAIL_LAYER, KitsuneAdornmentModel::createTailLayer);
-        event.registerLayerDefinition(KitsuneAdornmentModel.FOXFIRE_LAYER, KitsuneAdornmentModel::createFoxFireLayer);
     }
 
     public static void addLayers(EntityRenderersEvent.AddLayers event) {

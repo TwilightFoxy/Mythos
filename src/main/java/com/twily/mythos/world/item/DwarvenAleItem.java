@@ -1,11 +1,13 @@
 package com.twily.mythos.world.item;
 
 import com.twily.mythos.Mythos;
+import com.twily.mythos.gameplay.DwarfMythHandler;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.registry.MythosEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -40,13 +42,28 @@ public final class DwarvenAleItem extends Item {
     }
 
     @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int ticksRemaining) {
+        super.onUseTick(level, livingEntity, stack, ticksRemaining);
+        if (level.isClientSide() && ticksRemaining % 4 == 0) {
+            livingEntity.playSound(
+                SoundEvents.GENERIC_DRINK.value(),
+                0.45F,
+                0.92F + level.getRandom().nextFloat() * 0.12F
+            );
+        }
+    }
+
+    @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
         if (level instanceof ServerLevel && entity instanceof LivingEntity livingEntity) {
             livingEntity.addEffect(new MobEffectInstance(MythosEffects.DWARVEN_ALE, ALE_DURATION_TICKS, 0, false, true, true));
-            livingEntity.removeEffect(MobEffects.SLOWNESS);
-            livingEntity.removeEffect(MobEffects.BLINDNESS);
+            livingEntity.removeEffect(MythosEffects.DWARF_ALE_WITHDRAWAL);
+            livingEntity.removeEffect(MythosEffects.DWARF_ACUTE_ALE_WITHDRAWAL);
             if (entity instanceof Player player && MythState.is(player, ELF)) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.NAUSEA, ELF_NAUSEA_TICKS, 0, false, true, true));
+            }
+            if (entity instanceof Player player) {
+                DwarfMythHandler.clearAlePenaltyState(player);
             }
         }
 

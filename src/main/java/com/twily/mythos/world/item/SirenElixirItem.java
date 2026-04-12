@@ -1,7 +1,10 @@
 package com.twily.mythos.world.item;
 
+import com.twily.mythos.myth.MythState;
 import com.twily.mythos.registry.MythosAttachments;
+import com.twily.mythos.registry.MythosEffects;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -22,7 +25,8 @@ import java.util.function.Consumer;
 
 public final class SirenElixirItem extends Item {
 
-    private static final int ELIXIR_DURATION_TICKS = 20 * 60 * 30;
+    private static final Identifier SIREN = Identifier.fromNamespaceAndPath("mythos", "siren");
+    private static final int ELIXIR_DURATION_TICKS = 20 * 60 * 15;
     private static final int SIREN_DRY_MAX_TICKS = 20 * 90;
 
     public SirenElixirItem(Properties properties) {
@@ -43,6 +47,9 @@ public final class SirenElixirItem extends Item {
             livingEntity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, ELIXIR_DURATION_TICKS, 0, false, true, true));
             if (entity instanceof Player player) {
                 player.setData(MythosAttachments.SIREN_DRY_TICKS, SIREN_DRY_MAX_TICKS);
+                if (MythState.is(player, SIREN)) {
+                    player.addEffect(new MobEffectInstance(MythosEffects.SIREN_ELIXIR_GRACE, ELIXIR_DURATION_TICKS, 0, false, true, true));
+                }
             }
         }
 
