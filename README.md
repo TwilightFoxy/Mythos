@@ -17,7 +17,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 ## Current Version
 
-- `0.4.12`
+- `0.4.36`
 
 ## Core Systems
 
@@ -28,12 +28,19 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - admins can force, clear, or assign myths with commands
 - players can be reset through a one-use `Myth Sphere`
 - selection summaries stay short and readable
+- the mod requires both client and server
 
 ### Tome of Mythos
 
 - an in-game book explains each myth in plain language
 - the guide includes strengths, weaknesses, crafting, controls, and edge cases
 - selection stays brief, while the book gives the full breakdown
+
+### Client Configuration
+
+- Mythos exposes a built-in NeoForge config screen from the mod list
+- kitsune mask and tail colors can be set to `default`, `auto`, or `manual`
+- manual color uses a `#RRGGBB` value
 
 ### Data-Driven Myth Definitions
 
@@ -44,6 +51,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 - several myths can craft unique items that other players can use
 - forging is handled through custom smithing logic where needed
+- smithing access is limited by myth where appropriate
 
 ## Current Myths
 
@@ -74,6 +82,8 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - can hover close to the ground and transition into elytra-style flight
 - can forge `Fairy Boots` and a `Fairy Minecart`
 - can grant nearby players temporary night vision
+- `Fairy Vision` lasts 3 minutes and has a 30-second cooldown
+- the `Fairy Minecart` has tuned high-speed rail handling for turns, slopes, and launch ramps
 
 ### Kitsune
 
@@ -82,6 +92,8 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - has a directional dash that works even during the day
 - has reduced defense and reduced melee damage
 - can forge a placed `Fox Lantern`
+- mask and tail colors can be customized from the client config screen
+- visible foxfire and invisible-state visuals are handled separately
 
 ### Siren
 
@@ -92,6 +104,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - can restore moisture with a plain water bottle
 - can forge a `Siren Elixir` from a water bottle and a nautilus shell
 - can use marine enchantments in reverse on land
+- `Siren Elixir` lasts 15 minutes
 
 ## Myth Items and Utilities
 
@@ -143,6 +156,7 @@ build/libs/
 - keep expanding the data-driven myth framework
 - keep polishing visuals, controls, and in-game explanations
 - refine social and multiplayer utility for each myth
+- keep turning ad-hoc behavior into stable owned systems and config-backed features
 
 ## Author
 

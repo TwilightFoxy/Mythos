@@ -49,8 +49,8 @@ public final class FairyMythHandler {
     private static final float FAIRY_MELEE_DAMAGE_MULTIPLIER = 0.7F;
     private static final int FAIRY_FLIGHT_RANGE = 5;
     private static final int FAIRY_VISION_RADIUS = 5;
-    private static final int FAIRY_VISION_DURATION_TICKS = 20 * 20;
-    private static final int FAIRY_VISION_COOLDOWN_TICKS = 20 * 60;
+    private static final int FAIRY_VISION_DURATION_TICKS = 20 * 60 * 3;
+    private static final int FAIRY_VISION_COOLDOWN_TICKS = 20 * 30;
     private static final String FAIRY_BOOTS_MARKER = "mythos_fairy_boots";
 
     private FairyMythHandler() {

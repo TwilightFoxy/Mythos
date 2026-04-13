@@ -44,8 +44,12 @@ public final class SirenMythHandler {
     private static final Identifier SIREN_DRY_LAND_SLOW = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "siren_dry_land_slow");
     private static final int SIREN_MAX_DRY_AIR = 300;
     private static final int SIREN_PERSISTENT_STATUS_TICKS = 20 * 60 * 60;
-    private static final int WATER_BUFF_DURATION_TICKS = 20 * 10;
-    private static final int WATER_BUFF_REAPPLY_THRESHOLD_TICKS = 20 * 5;
+    private static final int WATER_BREATHING_DURATION_TICKS = 20 * 10;
+    private static final int WATER_BREATHING_REAPPLY_THRESHOLD_TICKS = 20 * 5;
+    private static final int DOLPHINS_GRACE_DURATION_TICKS = 20 * 10;
+    private static final int DOLPHINS_GRACE_REAPPLY_THRESHOLD_TICKS = 20 * 5;
+    private static final int NIGHT_VISION_DURATION_TICKS = 20 * 30;
+    private static final int NIGHT_VISION_REAPPLY_THRESHOLD_TICKS = 20 * 15;
     private static final int DRY_DAMAGE_INTERVAL_TICKS = 20;
     private static final int SIREN_FATIGUE_DURATION_TICKS = 20 * 10;
     private static final int SIREN_FATIGUE_REAPPLY_THRESHOLD = 20 * 5;
@@ -270,9 +274,27 @@ public final class SirenMythHandler {
         boolean current = player.getData(MythosAttachments.SIREN_WATER_BUFFS_ACTIVE);
         if (current == active) {
             if (active) {
-                ensureOwnedWaterEffect(player, MobEffects.WATER_BREATHING, MythosAttachments.SIREN_WATER_BREATHING_OWNED.get());
-                ensureOwnedWaterEffect(player, MobEffects.DOLPHINS_GRACE, MythosAttachments.SIREN_DOLPHINS_GRACE_OWNED.get());
-                ensureOwnedWaterEffect(player, MobEffects.NIGHT_VISION, MythosAttachments.SIREN_NIGHT_VISION_OWNED.get());
+                ensureOwnedWaterEffect(
+                    player,
+                    MobEffects.WATER_BREATHING,
+                    MythosAttachments.SIREN_WATER_BREATHING_OWNED.get(),
+                    WATER_BREATHING_DURATION_TICKS,
+                    WATER_BREATHING_REAPPLY_THRESHOLD_TICKS
+                );
+                ensureOwnedWaterEffect(
+                    player,
+                    MobEffects.DOLPHINS_GRACE,
+                    MythosAttachments.SIREN_DOLPHINS_GRACE_OWNED.get(),
+                    DOLPHINS_GRACE_DURATION_TICKS,
+                    DOLPHINS_GRACE_REAPPLY_THRESHOLD_TICKS
+                );
+                ensureOwnedWaterEffect(
+                    player,
+                    MobEffects.NIGHT_VISION,
+                    MythosAttachments.SIREN_NIGHT_VISION_OWNED.get(),
+                    NIGHT_VISION_DURATION_TICKS,
+                    NIGHT_VISION_REAPPLY_THRESHOLD_TICKS
+                );
             } else {
                 clearOwnedWaterEffectFlagIfExpired(player, MobEffects.WATER_BREATHING, MythosAttachments.SIREN_WATER_BREATHING_OWNED.get());
                 clearOwnedWaterEffectFlagIfExpired(player, MobEffects.DOLPHINS_GRACE, MythosAttachments.SIREN_DOLPHINS_GRACE_OWNED.get());
@@ -283,9 +305,27 @@ public final class SirenMythHandler {
 
         player.setData(MythosAttachments.SIREN_WATER_BUFFS_ACTIVE, active);
         if (active) {
-            ensureOwnedWaterEffect(player, MobEffects.WATER_BREATHING, MythosAttachments.SIREN_WATER_BREATHING_OWNED.get());
-            ensureOwnedWaterEffect(player, MobEffects.DOLPHINS_GRACE, MythosAttachments.SIREN_DOLPHINS_GRACE_OWNED.get());
-            ensureOwnedWaterEffect(player, MobEffects.NIGHT_VISION, MythosAttachments.SIREN_NIGHT_VISION_OWNED.get());
+            ensureOwnedWaterEffect(
+                player,
+                MobEffects.WATER_BREATHING,
+                MythosAttachments.SIREN_WATER_BREATHING_OWNED.get(),
+                WATER_BREATHING_DURATION_TICKS,
+                WATER_BREATHING_REAPPLY_THRESHOLD_TICKS
+            );
+            ensureOwnedWaterEffect(
+                player,
+                MobEffects.DOLPHINS_GRACE,
+                MythosAttachments.SIREN_DOLPHINS_GRACE_OWNED.get(),
+                DOLPHINS_GRACE_DURATION_TICKS,
+                DOLPHINS_GRACE_REAPPLY_THRESHOLD_TICKS
+            );
+            ensureOwnedWaterEffect(
+                player,
+                MobEffects.NIGHT_VISION,
+                MythosAttachments.SIREN_NIGHT_VISION_OWNED.get(),
+                NIGHT_VISION_DURATION_TICKS,
+                NIGHT_VISION_REAPPLY_THRESHOLD_TICKS
+            );
         } else {
             clearOwnedWaterEffectFlagIfExpired(player, MobEffects.WATER_BREATHING, MythosAttachments.SIREN_WATER_BREATHING_OWNED.get());
             clearOwnedWaterEffectFlagIfExpired(player, MobEffects.DOLPHINS_GRACE, MythosAttachments.SIREN_DOLPHINS_GRACE_OWNED.get());
@@ -307,19 +347,25 @@ public final class SirenMythHandler {
         }
     }
 
-    private static void ensureOwnedWaterEffect(Player player, Holder<MobEffect> effect, net.neoforged.neoforge.attachment.AttachmentType<Boolean> ownedAttachment) {
+    private static void ensureOwnedWaterEffect(
+        Player player,
+        Holder<MobEffect> effect,
+        net.neoforged.neoforge.attachment.AttachmentType<Boolean> ownedAttachment,
+        int durationTicks,
+        int reapplyThresholdTicks
+    ) {
         MobEffectInstance current = player.getEffect(effect);
         boolean owned = player.getData(ownedAttachment);
         if (current == null) {
-            player.addEffect(new MobEffectInstance(effect, WATER_BUFF_DURATION_TICKS, 0, false, false, true));
+            player.addEffect(new MobEffectInstance(effect, durationTicks, 0, false, false, true));
             player.setData(ownedAttachment, true);
             return;
         }
 
-        if (owned && current.getDuration() <= WATER_BUFF_REAPPLY_THRESHOLD_TICKS) {
-            player.addEffect(new MobEffectInstance(effect, WATER_BUFF_DURATION_TICKS, 0, false, false, true));
-        } else if (!owned && current.getDuration() <= WATER_BUFF_REAPPLY_THRESHOLD_TICKS) {
-            player.addEffect(new MobEffectInstance(effect, WATER_BUFF_DURATION_TICKS, 0, false, false, true));
+        if (owned && current.getDuration() <= reapplyThresholdTicks) {
+            player.addEffect(new MobEffectInstance(effect, durationTicks, 0, false, false, true));
+        } else if (!owned && current.getDuration() <= reapplyThresholdTicks) {
+            player.addEffect(new MobEffectInstance(effect, durationTicks, 0, false, false, true));
             player.setData(ownedAttachment, true);
         }
     }

@@ -12,7 +12,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -28,7 +27,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -82,11 +80,7 @@ public final class KitsuneMythHandler {
         if (player.getData(MythosAttachments.KITSUNE_MASKED) && canUseMaskPowers(player.level(), player)) {
             player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, MASK_DURATION_TICKS, 0, false, false, true));
             if (player.isCrouching()) {
-                player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, INVISIBILITY_DURATION_TICKS, 0, false, false, true));
-            }
-
-            if (player.level().isClientSide() && player.tickCount % 2 == 0) {
-                spawnMaskParticles(player);
+                player.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, INVISIBILITY_DURATION_TICKS, 0, false, true, true));
             }
         }
     }
@@ -288,33 +282,11 @@ public final class KitsuneMythHandler {
         }
     }
 
-    private static boolean canUseMaskPowers(Level level, Player player) {
+    public static boolean canUseMaskPowers(Level level, Player player) {
         if (level == null || !level.dimensionType().hasSkyLight()) {
             return true;
         }
 
         return level.getSkyDarken() >= 8;
-    }
-
-    private static void spawnMaskParticles(Player player) {
-        float[][] offsets = {
-            {-0.55F, -0.08F, -0.18F},
-            {0.55F, -0.2F, -0.14F},
-            {0.0F, -0.62F, -0.08F}
-        };
-
-        for (int i = 0; i < offsets.length; i++) {
-            double bob = Mth.sin((player.tickCount + i * 7) * 0.12F) * 0.05D;
-            double sway = Mth.sin((player.tickCount + i * 11) * 0.07F) * 0.03D;
-            player.level().addParticle(
-                ParticleTypes.SOUL_FIRE_FLAME,
-                player.getX() + offsets[i][0] + sway,
-                player.getEyeY() + offsets[i][1] + bob,
-                player.getZ() + offsets[i][2],
-                0.0D,
-                0.005D,
-                0.0D
-            );
-        }
     }
 }
