@@ -63,6 +63,34 @@ public final class MythosEffects {
         "kitsune_wrath_cooldown",
         () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0xFFF17A)
     );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> ONI_BATTLE_FORM = MOB_EFFECTS.register(
+        "oni_battle_form",
+        () -> new SimpleDisplayEffect(MobEffectCategory.BENEFICIAL, 0xB83428)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> ONI_BATTLE_FORM_COOLDOWN = MOB_EFFECTS.register(
+        "oni_battle_form_cooldown",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x6D2A26)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SLIME_MASS_SMALL = MOB_EFFECTS.register(
+        "slime_mass_small",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x74D36E)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SLIME_MASS_MEDIUM = MOB_EFFECTS.register(
+        "slime_mass_medium",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x63BE6E)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SLIME_MASS_LARGE = MOB_EFFECTS.register(
+        "slime_mass_large",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x53A96B)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SLIME_MASS_HUGE = MOB_EFFECTS.register(
+        "slime_mass_huge",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x438E62)
+    );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SLIME_CLINGING = MOB_EFFECTS.register(
+        "slime_clinging",
+        () -> new SimpleDisplayEffect(MobEffectCategory.BENEFICIAL, 0x5FCF7A)
+    );
 
     private MythosEffects() {
     }

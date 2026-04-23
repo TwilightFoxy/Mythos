@@ -17,7 +17,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 ## Current Version
 
-- `0.4.36`
+- `0.6.18`
 
 ## Core Systems
 
@@ -25,16 +25,19 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 - players who do not have a myth must choose one
 - myth choice is presented through a custom selection screen
+- long myth entries in the selection screen can be scrolled
 - admins can force, clear, or assign myths with commands
 - players can be reset through a one-use `Myth Sphere`
 - selection summaries stay short and readable
+- hidden utility myths can exist for admin-only command workflows
 - the mod requires both client and server
 
 ### Tome of Mythos
 
 - an in-game book explains each myth in plain language
-- the guide includes strengths, weaknesses, crafting, controls, and edge cases
+- the guide includes strengths, weaknesses, crafting, controls, edge cases, and exact values
 - selection stays brief, while the book gives the full breakdown
+- growth is shown as a separate section instead of being buried inside strengths
 
 ### Client Configuration
 
@@ -73,6 +76,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - has a shorter body
 - always has `Haste I`, and `Haste II` below `Y=0`
 - depends on `Dwarven Ale` and suffers visible withdrawal without it
+- uses named withdrawal stages and visible slowdown instead of hidden penalties
 - can temper enchanted pickaxes with a netherite ingot
 
 ### Fairy
@@ -104,7 +108,26 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - can restore moisture with a plain water bottle
 - can forge a `Siren Elixir` from a water bottle and a nautilus shell
 - can use marine enchantments in reverse on land
+- treats water cauldrons as a valid moisture source
 - `Siren Elixir` lasts 15 minutes
+
+### Oni
+
+- deals `+30%` melee damage with swords and axes
+- deals `-30%` ranged damage with bows and crossbows
+- can activate a 3-minute battle form with increased size, extra hearts, full knockback resistance, and hostile glow sensing
+- battle form has a heavy backlash when it ends and then goes on cooldown
+- now shows a dedicated oni mask during battle form
+- can forge a `Rage Talisman`
+
+### Slimeborn
+
+- changes mass stage based on occupied inventory slots
+- uses four stages with heights of `1.0`, `1.5`, `2.0`, and `3.0` blocks
+- each stage has its own visible status effect and stat package
+- is fully immune to fall damage
+- can grant wall-climbing through `Clinging Gel`
+- uses a translucent slime-shell visual instead of a standard player silhouette
 
 ## Myth Items and Utilities
 
@@ -116,6 +139,8 @@ Current myth-specific gear and utilities include:
 - `Fairy Minecart`
 - `Fox Lantern`
 - `Siren Elixir`
+- `Rage Talisman`
+- `Clinging Gel`
 - `Myth Sphere`
 - `Tome of Mythos`
 

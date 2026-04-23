@@ -28,6 +28,8 @@ public final class MythosClientRendering {
             if (renderer != null) {
                 renderer.addLayer(new FairyWingsLayer(renderer, event.getEntityModels()));
                 renderer.addLayer(new KitsuneAdornmentLayer(renderer, event.getEntityModels()));
+                renderer.addLayer(new OniAdornmentLayer(renderer));
+                renderer.addLayer(new SlimeDisguiseLayer(renderer, event.getEntityModels()));
             }
         }
     }

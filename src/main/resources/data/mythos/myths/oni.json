@@ -1,0 +1,26 @@
+{
+  "icon": "minecraft:netherite_axe",
+  "order": 60,
+  "complexity": 3,
+  "description": "myth.mythos.oni.description",
+  "growth": "myth.mythos.oni.growth",
+  "advantages": [
+    "myth.mythos.oni.advantage.brutal_melee",
+    "myth.mythos.oni.advantage.battle_form",
+    "myth.mythos.oni.advantage.rage_talisman"
+  ],
+  "disadvantages": [
+    "myth.mythos.oni.disadvantage.ranged_weakness",
+    "myth.mythos.oni.disadvantage.battle_form_backlash"
+  ],
+  "guide_features": [
+    "myth.mythos.oni.guide.feature.brutal_melee",
+    "myth.mythos.oni.guide.feature.battle_form",
+    "myth.mythos.oni.guide.feature.enemy_sense",
+    "myth.mythos.oni.guide.feature.battle_form_backlash"
+  ],
+  "guide_crafting": [
+    "myth.mythos.oni.guide.crafting.rage_talisman"
+  ],
+  "powers": []
+}

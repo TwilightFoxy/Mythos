@@ -63,7 +63,22 @@ public final class MythDataManager {
     }
 
     public static List<MythDefinition> mythsInOrder() {
-        return repository.myths.values().stream()
+        return orderedMyths(repository.myths.values());
+    }
+
+    public static List<MythDefinition> visibleMythsInOrder() {
+        return orderedMyths(repository.myths.values().stream()
+            .filter(definition -> !definition.hidden())
+            .toList());
+    }
+
+    public static boolean selectableInMenu(Identifier mythId) {
+        MythDefinition definition = repository.myths.get(mythId);
+        return definition != null && !definition.hidden();
+    }
+
+    private static List<MythDefinition> orderedMyths(Collection<MythDefinition> definitions) {
+        return definitions.stream()
             .sorted((left, right) -> {
                 int orderCompare = Integer.compare(left.order(), right.order());
                 return orderCompare != 0 ? orderCompare : left.id().toString().compareTo(right.id().toString());

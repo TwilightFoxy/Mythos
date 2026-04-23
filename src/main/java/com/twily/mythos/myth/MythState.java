@@ -1,6 +1,7 @@
 package com.twily.mythos.myth;
 
 import com.twily.mythos.Mythos;
+import com.twily.mythos.gameplay.MythScaleHandler;
 import com.twily.mythos.registry.MythosAttachments;
 import net.minecraft.resources.Identifier;
 import net.minecraft.network.chat.Component;
@@ -34,6 +35,7 @@ public final class MythState {
 
     public static void set(Player player, Identifier mythId) {
         player.setData(MythosAttachments.CURRENT_MYTH, mythId.toString());
+        MythScaleHandler.syncPersistentScaleOnMythChange(player, mythId);
     }
 
     public static void clear(Player player) {

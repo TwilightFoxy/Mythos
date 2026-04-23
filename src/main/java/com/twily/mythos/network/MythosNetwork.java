@@ -4,6 +4,7 @@ import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.gameplay.FairyMythHandler;
 import com.twily.mythos.gameplay.KitsuneMythHandler;
+import com.twily.mythos.gameplay.OniMythHandler;
 import com.twily.mythos.myth.MythState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,17 +30,18 @@ public final class MythosNetwork {
         registrar.playToServer(ChooseMythPayload.TYPE, ChooseMythPayload.STREAM_CODEC, MythosNetwork::handleChooseMyth);
         registrar.playToServer(UseFairyVisionPayload.TYPE, UseFairyVisionPayload.STREAM_CODEC, MythosNetwork::handleUseFairyVision);
         registrar.playToServer(UseKitsuneActionPayload.TYPE, UseKitsuneActionPayload.STREAM_CODEC, MythosNetwork::handleUseKitsuneAction);
+        registrar.playToServer(UseOniActionPayload.TYPE, UseOniActionPayload.STREAM_CODEC, MythosNetwork::handleUseOniAction);
     }
 
     public static void openGuide(ServerPlayer player) {
-        List<MythGuideEntry> myths = MythDataManager.mythsInOrder().stream()
+        List<MythGuideEntry> myths = MythDataManager.visibleMythsInOrder().stream()
             .map(MythGuideEntry::fromDefinition)
             .toList();
         PacketDistributor.sendToPlayer(player, new OpenMythGuidePayload(myths, MythState.get(player)));
     }
 
     public static void openSelection(ServerPlayer player, boolean canClose) {
-        List<MythSelectionEntry> myths = MythDataManager.mythsInOrder().stream()
+        List<MythSelectionEntry> myths = MythDataManager.visibleMythsInOrder().stream()
             .map(MythSelectionEntry::fromDefinition)
             .toList();
         PacketDistributor.sendToPlayer(player, new OpenMythSelectionPayload(myths, MythState.get(player), canClose));
@@ -52,7 +54,7 @@ public final class MythosNetwork {
                 return;
             }
 
-            if (!MythDataManager.hasMyth(payload.mythId()) || MythState.NONE.equals(payload.mythId())) {
+            if (!MythDataManager.selectableInMenu(payload.mythId()) || MythState.NONE.equals(payload.mythId())) {
                 player.sendSystemMessage(Component.translatable("command.mythos.unknown_myth", payload.mythId().toString()));
                 return;
             }
@@ -84,6 +86,15 @@ public final class MythosNetwork {
                 case "foxfire" -> KitsuneMythHandler.castFoxfire(player);
                 default -> {
                 }
+            }
+        });
+    }
+
+    private static void handleUseOniAction(UseOniActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (contextPlayer instanceof ServerPlayer player) {
+                OniMythHandler.activateBattleForm(player);
             }
         });
     }

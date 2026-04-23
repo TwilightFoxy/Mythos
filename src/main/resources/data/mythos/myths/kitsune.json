@@ -3,8 +3,8 @@
   "order": 40,
   "complexity": 3,
   "description": "myth.mythos.kitsune.description",
+  "growth": "myth.mythos.kitsune.growth",
   "advantages": [
-    "myth.mythos.kitsune.advantage.full_height",
     "myth.mythos.kitsune.advantage.night_mask",
     "myth.mythos.kitsune.advantage.fox_dash",
     "myth.mythos.kitsune.advantage.fox_lantern"
@@ -15,7 +15,6 @@
     "myth.mythos.kitsune.disadvantage.melee_weakness"
   ],
   "guide_features": [
-    "myth.mythos.kitsune.guide.feature.full_height",
     "myth.mythos.kitsune.guide.feature.night_mask",
     "myth.mythos.kitsune.guide.feature.foxfire",
     "myth.mythos.kitsune.guide.feature.fox_dash",

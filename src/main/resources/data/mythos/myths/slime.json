@@ -1,0 +1,27 @@
+{
+  "icon": "minecraft:slime_ball",
+  "order": 70,
+  "complexity": 3,
+  "description": "myth.mythos.slime.description",
+  "growth": "myth.mythos.slime.growth",
+  "advantages": [
+    "myth.mythos.slime.advantage.amorphous_body",
+    "myth.mythos.slime.advantage.mass_stages",
+    "myth.mythos.slime.advantage.no_fall_damage",
+    "myth.mythos.slime.advantage.clinging_gel"
+  ],
+  "disadvantages": [
+    "myth.mythos.slime.disadvantage.inventory_weight",
+    "myth.mythos.slime.disadvantage.stage_tradeoff"
+  ],
+  "guide_features": [
+    "myth.mythos.slime.guide.feature.body",
+    "myth.mythos.slime.guide.feature.stages",
+    "myth.mythos.slime.guide.feature.stage_stats",
+    "myth.mythos.slime.guide.feature.clinging"
+  ],
+  "guide_crafting": [
+    "myth.mythos.slime.guide.crafting.clinging_gel"
+  ],
+  "powers": []
+}

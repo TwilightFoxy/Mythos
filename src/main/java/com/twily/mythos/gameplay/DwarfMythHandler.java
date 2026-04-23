@@ -15,7 +15,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.inventory.SmithingMenu;
@@ -36,18 +35,8 @@ public final class DwarfMythHandler {
 
     private static final Identifier DWARF = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarf");
     private static final Identifier FAIRY = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy");
-    private static final Identifier LEGACY_DWARF_SCALE = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarf_scale");
     private static final Identifier DWARF_ALE_SLOWNESS = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarf_ale_slowness");
     private static final String DWARVEN_PICKAXE_MARKER = "mythos_dwarven_pickaxe";
-
-    /*
-     * FROZEN SECTION: myth-driven player scale
-     * This block owns player size for standard, dwarf, and fairy forms.
-     * It is considered stable and should not be changed without explicit request.
-     */
-    private static final double NORMAL_SCALE = 1.0D;
-    private static final double DWARF_SCALE = 0.75D;
-    private static final double FAIRY_SCALE = 0.5D;
     private static final int BLINDNESS_THRESHOLD_TICKS = 20 * 60 * 5;
     private static final int DWARF_PERSISTENT_STATUS_TICKS = 20 * 60 * 60;
     private static final double DWARF_ALE_SLOWNESS_AMOUNT = -0.35D;
@@ -61,8 +50,6 @@ public final class DwarfMythHandler {
         if (player.level().isClientSide()) {
             return;
         }
-
-        syncScale(player.getAttribute(Attributes.SCALE), targetScale(player));
 
         if (MythState.is(player, DWARF)) {
             int hasteAmplifier = player.getBlockY() < 0 ? 1 : 0;
@@ -95,31 +82,6 @@ public final class DwarfMythHandler {
             handleSmithing(player, smithingMenu, MythState.is(player, DWARF));
         }
     }
-
-    private static void syncScale(AttributeInstance scale, double targetScale) {
-        if (scale == null) {
-            return;
-        }
-
-        scale.removeModifier(LEGACY_DWARF_SCALE);
-
-        if (scale.getBaseValue() != targetScale) {
-            scale.setBaseValue(targetScale);
-        }
-    }
-
-    private static double targetScale(net.minecraft.world.entity.player.Player player) {
-        if (MythState.is(player, DWARF)) {
-            return DWARF_SCALE;
-        }
-
-        if (MythState.is(player, FAIRY)) {
-            return FAIRY_SCALE;
-        }
-
-        return NORMAL_SCALE;
-    }
-    // END FROZEN SECTION: myth-driven player scale
 
     public static void clearAlePenaltyState(net.minecraft.world.entity.player.Player player) {
         player.setData(MythosAttachments.DWARF_SOBER_TICKS, 0);

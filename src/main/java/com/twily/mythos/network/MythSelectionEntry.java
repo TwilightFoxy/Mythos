@@ -13,6 +13,7 @@ public record MythSelectionEntry(
     Identifier icon,
     int complexity,
     String description,
+    String growth,
     List<String> advantages,
     List<String> disadvantages
 ) {
@@ -26,6 +27,8 @@ public record MythSelectionEntry(
         MythSelectionEntry::complexity,
         ByteBufCodecs.STRING_UTF8,
         MythSelectionEntry::description,
+        ByteBufCodecs.STRING_UTF8,
+        MythSelectionEntry::growth,
         ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()),
         MythSelectionEntry::advantages,
         ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()),
@@ -39,6 +42,7 @@ public record MythSelectionEntry(
             definition.icon(),
             definition.complexity(),
             definition.description(),
+            definition.growth(),
             definition.advantages(),
             definition.disadvantages()
         );

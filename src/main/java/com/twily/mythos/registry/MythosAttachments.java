@@ -130,6 +130,34 @@ public final class MythosAttachments {
             .build()
     );
 
+    public static final Supplier<AttachmentType<Integer>> ONI_BATTLE_FORM_TICKS = ATTACHMENT_TYPES.register(
+        "oni_battle_form_ticks",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("battle_form_ticks"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> ONI_BATTLE_FORM_COOLDOWN = ATTACHMENT_TYPES.register(
+        "oni_battle_form_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("battle_form_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> RAGE_TALISMAN_AFTERMATH_TICKS = ATTACHMENT_TYPES.register(
+        "rage_talisman_aftermath_ticks",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("rage_talisman_aftermath_ticks"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> SLIME_STAGE = ATTACHMENT_TYPES.register(
+        "slime_stage",
+        () -> AttachmentType.builder(() -> -1)
+            .serialize(Codec.INT.fieldOf("slime_stage"))
+            .build()
+    );
+
     public static final Supplier<AttachmentType<Integer>> HUMAN_TRADE_VILLAGER = ATTACHMENT_TYPES.register(
         "human_trade_villager",
         () -> AttachmentType.builder(() -> -1)

@@ -1,0 +1,12 @@
+{
+  "hidden": true,
+  "icon": "minecraft:book",
+  "order": 999,
+  "description": "myth.mythos.player.description",
+  "growth": "myth.mythos.player.growth",
+  "advantages": [],
+  "disadvantages": [],
+  "guide_features": [],
+  "guide_crafting": [],
+  "powers": []
+}

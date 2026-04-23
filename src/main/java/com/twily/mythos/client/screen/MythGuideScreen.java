@@ -3,6 +3,7 @@ package com.twily.mythos.client.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.twily.mythos.client.FairyVisionKeyHandler;
 import com.twily.mythos.client.KitsuneActionKeyHandler;
+import com.twily.mythos.client.OniActionKeyHandler;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythGuideEntry;
@@ -163,6 +164,7 @@ public final class MythGuideScreen extends Screen {
         graphics.enableScissor(panelX + 8, contentTop, panelX + panelWidth - 8, contentBottom);
         int y = contentTop - this.contentScroll;
         y = drawWrappedText(graphics, Component.translatable(selected.description()), textX, y, contentWidth, BODY_TEXT, 8);
+        y = drawSingleLineSection(graphics, Component.translatable("gui.mythos.growth"), Component.translatable(selected.growth()), textX, y, contentWidth, BODY_TEXT);
         y = drawSection(graphics, Component.translatable("gui.mythos.advantages"), selected.advantages(), textX, y, contentWidth, POSITIVE_TEXT);
         y = drawSection(graphics, Component.translatable("gui.mythos.disadvantages"), selected.disadvantages(), textX, y, contentWidth, NEGATIVE_TEXT);
         y = drawSection(graphics, Component.translatable("gui.mythos.guide.features"), selected.features(), textX, y, contentWidth, FEATURE_TEXT);
@@ -191,6 +193,12 @@ public final class MythGuideScreen extends Screen {
         y += 11;
         y = drawBullets(graphics, lines, x, y, width, color, "• ");
         return y + 4;
+    }
+
+    private int drawSingleLineSection(GuiGraphicsExtractor graphics, Component title, Component line, int x, int y, int width, int color) {
+        graphics.text(this.font, title, x, y, color, false);
+        y += 11;
+        return drawWrappedText(graphics, line, x, y, width, color, 4);
     }
 
     private void stepSelection(int delta) {
@@ -295,6 +303,7 @@ public final class MythGuideScreen extends Screen {
         int panelWidth = Math.min(390, this.width - 34);
         int contentWidth = panelWidth - 32;
         int height = measureWrappedText(Component.translatable(selected.description()), contentWidth, 8);
+        height += measureSingleLineSection(Component.translatable("gui.mythos.growth"), Component.translatable(selected.growth()), contentWidth);
         height += measureSection(Component.translatable("gui.mythos.advantages"), selected.advantages(), contentWidth);
         height += measureSection(Component.translatable("gui.mythos.disadvantages"), selected.disadvantages(), contentWidth);
         height += measureSection(Component.translatable("gui.mythos.guide.features"), selected.features(), contentWidth);
@@ -314,6 +323,10 @@ public final class MythGuideScreen extends Screen {
         return height + 4;
     }
 
+    private int measureSingleLineSection(Component title, Component line, int width) {
+        return 11 + measureWrappedText(line, width, 4);
+    }
+
     private int measureWrappedText(Component text, int width, int bottomSpacing) {
         return this.font.split(text, width).size() * 10 + bottomSpacing;
     }
@@ -328,6 +341,8 @@ public final class MythGuideScreen extends Screen {
                 Component.translatable(lineKey, KitsuneActionKeyHandler.foxfireKeyName());
             case "myth.mythos.kitsune.guide.feature.fox_dash" ->
                 Component.translatable(lineKey, KitsuneActionKeyHandler.dashKeyName());
+            case "myth.mythos.oni.guide.feature.battle_form" ->
+                Component.translatable(lineKey, OniActionKeyHandler.battleFormKeyName());
             default -> Component.translatable(lineKey);
         };
     }

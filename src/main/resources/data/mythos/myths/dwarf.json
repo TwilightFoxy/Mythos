@@ -3,17 +3,16 @@
   "order": 20,
   "complexity": 2,
   "description": "myth.mythos.dwarf.description",
+  "growth": "myth.mythos.dwarf.growth",
   "advantages": [
     "myth.mythos.dwarf.advantage.mining_focus",
     "myth.mythos.dwarf.advantage.deep_mining",
-    "myth.mythos.dwarf.advantage.runic_tempering",
-    "myth.mythos.dwarf.advantage.compact_frame"
+    "myth.mythos.dwarf.advantage.runic_tempering"
   ],
   "disadvantages": [
     "myth.mythos.dwarf.disadvantage.ale_dependency"
   ],
   "guide_features": [
-    "myth.mythos.dwarf.guide.feature.compact_frame",
     "myth.mythos.dwarf.guide.feature.stone_stride",
     "myth.mythos.dwarf.guide.feature.runic_tempering",
     "myth.mythos.dwarf.guide.feature.ale_dependency"

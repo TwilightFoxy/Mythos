@@ -3,11 +3,13 @@ package com.twily.mythos;
 import com.twily.mythos.client.HumanTradeOverlay;
 import com.twily.mythos.client.FairyVisionKeyHandler;
 import com.twily.mythos.client.KitsuneActionKeyHandler;
+import com.twily.mythos.client.OniActionKeyHandler;
 import com.twily.mythos.client.MythosKeyCategory;
 import com.twily.mythos.client.MythosClientRendering;
 import com.twily.mythos.client.MythosClientNetworking;
 import com.twily.mythos.client.MythosClientTintSources;
 import com.twily.mythos.client.config.MythosClientConfig;
+import com.twily.mythos.gameplay.SlimeMythHandler;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.network.MythosNetwork;
 import com.twily.mythos.registry.MythosAttachments;
@@ -44,6 +46,7 @@ public final class Mythos {
             modBus.addListener(MythosKeyCategory::register);
             modBus.addListener(FairyVisionKeyHandler::registerKeyMappings);
             modBus.addListener(KitsuneActionKeyHandler::registerKeyMappings);
+            modBus.addListener(OniActionKeyHandler::registerKeyMappings);
             modBus.addListener(MythosClientRendering::registerRenderers);
             modBus.addListener(MythosClientRendering::registerLayerDefinitions);
             modBus.addListener(MythosClientRendering::addLayers);
@@ -51,9 +54,11 @@ public final class Mythos {
             NeoForge.EVENT_BUS.register(new HumanTradeOverlay());
             NeoForge.EVENT_BUS.register(FairyVisionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(KitsuneActionKeyHandler.Handler.class);
+            NeoForge.EVENT_BUS.register(OniActionKeyHandler.Handler.class);
             // Tail debug bindings are intentionally disabled in normal builds.
             // To bring them back for asset tuning, re-enable KitsuneTailDebugKeyHandler here.
         }
         NeoForge.EVENT_BUS.register(MythDataManager.class);
+        NeoForge.EVENT_BUS.register(SlimeMythHandler.class);
     }
 }

@@ -6,6 +6,7 @@ import com.twily.mythos.registry.MythosAttachments;
 import com.twily.mythos.registry.MythosEffects;
 import com.twily.mythos.registry.MythosItems;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +16,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -179,12 +183,33 @@ public final class SirenMythHandler {
 
     private static boolean hasMoistureSupport(Player player) {
         return isInWater(player)
+            || isInWaterCauldron(player)
             || player.level().isRainingAt(player.blockPosition().above())
             || hasSirenElixirGrace(player);
     }
 
     private static boolean isInWater(Player player) {
         return player.isInWater() || player.isEyeInFluid(FluidTags.WATER);
+    }
+
+    private static boolean isInWaterCauldron(Player player) {
+        BlockPos feetPos = player.blockPosition();
+        return isStandingInWaterCauldron(player, feetPos) || isStandingInWaterCauldron(player, feetPos.below());
+    }
+
+    private static boolean isStandingInWaterCauldron(Player player, BlockPos pos) {
+        BlockState state = player.level().getBlockState(pos);
+        if (!state.is(Blocks.WATER_CAULDRON)) {
+            return false;
+        }
+
+        int level = state.hasProperty(LayeredCauldronBlock.LEVEL) ? state.getValue(LayeredCauldronBlock.LEVEL) : 3;
+        double waterSurfaceY = pos.getY() + (6.0D + level * 3.0D) / 16.0D;
+        return player.getBoundingBox().minY <= waterSurfaceY + 0.01D
+            && player.getX() >= pos.getX() + 0.125D
+            && player.getX() <= pos.getX() + 0.875D
+            && player.getZ() >= pos.getZ() + 0.125D
+            && player.getZ() <= pos.getZ() + 0.875D;
     }
 
     private static boolean hasSirenElixirGrace(Player player) {
