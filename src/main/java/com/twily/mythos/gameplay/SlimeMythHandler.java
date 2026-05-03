@@ -4,20 +4,27 @@ import com.twily.mythos.Mythos;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.registry.MythosAttachments;
 import com.twily.mythos.registry.MythosEffects;
+import com.twily.mythos.registry.MythosEntities;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import com.twily.mythos.world.entity.SlimeRemnantEntity;
+import com.twily.mythos.world.entity.SlimeSeedEntity;
+import com.mojang.authlib.GameProfile;
 
 public final class SlimeMythHandler {
 
@@ -102,6 +109,31 @@ public final class SlimeMythHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onLivingDeath(LivingDeathEvent event) {
+        if (!(event.getEntity() instanceof ServerPlayer player) || player.level().isClientSide() || !MythState.is(player, SLIME)) {
+            return;
+        }
+
+        int stage = player.getData(MythosAttachments.SLIME_STAGE);
+        switch (stage) {
+            case STAGE_SMALL -> spawnSlimeSeed(player, 1, 0);
+            case STAGE_MEDIUM -> {
+                for (int index = 0; index < 2; index++) {
+                    spawnSlimeSeed(player, 2, index);
+                }
+            }
+            case STAGE_LARGE -> spawnSlimeRemnant(player, stage, 1, 0);
+            case STAGE_HUGE -> {
+                for (int index = 0; index < 2; index++) {
+                    spawnSlimeRemnant(player, stage, 2, index);
+                }
+            }
+            default -> {
+            }
+        }
+    }
+
     private static void tickClinging(Player player) {
         if (!player.horizontalCollision) {
             return;
@@ -119,6 +151,75 @@ public final class SlimeMythHandler {
         } else if (player.getDeltaMovement().y < -0.05D) {
             player.setDeltaMovement(player.getDeltaMovement().x, -0.05D, player.getDeltaMovement().z);
         }
+    }
+
+    private static void spawnSlimeRemnant(ServerPlayer player, int stage, int spawnCount, int index) {
+        if (!(player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel)) {
+            return;
+        }
+
+        double playerX = player.getX();
+        double playerY = player.getY();
+        double playerZ = player.getZ();
+        float playerYaw = player.getYRot();
+        GameProfile profile = resolveProfile(player);
+
+        serverLevel.getServer().execute(() -> {
+            SlimeRemnantEntity remnant = new SlimeRemnantEntity(MythosEntities.SLIME_REMNANT.get(), serverLevel);
+            double spread = spawnCount == 1 ? 0.0D : (index == 0 ? -0.65D : 0.65D);
+            double angle = Math.toRadians(playerYaw + 90.0D);
+            double offsetX = Math.cos(angle) * spread;
+            double offsetZ = Math.sin(angle) * spread;
+            remnant.setPos(playerX + offsetX, playerY, playerZ + offsetZ);
+            remnant.setYRot(playerYaw);
+            remnant.setYHeadRot(playerYaw);
+            remnant.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(remnant.blockPosition()), EntitySpawnReason.EVENT, null);
+            remnant.setCanPickUpLoot(false);
+            remnant.setPersistenceRequired();
+            remnant.setAppearance(profile, stage);
+            remnant.setCustomName(Component.translatable("entity.mythos.slime_remnant"));
+            if (!serverLevel.addFreshEntity(remnant)) {
+                serverLevel.addWithUUID(remnant);
+            }
+        });
+    }
+
+    private static void spawnSlimeSeed(ServerPlayer player, int spawnCount, int index) {
+        if (!(player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel)) {
+            return;
+        }
+
+        double playerX = player.getX();
+        double playerY = player.getY();
+        double playerZ = player.getZ();
+        float playerYaw = player.getYRot();
+
+        serverLevel.getServer().execute(() -> {
+            SlimeSeedEntity seed = new SlimeSeedEntity(MythosEntities.SLIME_SEED.get(), serverLevel);
+            double spread = spawnCount == 1 ? 0.0D : (index == 0 ? -0.5D : 0.5D);
+            double angle = Math.toRadians(playerYaw + 90.0D);
+            double offsetX = Math.cos(angle) * spread;
+            double offsetZ = Math.sin(angle) * spread;
+            seed.setPos(playerX + offsetX, playerY, playerZ + offsetZ);
+            seed.setYRot(playerYaw);
+            seed.setYHeadRot(playerYaw);
+            seed.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(seed.blockPosition()), EntitySpawnReason.EVENT, null);
+            seed.setSize(1, true);
+            seed.setPersistenceRequired();
+            seed.setCustomName(Component.translatable("entity.mythos.slime_seed"));
+            if (!serverLevel.addFreshEntity(seed)) {
+                serverLevel.addWithUUID(seed);
+            }
+        });
+    }
+
+    private static GameProfile resolveProfile(ServerPlayer player) {
+        GameProfile profile = player.getGameProfile();
+        if (profile != null) {
+            return profile;
+        }
+
+        return SlimeRemnantEntity.fallbackProfile(player.getUUID());
     }
 
     private static int determineStage(Player player) {

@@ -5,6 +5,7 @@ import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.gameplay.FairyMythHandler;
 import com.twily.mythos.gameplay.KitsuneMythHandler;
 import com.twily.mythos.gameplay.OniMythHandler;
+import com.twily.mythos.gameplay.ShulkerbornInventoryHandler;
 import com.twily.mythos.myth.MythState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,9 +29,11 @@ public final class MythosNetwork {
         registrar.playToClient(OpenMythGuidePayload.TYPE, OpenMythGuidePayload.STREAM_CODEC);
         registrar.playToClient(OpenMythSelectionPayload.TYPE, OpenMythSelectionPayload.STREAM_CODEC);
         registrar.playToServer(ChooseMythPayload.TYPE, ChooseMythPayload.STREAM_CODEC, MythosNetwork::handleChooseMyth);
+        registrar.playToServer(ToggleFairyFlightModePayload.TYPE, ToggleFairyFlightModePayload.STREAM_CODEC, MythosNetwork::handleToggleFairyFlightMode);
         registrar.playToServer(UseFairyVisionPayload.TYPE, UseFairyVisionPayload.STREAM_CODEC, MythosNetwork::handleUseFairyVision);
         registrar.playToServer(UseKitsuneActionPayload.TYPE, UseKitsuneActionPayload.STREAM_CODEC, MythosNetwork::handleUseKitsuneAction);
         registrar.playToServer(UseOniActionPayload.TYPE, UseOniActionPayload.STREAM_CODEC, MythosNetwork::handleUseOniAction);
+        registrar.playToServer(ClickShulkerbornSlotPayload.TYPE, ClickShulkerbornSlotPayload.STREAM_CODEC, MythosNetwork::handleClickShulkerbornSlot);
     }
 
     public static void openGuide(ServerPlayer player) {
@@ -73,6 +76,15 @@ public final class MythosNetwork {
         });
     }
 
+    private static void handleToggleFairyFlightMode(ToggleFairyFlightModePayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (contextPlayer instanceof ServerPlayer player) {
+                FairyMythHandler.toggleFlightMode(player);
+            }
+        });
+    }
+
     private static void handleUseKitsuneAction(UseKitsuneActionPayload payload, IPayloadContext context) {
         context.enqueueWork(() -> {
             Player contextPlayer = context.player();
@@ -95,6 +107,15 @@ public final class MythosNetwork {
             Player contextPlayer = context.player();
             if (contextPlayer instanceof ServerPlayer player) {
                 OniMythHandler.activateBattleForm(player);
+            }
+        });
+    }
+
+    private static void handleClickShulkerbornSlot(ClickShulkerbornSlotPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (contextPlayer instanceof ServerPlayer player) {
+                ShulkerbornInventoryHandler.handleSlotClick(player, payload.slot(), payload.secondary(), payload.quickMove());
             }
         });
     }

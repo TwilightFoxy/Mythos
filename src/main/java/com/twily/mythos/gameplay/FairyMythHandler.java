@@ -6,33 +6,32 @@ import com.twily.mythos.myth.MythState;
 import com.twily.mythos.registry.MythosAttachments;
 import com.twily.mythos.registry.MythosItems;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.FireworkRocketEntity;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.equipment.Equippable;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.Optional;
@@ -42,16 +41,14 @@ public final class FairyMythHandler {
 
     private static final Identifier FAIRY = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy");
     private static final Identifier FAIRY_HEALTH = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy_health");
-    private static final Identifier FAIRY_ARMOR = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy_armor");
-    private static final Identifier FAIRY_ARMOR_TOUGHNESS = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "fairy_armor_toughness");
     private static final double FAIRY_HEALTH_REDUCTION = -0.5D;
-    private static final double FAIRY_DEFENSE_REDUCTION = -0.3D;
     private static final float FAIRY_MELEE_DAMAGE_MULTIPLIER = 0.7F;
     private static final int FAIRY_FLIGHT_RANGE = 5;
     private static final int FAIRY_VISION_RADIUS = 5;
     private static final int FAIRY_VISION_DURATION_TICKS = 20 * 60 * 3;
     private static final int FAIRY_VISION_COOLDOWN_TICKS = 20 * 30;
     private static final String FAIRY_BOOTS_MARKER = "mythos_fairy_boots";
+    private static final String FAIRY_WINGS_MARKER = "mythos_fairy_wings";
 
     private FairyMythHandler() {
     }
@@ -60,15 +57,14 @@ public final class FairyMythHandler {
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
         boolean isFairy = MythState.is(player, FAIRY);
-        boolean lowFlightAvailable = isFairy && hasSupportBelow(player, FAIRY_FLIGHT_RANGE);
+        boolean lowFlightAvailable = isFairy && hasSupportNearby(player, FAIRY_FLIGHT_RANGE);
         boolean fairyElytraMode = player.getData(MythosAttachments.FAIRY_ELYTRA_MODE);
-        boolean wearingVanillaElytra = isWearingVanillaElytra(player);
 
         if (!player.level().isClientSide()) {
             tickFairyVisionCooldown(player);
             syncFairyBoots(player);
+            syncFairyWings(player, isFairy);
             syncFairyHealth(player, isFairy);
-            syncFairyDefense(player, isFairy);
             if (player.containerMenu instanceof SmithingMenu smithingMenu) {
                 handleFairySmithing(player, smithingMenu, isFairy);
             }
@@ -81,33 +77,17 @@ public final class FairyMythHandler {
                 return;
             }
 
-            if (wearingVanillaElytra) {
-                if (fairyElytraMode) {
-                    player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, false);
-                    fairyElytraMode = false;
-                }
-                syncFairyFlight(player, false, false);
-                return;
-            }
-
             if (fairyElytraMode) {
-                if (player.onGround() || player.isInWater()) {
-                    player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, false);
-                    fairyElytraMode = false;
-                    if (player.isFallFlying()) {
-                        player.stopFallFlying();
-                    }
-                } else if (lowFlightAvailable && player.isShiftKeyDown()) {
+                if (player.isShiftKeyDown() && lowFlightAvailable && !player.onGround()) {
                     player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, false);
                     fairyElytraMode = false;
                     switchToLowFlight(player);
-                } else if (canFallFly(player) && !player.isFallFlying()) {
-                    switchToElytraFlight(player);
                 }
-            } else if (!lowFlightAvailable && canFallFly(player)) {
-                player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, true);
-                fairyElytraMode = true;
-                switchToElytraFlight(player);
+            } else {
+                if (player.isFallFlying()) {
+                    player.stopFallFlying();
+                }
+                applySlowFallingOutsideFlightZone(player, lowFlightAvailable);
             }
 
             syncFairyFlight(player, lowFlightAvailable, fairyElytraMode);
@@ -116,6 +96,12 @@ public final class FairyMythHandler {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
+        if (event.getSource().is(DamageTypes.FLY_INTO_WALL) && event.getEntity() instanceof Player fairy
+            && MythState.is(fairy, FAIRY) && fairy.getData(MythosAttachments.FAIRY_ELYTRA_MODE)) {
+            event.setNewDamage(0.0F);
+            return;
+        }
+
         if (event.getSource().is(DamageTypeTags.IS_FALL) && event.getEntity() instanceof Player fairy && MythState.is(fairy, FAIRY)) {
             event.setNewDamage(0.0F);
             return;
@@ -128,34 +114,6 @@ public final class FairyMythHandler {
         if (event.getSource().getDirectEntity() == player) {
             event.setNewDamage(event.getNewDamage() * FAIRY_MELEE_DAMAGE_MULTIPLIER);
         }
-    }
-
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        Player player = event.getEntity();
-        if (player.level().isClientSide() || !MythState.is(player, FAIRY) || isWearingVanillaElytra(player)) {
-            return;
-        }
-
-        ItemStack stack = player.getItemInHand(event.getHand());
-        if (!stack.is(Items.FIREWORK_ROCKET) || !canFallFly(player)) {
-            return;
-        }
-
-        if (!player.getData(MythosAttachments.FAIRY_ELYTRA_MODE)) {
-            player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, true);
-        }
-        if (!player.isFallFlying()) {
-            switchToElytraFlight(player);
-        }
-
-        ServerLevel level = (ServerLevel) player.level();
-        player.resetFallDistance();
-        level.addFreshEntity(new FireworkRocketEntity(level, stack.copyWithCount(1), player));
-        stack.consume(1, player);
-        player.awardStat(Stats.ITEM_USED.get(Items.FIREWORK_ROCKET));
-        event.setCancellationResult(InteractionResult.SUCCESS);
-        event.setCanceled(true);
     }
 
     public static void activateFairyVision(ServerPlayer player) {
@@ -176,6 +134,38 @@ public final class FairyMythHandler {
         player.setData(MythosAttachments.FAIRY_VISION_COOLDOWN, FAIRY_VISION_COOLDOWN_TICKS);
     }
 
+    public static void toggleFlightMode(ServerPlayer player) {
+        if (!MythState.is(player, FAIRY)) {
+            return;
+        }
+
+        syncFairyWings(player, true);
+        boolean lowFlightAvailable = hasSupportNearby(player, FAIRY_FLIGHT_RANGE);
+        boolean fairyElytraMode = player.getData(MythosAttachments.FAIRY_ELYTRA_MODE);
+
+        if (fairyElytraMode) {
+            player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, false);
+            if (player.isFallFlying()) {
+                player.stopFallFlying();
+            }
+            if (!player.onGround() && !player.isInWater() && lowFlightAvailable) {
+                switchToLowFlight(player);
+            } else {
+                syncFairyFlight(player, lowFlightAvailable, false);
+            }
+            applySlowFallingOutsideFlightZone(player, lowFlightAvailable);
+            player.sendSystemMessage(Component.translatable("message.mythos.fairy_mode_low_flight"));
+            return;
+        }
+
+        player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, true);
+        syncFairyFlight(player, false, true);
+        if (canFallFly(player)) {
+            switchToElytraFlight(player);
+        }
+        player.sendSystemMessage(Component.translatable("message.mythos.fairy_mode_elytra"));
+    }
+
     private static void syncFairyHealth(Player player, boolean isFairy) {
         AttributeInstance maxHealth = player.getAttribute(Attributes.MAX_HEALTH);
         if (maxHealth == null) {
@@ -194,31 +184,56 @@ public final class FairyMythHandler {
         }
     }
 
-    private static void syncFairyDefense(Player player, boolean isFairy) {
-        AttributeInstance armor = player.getAttribute(Attributes.ARMOR);
-        if (armor != null) {
-            if (isFairy) {
-                armor.addOrUpdateTransientModifier(new AttributeModifier(FAIRY_ARMOR, FAIRY_DEFENSE_REDUCTION, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            } else {
-                armor.removeModifier(FAIRY_ARMOR);
-            }
-        }
-
-        AttributeInstance armorToughness = player.getAttribute(Attributes.ARMOR_TOUGHNESS);
-        if (armorToughness != null) {
-            if (isFairy) {
-                armorToughness.addOrUpdateTransientModifier(new AttributeModifier(FAIRY_ARMOR_TOUGHNESS, FAIRY_DEFENSE_REDUCTION, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            } else {
-                armorToughness.removeModifier(FAIRY_ARMOR_TOUGHNESS);
-            }
-        }
-    }
-
     private static void syncFairyBoots(Player player) {
         ItemStack boots = player.getItemBySlot(EquipmentSlot.FEET);
         if (MythItemMarkerHelper.hasMarker(boots, FAIRY_BOOTS_MARKER)) {
             player.addEffect(new MobEffectInstance(MobEffects.SPEED, 40, 0, false, false, true));
         }
+    }
+
+    private static void syncFairyWings(Player player, boolean isFairy) {
+        if (!isFairy) {
+            ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+            if (isFairyWings(chest)) {
+                player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+                player.inventoryMenu.broadcastChanges();
+            }
+            return;
+        }
+
+        ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+        if (!isFairyWings(chest)) {
+            if (!chest.isEmpty()) {
+                ItemStack displaced = chest.copy();
+                player.setItemSlot(EquipmentSlot.CHEST, ItemStack.EMPTY);
+                if (!player.getInventory().add(displaced)) {
+                    player.drop(displaced, false);
+                }
+            }
+            player.setItemSlot(EquipmentSlot.CHEST, createFairyWings(player));
+            player.inventoryMenu.broadcastChanges();
+            return;
+        }
+
+        if (chest.isDamageableItem() && chest.getDamageValue() != 0) {
+            chest.setDamageValue(0);
+        }
+    }
+
+    private static ItemStack createFairyWings(Player player) {
+        ItemStack result = new ItemStack(Items.ELYTRA);
+        ItemEnchantments.Mutable enchantments = new ItemEnchantments.Mutable(result.getEnchantments());
+        var registry = player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        enchantments.set(registry.getOrThrow(Enchantments.BINDING_CURSE), 1);
+        enchantments.set(registry.getOrThrow(Enchantments.VANISHING_CURSE), 1);
+        result.set(DataComponents.ENCHANTMENTS, enchantments.toImmutable());
+        result.set(DataComponents.CUSTOM_NAME, Component.translatable("item.mythos.fairy_wings").withStyle(ChatFormatting.LIGHT_PURPLE));
+        MythItemMarkerHelper.setMarker(result, FAIRY_WINGS_MARKER);
+        return result;
+    }
+
+    private static boolean isFairyWings(ItemStack stack) {
+        return stack.is(Items.ELYTRA) && MythItemMarkerHelper.hasMarker(stack, FAIRY_WINGS_MARKER);
     }
 
     private static void syncFairyFlight(Player player, boolean allowLowFlight, boolean fairyElytraMode) {
@@ -264,6 +279,14 @@ public final class FairyMythHandler {
 
     private static boolean canFallFly(Player player) {
         return !player.onGround() && !player.isInWater();
+    }
+
+    private static void applySlowFallingOutsideFlightZone(Player player, boolean lowFlightAvailable) {
+        if (lowFlightAvailable || player.onGround() || player.isInWater() || player.isSpectator() || player.hasInfiniteMaterials()) {
+            return;
+        }
+
+        player.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 40, 0, false, false, true));
     }
 
     private static void tickFairyVisionCooldown(Player player) {
@@ -340,24 +363,19 @@ public final class FairyMythHandler {
         }
     }
 
-    private static boolean isWearingVanillaElytra(Player player) {
-        return player.getItemBySlot(EquipmentSlot.CHEST).is(Items.ELYTRA);
-    }
+    private static boolean hasSupportNearby(Player player, int maxDistance) {
+        AABB playerBox = player.getBoundingBox();
+        AABB searchBox = playerBox.inflate(maxDistance);
+        double maxDistanceSquared = maxDistance * maxDistance;
 
-    private static boolean hasSupportBelow(Player player, int maxDistance) {
-        AABB box = player.getBoundingBox();
-        double minY = box.minY - 0.05D;
-        double inset = Math.min(0.15D, box.getXsize() * 0.25D);
-        double[] xSamples = new double[]{(box.minX + box.maxX) * 0.5D, box.minX + inset, box.maxX - inset};
-        double[] zSamples = new double[]{(box.minZ + box.maxZ) * 0.5D, box.minZ + inset, box.maxZ - inset};
+        for (VoxelShape shape : player.level().getBlockCollisions(player, searchBox)) {
+            if (shape.isEmpty()) {
+                continue;
+            }
 
-        for (double sampleX : xSamples) {
-            for (double sampleZ : zSamples) {
-                for (int distance = 0; distance <= maxDistance; distance++) {
-                    BlockPos pos = BlockPos.containing(sampleX, minY - distance, sampleZ);
-                    if (isSolidSupport(player.level().getBlockState(pos), player, pos)) {
-                        return true;
-                    }
+            for (AABB collisionBox : shape.toAabbs()) {
+                if (distanceSquared(playerBox, collisionBox) <= maxDistanceSquared) {
+                    return true;
                 }
             }
         }
@@ -365,7 +383,20 @@ public final class FairyMythHandler {
         return false;
     }
 
-    private static boolean isSolidSupport(BlockState state, Player player, BlockPos pos) {
-        return !state.isAir() && state.blocksMotion() && !state.getCollisionShape(player.level(), pos).isEmpty();
+    private static double distanceSquared(AABB source, AABB target) {
+        double dx = axisGap(source.minX, source.maxX, target.minX, target.maxX);
+        double dy = axisGap(source.minY, source.maxY, target.minY, target.maxY);
+        double dz = axisGap(source.minZ, source.maxZ, target.minZ, target.maxZ);
+        return dx * dx + dy * dy + dz * dz;
+    }
+
+    private static double axisGap(double minA, double maxA, double minB, double maxB) {
+        if (maxA < minB) {
+            return minB - maxA;
+        }
+        if (maxB < minA) {
+            return minA - maxB;
+        }
+        return 0.0D;
     }
 }

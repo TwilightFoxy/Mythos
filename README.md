@@ -17,7 +17,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 ## Current Version
 
-- `0.6.18`
+- `0.6.38`
 
 ## Core Systems
 
@@ -82,8 +82,9 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 ### Fairy
 
 - is much smaller than a normal player
-- has half health, reduced defense, and reduced melee damage
-- can hover close to the ground and transition into elytra-style flight
+- has half health and reduced melee damage
+- keeps `Fairy Wings` in the chest slot instead of armor
+- switches manually between free flight near support and full vanilla elytra flight
 - can forge `Fairy Boots` and a `Fairy Minecart`
 - can grant nearby players temporary night vision
 - `Fairy Vision` lasts 3 minutes and has a 30-second cooldown
@@ -129,18 +130,28 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - can grant wall-climbing through `Clinging Gel`
 - uses a translucent slime-shell visual instead of a standard player silhouette
 
+### Shulkerborn
+
+- Wardens always drop `1` `Resonance Shard`
+- gains a personal 4th inventory row with `9` extra slots
+- becomes `Overloaded (Slowness I)` at `37+` occupied slots
+- stores its extra row separately and drops it together with the rest of the inventory on death
+- is built around a late shellcraft progression instead of a direct End rush
+
 ## Myth Items and Utilities
 
 Current myth-specific gear and utilities include:
 - `Elven Bow`
 - `Dwarven Pickaxe`
 - `Dwarven Ale`
+- `Fairy Wings`
 - `Fairy Boots`
 - `Fairy Minecart`
 - `Fox Lantern`
 - `Siren Elixir`
 - `Rage Talisman`
 - `Clinging Gel`
+- `Resonance Shard`
 - `Myth Sphere`
 - `Tome of Mythos`
 

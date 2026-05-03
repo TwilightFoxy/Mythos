@@ -2,6 +2,7 @@ package com.twily.mythos.registry;
 
 import com.mojang.serialization.Codec;
 import com.twily.mythos.Mythos;
+import com.twily.mythos.data.ShulkerbornInventoryData;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -155,6 +156,14 @@ public final class MythosAttachments {
         "slime_stage",
         () -> AttachmentType.builder(() -> -1)
             .serialize(Codec.INT.fieldOf("slime_stage"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<ShulkerbornInventoryData>> SHULKERBORN_EXTRA_SLOTS = ATTACHMENT_TYPES.register(
+        "shulkerborn_extra_slots",
+        () -> AttachmentType.builder(ShulkerbornInventoryData::empty)
+            .serialize(ShulkerbornInventoryData.CODEC)
+            .sync((holder, player) -> true, ShulkerbornInventoryData.STREAM_CODEC)
             .build()
     );
 

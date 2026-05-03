@@ -2,6 +2,7 @@ package com.twily.mythos.client.screen;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.twily.mythos.client.FairyVisionKeyHandler;
+import com.twily.mythos.client.FairyFlightModeKeyHandler;
 import com.twily.mythos.client.KitsuneActionKeyHandler;
 import com.twily.mythos.client.OniActionKeyHandler;
 import com.twily.mythos.Mythos;
@@ -333,6 +334,8 @@ public final class MythGuideScreen extends Screen {
 
     private Component resolveGuideLine(String lineKey) {
         return switch (lineKey) {
+            case "myth.mythos.fairy.guide.feature.low_flight" ->
+                Component.translatable(lineKey, FairyFlightModeKeyHandler.keyName());
             case "myth.mythos.fairy.guide.feature.shared_vision" ->
                 Component.translatable(lineKey, FairyVisionKeyHandler.keyName());
             case "myth.mythos.kitsune.guide.feature.night_mask" ->

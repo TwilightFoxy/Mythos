@@ -35,6 +35,7 @@ public final class MythosItems {
     private static final ResourceKey<Item> SIREN_ELIXIR_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "siren_elixir"));
     private static final ResourceKey<Item> RAGE_TALISMAN_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "rage_talisman"));
     private static final ResourceKey<Item> CLINGING_GEL_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "clinging_gel"));
+    private static final ResourceKey<Item> RESONANCE_SHARD_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "resonance_shard"));
 
     public static final DeferredItem<Item> DWARVEN_ALE = ITEMS.register(
         "dwarven_ale",
@@ -148,6 +149,15 @@ public final class MythosItems {
                 .setId(CLINGING_GEL_KEY)
                 .stacksTo(16)
                 .rarity(Rarity.UNCOMMON)
+        )
+    );
+    public static final DeferredItem<Item> RESONANCE_SHARD = ITEMS.register(
+        "resonance_shard",
+        () -> new Item(
+            new Item.Properties()
+                .setId(RESONANCE_SHARD_KEY)
+                .stacksTo(16)
+                .rarity(Rarity.RARE)
         )
     );
     private MythosItems() {

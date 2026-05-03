@@ -1,0 +1,28 @@
+{
+  "icon": "mythos:resonance_shard",
+  "order": 80,
+  "complexity": 3,
+  "description": "myth.mythos.shulkerborn.description",
+  "growth": "myth.mythos.shulkerborn.growth",
+  "advantages": [
+    "myth.mythos.shulkerborn.advantage.resonance_shard",
+    "myth.mythos.shulkerborn.advantage.extra_storage",
+    "myth.mythos.shulkerborn.advantage.shell_path"
+  ],
+  "disadvantages": [
+    "myth.mythos.shulkerborn.disadvantage.warden_hunt",
+    "myth.mythos.shulkerborn.disadvantage.overloaded_storage",
+    "myth.mythos.shulkerborn.disadvantage.heavy_progression"
+  ],
+  "guide_features": [
+    "myth.mythos.shulkerborn.guide.feature.full_height",
+    "myth.mythos.shulkerborn.guide.feature.resonance_shard",
+    "myth.mythos.shulkerborn.guide.feature.extra_storage",
+    "myth.mythos.shulkerborn.guide.feature.overload",
+    "myth.mythos.shulkerborn.guide.feature.shell_path"
+  ],
+  "guide_crafting": [
+    "myth.mythos.shulkerborn.guide.crafting.resonance_shard"
+  ],
+  "powers": []
+}

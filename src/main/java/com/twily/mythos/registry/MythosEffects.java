@@ -91,6 +91,10 @@ public final class MythosEffects {
         "slime_clinging",
         () -> new SimpleDisplayEffect(MobEffectCategory.BENEFICIAL, 0x5FCF7A)
     );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SHULKERBORN_OVERLOADED = MOB_EFFECTS.register(
+        "shulkerborn_overloaded",
+        () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x7C68C1)
+    );
 
     private MythosEffects() {
     }

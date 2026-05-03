@@ -5,6 +5,7 @@ import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythosNetwork;
+import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -121,6 +122,7 @@ public final class ElfMythHandler {
                     .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN) || source.getEntity() == null)
                     .then(Commands.argument("targets", EntityArgument.players())
                         .then(Commands.argument("myth", StringArgumentType.word())
+                            .suggests((context, builder) -> SharedSuggestionProvider.suggest(MythDataManager.mythCommandIds(), builder))
                         .executes(context -> {
                             var targets = EntityArgument.getPlayers(context, "targets");
                             String rawMyth = StringArgumentType.getString(context, "myth");

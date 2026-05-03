@@ -40,5 +40,9 @@ public final class MythosTooltipHandler {
             event.getToolTip().add(Component.translatable("tooltip.mythos.fairy_minecart").withStyle(ChatFormatting.GRAY));
         }
 
+        if (event.getItemStack().is(com.twily.mythos.registry.MythosItems.RESONANCE_SHARD.asItem())) {
+            event.getToolTip().add(Component.translatable("tooltip.mythos.resonance_shard").withStyle(ChatFormatting.GRAY));
+        }
+
     }
 }

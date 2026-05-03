@@ -1,6 +1,7 @@
 package com.twily.mythos;
 
 import com.twily.mythos.client.HumanTradeOverlay;
+import com.twily.mythos.client.FairyFlightModeKeyHandler;
 import com.twily.mythos.client.FairyVisionKeyHandler;
 import com.twily.mythos.client.KitsuneActionKeyHandler;
 import com.twily.mythos.client.OniActionKeyHandler;
@@ -8,6 +9,7 @@ import com.twily.mythos.client.MythosKeyCategory;
 import com.twily.mythos.client.MythosClientRendering;
 import com.twily.mythos.client.MythosClientNetworking;
 import com.twily.mythos.client.MythosClientTintSources;
+import com.twily.mythos.client.ShulkerbornInventoryOverlay;
 import com.twily.mythos.client.config.MythosClientConfig;
 import com.twily.mythos.gameplay.SlimeMythHandler;
 import com.twily.mythos.data.MythDataManager;
@@ -37,6 +39,7 @@ public final class Mythos {
         MythosAttachments.register(modBus);
         MythosBlocks.register(modBus);
         MythosEntities.register(modBus);
+        modBus.addListener(MythosEntities::registerAttributes);
         MythosEffects.register(modBus);
         MythosItems.register(modBus);
         modBus.addListener(MythosNetwork::registerPayloads);
@@ -44,6 +47,7 @@ public final class Mythos {
             modContainer.registerExtensionPoint(IConfigScreenFactory.class, (IConfigScreenFactory) (container, parent) -> new ConfigurationScreen(container, parent));
             modBus.addListener(MythosClientNetworking::registerClientPayloads);
             modBus.addListener(MythosKeyCategory::register);
+            modBus.addListener(FairyFlightModeKeyHandler::registerKeyMappings);
             modBus.addListener(FairyVisionKeyHandler::registerKeyMappings);
             modBus.addListener(KitsuneActionKeyHandler::registerKeyMappings);
             modBus.addListener(OniActionKeyHandler::registerKeyMappings);
@@ -52,9 +56,11 @@ public final class Mythos {
             modBus.addListener(MythosClientRendering::addLayers);
             modBus.addListener(MythosClientTintSources::registerTintSources);
             NeoForge.EVENT_BUS.register(new HumanTradeOverlay());
+            NeoForge.EVENT_BUS.register(FairyFlightModeKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(FairyVisionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(KitsuneActionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(OniActionKeyHandler.Handler.class);
+            NeoForge.EVENT_BUS.register(new ShulkerbornInventoryOverlay());
             // Tail debug bindings are intentionally disabled in normal builds.
             // To bring them back for asset tuning, re-enable KitsuneTailDebugKeyHandler here.
         }
