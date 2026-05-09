@@ -18,7 +18,8 @@
     "myth.mythos.elf.guide.feature.ale_reaction"
   ],
   "guide_crafting": [
-    "myth.mythos.elf.guide.crafting.elven_bow"
+    "myth.mythos.elf.guide.crafting.elven_bow",
+    "recipe:mythos:looting_bow_upgrade"
   ],
   "powers": [
     "mythos:forest_stride",

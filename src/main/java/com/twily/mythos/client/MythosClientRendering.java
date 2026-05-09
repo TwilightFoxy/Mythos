@@ -1,8 +1,10 @@
 package com.twily.mythos.client;
 
 import com.twily.mythos.client.model.KitsuneAdornmentModel;
+import com.twily.mythos.registry.MythosBlockEntities;
 import com.twily.mythos.registry.MythosEntities;
 import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.blockentity.ShulkerBoxRenderer;
 import net.minecraft.client.renderer.entity.MinecartRenderer;
 import net.minecraft.client.renderer.entity.SlimeRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
@@ -18,6 +20,7 @@ public final class MythosClientRendering {
         event.registerEntityRenderer(MythosEntities.KITSUNE_FOXFIRE.get(), context -> new ThrownItemRenderer<>(context, 0.75F, true));
         event.registerEntityRenderer(MythosEntities.SLIME_REMNANT.get(), SlimeRemnantRenderer::new);
         event.registerEntityRenderer(MythosEntities.SLIME_SEED.get(), SlimeRenderer::new);
+        event.registerBlockEntityRenderer(MythosBlockEntities.REINFORCED_SHULKER_BOX.get(), ShulkerBoxRenderer::new);
     }
 
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {

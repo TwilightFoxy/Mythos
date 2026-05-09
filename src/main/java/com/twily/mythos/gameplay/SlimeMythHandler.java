@@ -65,7 +65,7 @@ public final class SlimeMythHandler {
             return;
         }
 
-        if (!MythState.is(player, SLIME)) {
+        if (!MythState.matches(player, SLIME)) {
             clearSlimeState(player);
             return;
         }
@@ -85,7 +85,7 @@ public final class SlimeMythHandler {
             return;
         }
 
-        if (!MythState.is(player, SLIME)) {
+        if (!MythState.matches(player, SLIME)) {
             clearSlimeState(player);
             return;
         }
@@ -104,14 +104,14 @@ public final class SlimeMythHandler {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
-        if (event.getEntity() instanceof Player player && MythState.is(player, SLIME) && event.getSource().is(DamageTypeTags.IS_FALL)) {
+        if (event.getEntity() instanceof Player player && MythState.matches(player, SLIME) && event.getSource().is(DamageTypeTags.IS_FALL)) {
             event.setNewDamage(0.0F);
         }
     }
 
     @SubscribeEvent
     public static void onLivingDeath(LivingDeathEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player) || player.level().isClientSide() || !MythState.is(player, SLIME)) {
+        if (!(event.getEntity() instanceof ServerPlayer player) || player.level().isClientSide() || !MythState.matches(player, SLIME)) {
             return;
         }
 

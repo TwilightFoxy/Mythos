@@ -1,6 +1,7 @@
 package com.twily.mythos.gameplay;
 
 import com.twily.mythos.Mythos;
+import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.myth.MythState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -66,11 +67,11 @@ public final class MythScaleHandler {
     }
 
     private static double targetScale(Identifier mythId) {
-        if (DWARF.equals(mythId)) {
+        if (MythDataManager.matches(mythId, DWARF)) {
             return DWARF_SCALE;
         }
 
-        if (FAIRY.equals(mythId)) {
+        if (MythDataManager.matches(mythId, FAIRY)) {
             return FAIRY_SCALE;
         }
 

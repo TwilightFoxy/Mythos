@@ -95,7 +95,7 @@ public final class SlimeRemnantEntity extends Zombie {
     }
 
     private static boolean isFriendlySlimeborn(Entity target) {
-        return target instanceof Player player && MythState.is(player, SLIME);
+        return target instanceof Player player && MythState.matches(player, SLIME);
     }
 
     public static GameProfile fallbackProfile(UUID uuid) {

@@ -6,6 +6,7 @@
   "growth": "myth.mythos.fairy.growth",
   "advantages": [
     "myth.mythos.fairy.advantage.low_flight",
+    "myth.mythos.fairy.advantage.flower_diet",
     "myth.mythos.fairy.advantage.wind_artifacts",
     "myth.mythos.fairy.advantage.shared_vision"
   ],
@@ -16,12 +17,15 @@
   ],
   "guide_features": [
     "myth.mythos.fairy.guide.feature.low_flight",
+    "myth.mythos.fairy.guide.feature.flower_diet",
     "myth.mythos.fairy.guide.feature.wind_artifacts",
     "myth.mythos.fairy.guide.feature.shared_vision"
   ],
   "guide_crafting": [
     "myth.mythos.fairy.guide.crafting.fairy_boots",
-    "myth.mythos.fairy.guide.crafting.fairy_minecart"
+    "recipe:mythos:fairy_boots",
+    "myth.mythos.fairy.guide.crafting.fairy_minecart",
+    "recipe:mythos:fairy_minecart"
   ],
   "powers": []
 }

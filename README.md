@@ -17,7 +17,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 ## Current Version
 
-- `0.6.38`
+- `0.6.56`
 
 ## Core Systems
 
@@ -36,6 +36,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 - an in-game book explains each myth in plain language
 - the guide includes strengths, weaknesses, crafting, controls, edge cases, and exact values
+- myth crafting pages now show visual recipe cards for crafting table and smithing table workflows
 - selection stays brief, while the book gives the full breakdown
 - growth is shown as a separate section instead of being buried inside strengths
 
@@ -48,6 +49,8 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 ### Data-Driven Myth Definitions
 
 - myth definitions are loaded from JSON
+- myths can inherit from other myths through `inherits`
+- hidden command-only variants can extend an existing myth without appearing in the normal selection menu
 - powers are still executed by code, but myth content is structured for expansion
 
 ### Myth Artifacts and Forging
@@ -55,6 +58,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - several myths can craft unique items that other players can use
 - forging is handled through custom smithing logic where needed
 - smithing access is limited by myth where appropriate
+- reinforced shulker boxes use their own container line, loot handling, recolors, and tooltip support
 
 ## Current Myths
 
@@ -78,6 +82,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - depends on `Dwarven Ale` and suffers visible withdrawal without it
 - uses named withdrawal stages and visible slowdown instead of hidden penalties
 - can temper enchanted pickaxes with a netherite ingot
+- now crafts `1` ale per recipe, and the honey bottle is fully consumed by crafting
 
 ### Fairy
 
@@ -85,10 +90,12 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - has half health and reduced melee damage
 - keeps `Fairy Wings` in the chest slot instead of armor
 - switches manually between free flight near support and full vanilla elytra flight
+- can eat any flower, including the wither rose
 - can forge `Fairy Boots` and a `Fairy Minecart`
 - can grant nearby players temporary night vision
 - `Fairy Vision` lasts 3 minutes and has a 30-second cooldown
 - the `Fairy Minecart` has tuned high-speed rail handling for turns, slopes, and launch ramps
+- ignores elytra collision damage while using its fairy elytra mode
 
 ### Kitsune
 
@@ -129,6 +136,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - is fully immune to fall damage
 - can grant wall-climbing through `Clinging Gel`
 - uses a translucent slime-shell visual instead of a standard player silhouette
+- splits into slime offspring on death depending on its current mass stage
 
 ### Shulkerborn
 
@@ -137,6 +145,8 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - becomes `Overloaded (Slowness I)` at `37+` occupied slots
 - stores its extra row separately and drops it together with the rest of the inventory on death
 - is built around a late shellcraft progression instead of a direct End rush
+- can craft a pre-End shulker box and upgrade it into a `Reinforced Shulker Box`
+- reinforced shulkers support colors, hopper interaction, loot preservation, and tooltip previews
 
 ## Myth Items and Utilities
 
@@ -152,8 +162,20 @@ Current myth-specific gear and utilities include:
 - `Rage Talisman`
 - `Clinging Gel`
 - `Resonance Shard`
+- `Reinforced Shulker Box`
 - `Myth Sphere`
 - `Tome of Mythos`
+
+## Hidden Variants
+
+- `player`
+  A utility myth for manual admin-side scaling and testing.
+
+- `femboy_kitsune`
+  A hidden kitsune variant with its own joke utility behavior and login lightning toggle.
+
+- `arch_fairy`
+  A hidden fairy variant that can manually shrink into a tiny speed-boosted form.
 
 ## Project Layout
 

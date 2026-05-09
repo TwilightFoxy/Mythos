@@ -18,7 +18,8 @@
     "myth.mythos.siren.guide.feature.dry_land"
   ],
   "guide_crafting": [
-    "myth.mythos.siren.guide.crafting.siren_elixir"
+    "myth.mythos.siren.guide.crafting.siren_elixir",
+    "recipe:mythos:siren_elixir"
   ],
   "powers": []
 }

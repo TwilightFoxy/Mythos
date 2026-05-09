@@ -21,7 +21,8 @@
     "myth.mythos.slime.guide.feature.clinging"
   ],
   "guide_crafting": [
-    "myth.mythos.slime.guide.crafting.clinging_gel"
+    "myth.mythos.slime.guide.crafting.clinging_gel",
+    "recipe:mythos:clinging_gel"
   ],
   "powers": []
 }

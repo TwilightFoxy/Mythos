@@ -22,7 +22,8 @@
     "myth.mythos.kitsune.guide.feature.fox_lantern"
   ],
   "guide_crafting": [
-    "myth.mythos.kitsune.guide.crafting.fox_lantern"
+    "myth.mythos.kitsune.guide.crafting.fox_lantern",
+    "recipe:mythos:fox_lantern"
   ],
   "powers": []
 }

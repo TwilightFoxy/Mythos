@@ -56,7 +56,7 @@ public final class KitsuneMythHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        boolean isKitsune = MythState.is(player, KITSUNE);
+        boolean isKitsune = MythState.matches(player, KITSUNE);
 
         if (!player.level().isClientSide()) {
             tickCooldown(player, MythosAttachments.KITSUNE_DASH_COOLDOWN.get());
@@ -114,7 +114,7 @@ public final class KitsuneMythHandler {
             return;
         }
 
-        if (!(event.getSource().getEntity() instanceof Player player) || !MythState.is(player, KITSUNE)) {
+        if (!(event.getSource().getEntity() instanceof Player player) || !MythState.matches(player, KITSUNE)) {
             return;
         }
 
@@ -130,7 +130,7 @@ public final class KitsuneMythHandler {
     }
 
     public static void toggleMask(ServerPlayer player) {
-        if (!MythState.is(player, KITSUNE)) {
+        if (!MythState.matches(player, KITSUNE)) {
             return;
         }
 
@@ -142,7 +142,7 @@ public final class KitsuneMythHandler {
     }
 
     public static void performDash(ServerPlayer player) {
-        if (!MythState.is(player, KITSUNE)) {
+        if (!MythState.matches(player, KITSUNE)) {
             return;
         }
 
@@ -161,7 +161,7 @@ public final class KitsuneMythHandler {
     }
 
     public static void castFoxfire(ServerPlayer player) {
-        if (!MythState.is(player, KITSUNE)
+        if (!MythState.matches(player, KITSUNE)
             || !player.getData(MythosAttachments.KITSUNE_MASKED)
             || !canUseMaskPowers(player.level(), player)) {
             return;

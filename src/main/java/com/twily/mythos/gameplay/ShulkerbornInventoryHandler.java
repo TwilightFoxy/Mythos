@@ -39,7 +39,7 @@ public final class ShulkerbornInventoryHandler {
     }
 
     public static boolean isShulkerborn(Player player) {
-        return MythState.is(player, SHULKERBORN);
+        return MythState.matches(player, SHULKERBORN);
     }
 
     public static ShulkerbornInventoryData getData(Player player) {

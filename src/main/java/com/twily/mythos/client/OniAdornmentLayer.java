@@ -39,7 +39,7 @@ public final class OniAdornmentLayer extends RenderLayer<AvatarRenderState, Play
         }
 
         Entity entity = minecraft.level.getEntity(state.id);
-        if (!(entity instanceof Player player) || !MythState.is(player, ONI) || !player.hasEffect(MythosEffects.ONI_BATTLE_FORM)) {
+        if (!(entity instanceof Player player) || !MythState.matches(player, ONI) || !player.hasEffect(MythosEffects.ONI_BATTLE_FORM)) {
             return;
         }
 

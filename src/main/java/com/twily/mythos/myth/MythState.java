@@ -1,6 +1,7 @@
 package com.twily.mythos.myth;
 
 import com.twily.mythos.Mythos;
+import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.gameplay.MythScaleHandler;
 import com.twily.mythos.registry.MythosAttachments;
 import net.minecraft.resources.Identifier;
@@ -31,6 +32,10 @@ public final class MythState {
 
     public static boolean is(Player player, Identifier mythId) {
         return get(player).equals(mythId);
+    }
+
+    public static boolean matches(Player player, Identifier mythId) {
+        return MythDataManager.matches(get(player), mythId);
     }
 
     public static void set(Player player, Identifier mythId) {

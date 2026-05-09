@@ -20,7 +20,8 @@
     "myth.mythos.oni.guide.feature.battle_form_backlash"
   ],
   "guide_crafting": [
-    "myth.mythos.oni.guide.crafting.rage_talisman"
+    "myth.mythos.oni.guide.crafting.rage_talisman",
+    "recipe:mythos:rage_talisman"
   ],
   "powers": []
 }

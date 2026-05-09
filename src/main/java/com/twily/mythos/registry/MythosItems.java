@@ -3,14 +3,17 @@ package com.twily.mythos.registry;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.world.item.DwarvenAleItem;
 import com.twily.mythos.world.item.ClingingGelItem;
+import com.twily.mythos.world.item.FoilBlockItem;
 import com.twily.mythos.world.item.KitsuneTailTunerItem;
 import com.twily.mythos.world.item.MythSphereItem;
 import com.twily.mythos.world.item.MythosGuideItem;
 import com.twily.mythos.world.item.RageTalismanItem;
 import com.twily.mythos.world.item.SirenElixirItem;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.MinecartItem;
@@ -19,9 +22,14 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
+
 public final class MythosItems {
 
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Mythos.MOD_ID);
+    private static final Map<DyeColor, DeferredItem<Item>> DYED_REINFORCED_SHULKER_BOXES = registerDyedReinforcedShulkerBoxes();
     private static final ResourceKey<Item> DWARVEN_ALE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "dwarven_ale"));
     private static final ResourceKey<Item> MYTHOS_GUIDE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "mythos_guide"));
     private static final ResourceKey<Item> MYTH_SPHERE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "myth_sphere"));
@@ -160,10 +168,60 @@ public final class MythosItems {
                 .rarity(Rarity.RARE)
         )
     );
+    public static final DeferredItem<Item> REINFORCED_SHULKER_BOX = ITEMS.register(
+        "reinforced_shulker_box",
+        () -> new FoilBlockItem(
+            MythosBlocks.REINFORCED_SHULKER_BOX.get(),
+            new Item.Properties()
+                .setId(itemKey("reinforced_shulker_box"))
+                .stacksTo(1)
+                .rarity(Rarity.RARE)
+                .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+        )
+    );
     private MythosItems() {
     }
 
     public static void register(IEventBus modBus) {
         ITEMS.register(modBus);
+    }
+
+    public static DeferredItem<Item> reinforcedShulkerBox(DyeColor color) {
+        return DYED_REINFORCED_SHULKER_BOXES.get(color);
+    }
+
+    public static Item[] reinforcedShulkerBoxItems() {
+        ArrayList<Item> items = new ArrayList<>(1 + DYED_REINFORCED_SHULKER_BOXES.size());
+        items.add(REINFORCED_SHULKER_BOX.get());
+        for (DeferredItem<Item> item : DYED_REINFORCED_SHULKER_BOXES.values()) {
+            items.add(item.get());
+        }
+        return items.toArray(Item[]::new);
+    }
+
+    private static Map<DyeColor, DeferredItem<Item>> registerDyedReinforcedShulkerBoxes() {
+        EnumMap<DyeColor, DeferredItem<Item>> items = new EnumMap<>(DyeColor.class);
+        for (DyeColor color : DyeColor.values()) {
+            String name = color.getName() + "_reinforced_shulker_box";
+            items.put(
+                color,
+                ITEMS.register(
+                    name,
+                    () -> new FoilBlockItem(
+                        MythosBlocks.reinforcedShulkerBox(color).get(),
+                        new Item.Properties()
+                            .setId(itemKey(name))
+                            .stacksTo(1)
+                            .rarity(Rarity.RARE)
+                            .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+                    )
+                )
+            );
+        }
+        return Map.copyOf(items);
+    }
+
+    private static ResourceKey<Item> itemKey(String path) {
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, path));
     }
 }

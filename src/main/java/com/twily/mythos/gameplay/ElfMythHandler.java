@@ -166,6 +166,74 @@ public final class ElfMythHandler {
                         context.getSource().sendSuccess(() -> Component.translatable("command.mythos.clear"), false);
                         return 1;
                     }))
+                .then(literal("femboy_login_lightning")
+                    .requires(source -> source.getEntity() instanceof ServerPlayer || source.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
+                    .executes(context -> {
+                        if (context.getSource().getPlayer() == null) {
+                            return 0;
+                        }
+
+                        ServerPlayer player = context.getSource().getPlayerOrException();
+                        boolean enabled = FemboyKitsuneMythHandler.toggleLoginLightningEnabled(player);
+                        context.getSource().sendSuccess(
+                            () -> Component.translatable(
+                                enabled ? "command.mythos.femboy_login_lightning.enabled" : "command.mythos.femboy_login_lightning.disabled"
+                            ),
+                            false
+                        );
+                        return 1;
+                    })
+                    .then(literal("on")
+                        .executes(context -> {
+                            if (context.getSource().getPlayer() == null) {
+                                return 0;
+                            }
+
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            FemboyKitsuneMythHandler.setLoginLightningEnabled(player, true);
+                            context.getSource().sendSuccess(
+                                () -> Component.translatable("command.mythos.femboy_login_lightning.enabled"),
+                                false
+                            );
+                            return 1;
+                        }))
+                    .then(literal("off")
+                        .executes(context -> {
+                            if (context.getSource().getPlayer() == null) {
+                                return 0;
+                            }
+
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            FemboyKitsuneMythHandler.setLoginLightningEnabled(player, false);
+                            context.getSource().sendSuccess(
+                                () -> Component.translatable("command.mythos.femboy_login_lightning.disabled"),
+                                false
+                            );
+                            return 1;
+                        }))
+                    .then(literal("set")
+                        .requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
+                        .then(Commands.argument("target", EntityArgument.player())
+                            .then(literal("on")
+                                .executes(context -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                    FemboyKitsuneMythHandler.setLoginLightningEnabled(target, true);
+                                    context.getSource().sendSuccess(
+                                        () -> Component.translatable("command.mythos.femboy_login_lightning.target_enabled", target.getDisplayName()),
+                                        false
+                                    );
+                                    return 1;
+                                }))
+                            .then(literal("off")
+                                .executes(context -> {
+                                    ServerPlayer target = EntityArgument.getPlayer(context, "target");
+                                    FemboyKitsuneMythHandler.setLoginLightningEnabled(target, false);
+                                    context.getSource().sendSuccess(
+                                        () -> Component.translatable("command.mythos.femboy_login_lightning.target_disabled", target.getDisplayName()),
+                                        false
+                                    );
+                                    return 1;
+                                })))))
         );
     }
 

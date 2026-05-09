@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#mythos:reinforced_shulker_boxes",
+    "minecraft:white_dye"
+  ],
+  "result": {
+    "id": "mythos:white_reinforced_shulker_box",
+    "count": 1
+  }
+}

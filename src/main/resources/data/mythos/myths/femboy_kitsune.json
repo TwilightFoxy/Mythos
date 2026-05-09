@@ -1,0 +1,13 @@
+{
+  "hidden": true,
+  "inherits": "mythos:kitsune",
+  "icon": "minecraft:milk_bucket",
+  "order": 46,
+  "description": "myth.mythos.femboy_kitsune.description",
+  "growth": "myth.mythos.kitsune.growth",
+  "advantages": [],
+  "disadvantages": [],
+  "guide_features": [],
+  "guide_crafting": [],
+  "powers": []
+}

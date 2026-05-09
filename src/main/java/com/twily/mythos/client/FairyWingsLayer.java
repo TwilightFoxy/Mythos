@@ -39,7 +39,7 @@ public final class FairyWingsLayer extends RenderLayer<AvatarRenderState, Player
         }
 
         Entity entity = minecraft.level.getEntity(state.id);
-        if (!(entity instanceof Player player) || !MythState.is(player, FAIRY)) {
+        if (!(entity instanceof Player player) || !MythState.matches(player, FAIRY)) {
             return;
         }
 

@@ -1,5 +1,6 @@
 package com.twily.mythos;
 
+import com.twily.mythos.client.ArchFairySizeKeyHandler;
 import com.twily.mythos.client.HumanTradeOverlay;
 import com.twily.mythos.client.FairyFlightModeKeyHandler;
 import com.twily.mythos.client.FairyVisionKeyHandler;
@@ -10,11 +11,13 @@ import com.twily.mythos.client.MythosClientRendering;
 import com.twily.mythos.client.MythosClientNetworking;
 import com.twily.mythos.client.MythosClientTintSources;
 import com.twily.mythos.client.ShulkerbornInventoryOverlay;
+import com.twily.mythos.client.ShulkerBoxTooltipCompat;
 import com.twily.mythos.client.config.MythosClientConfig;
 import com.twily.mythos.gameplay.SlimeMythHandler;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.network.MythosNetwork;
 import com.twily.mythos.registry.MythosAttachments;
+import com.twily.mythos.registry.MythosBlockEntities;
 import com.twily.mythos.registry.MythosBlocks;
 import com.twily.mythos.registry.MythosEntities;
 import com.twily.mythos.registry.MythosEffects;
@@ -24,6 +27,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -37,6 +41,8 @@ public final class Mythos {
     public Mythos(IEventBus modBus, ModContainer modContainer) {
         modContainer.registerConfig(ModConfig.Type.CLIENT, MythosClientConfig.SPEC);
         MythosAttachments.register(modBus);
+        MythosBlockEntities.register(modBus);
+        modBus.addListener(MythosBlockEntities::addValidBlocks);
         MythosBlocks.register(modBus);
         MythosEntities.register(modBus);
         modBus.addListener(MythosEntities::registerAttributes);
@@ -47,6 +53,7 @@ public final class Mythos {
             modContainer.registerExtensionPoint(IConfigScreenFactory.class, (IConfigScreenFactory) (container, parent) -> new ConfigurationScreen(container, parent));
             modBus.addListener(MythosClientNetworking::registerClientPayloads);
             modBus.addListener(MythosKeyCategory::register);
+            modBus.addListener(ArchFairySizeKeyHandler::registerKeyMappings);
             modBus.addListener(FairyFlightModeKeyHandler::registerKeyMappings);
             modBus.addListener(FairyVisionKeyHandler::registerKeyMappings);
             modBus.addListener(KitsuneActionKeyHandler::registerKeyMappings);
@@ -55,7 +62,9 @@ public final class Mythos {
             modBus.addListener(MythosClientRendering::registerLayerDefinitions);
             modBus.addListener(MythosClientRendering::addLayers);
             modBus.addListener(MythosClientTintSources::registerTintSources);
+            modBus.addListener((FMLClientSetupEvent event) -> ShulkerBoxTooltipCompat.onClientSetup(event));
             NeoForge.EVENT_BUS.register(new HumanTradeOverlay());
+            NeoForge.EVENT_BUS.register(ArchFairySizeKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(FairyFlightModeKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(FairyVisionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(KitsuneActionKeyHandler.Handler.class);

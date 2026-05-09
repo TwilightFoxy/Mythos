@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "mythos:reinforced_shulker_box",
+    "mythos:white_reinforced_shulker_box",
+    "mythos:orange_reinforced_shulker_box",
+    "mythos:magenta_reinforced_shulker_box",
+    "mythos:light_blue_reinforced_shulker_box",
+    "mythos:yellow_reinforced_shulker_box",
+    "mythos:lime_reinforced_shulker_box",
+    "mythos:pink_reinforced_shulker_box",
+    "mythos:gray_reinforced_shulker_box",
+    "mythos:light_gray_reinforced_shulker_box",
+    "mythos:cyan_reinforced_shulker_box",
+    "mythos:purple_reinforced_shulker_box",
+    "mythos:blue_reinforced_shulker_box",
+    "mythos:brown_reinforced_shulker_box",
+    "mythos:green_reinforced_shulker_box",
+    "mythos:red_reinforced_shulker_box",
+    "mythos:black_reinforced_shulker_box"
+  ]
+}

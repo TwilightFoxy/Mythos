@@ -47,6 +47,6 @@ public final class SlimeSeedEntity extends Slime {
     }
 
     private static boolean isFriendlySlimeborn(net.minecraft.world.entity.Entity target) {
-        return target instanceof Player player && MythState.is(player, SLIME);
+        return target instanceof Player player && MythState.matches(player, SLIME);
     }
 }

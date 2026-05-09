@@ -5,10 +5,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 
 import java.util.List;
+import java.util.Optional;
 
 public record MythDefinition(
     Identifier id,
     Identifier icon,
+    Optional<Identifier> inherits,
     boolean hidden,
     int order,
     int complexity,
@@ -23,6 +25,7 @@ public record MythDefinition(
 
     public static final Codec<MythFile> FILE_CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Identifier.CODEC.optionalFieldOf("icon", Identifier.fromNamespaceAndPath("minecraft", "book")).forGetter(MythFile::icon),
+        Identifier.CODEC.optionalFieldOf("inherits").forGetter(MythFile::inherits),
         Codec.BOOL.optionalFieldOf("hidden", false).forGetter(MythFile::hidden),
         Codec.INT.optionalFieldOf("order", 0).forGetter(MythFile::order),
         Codec.INT.optionalFieldOf("complexity", 1).forGetter(MythFile::complexity),
@@ -46,6 +49,7 @@ public record MythDefinition(
         return new MythDefinition(
             id,
             file.icon(),
+            file.inherits(),
             file.hidden(),
             file.order(),
             Math.max(1, Math.min(file.complexity(), 3)),
@@ -61,6 +65,7 @@ public record MythDefinition(
 
     public record MythFile(
         Identifier icon,
+        Optional<Identifier> inherits,
         boolean hidden,
         int order,
         int complexity,

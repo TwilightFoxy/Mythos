@@ -67,7 +67,7 @@ public final class SirenMythHandler {
             return;
         }
 
-        boolean isSiren = MythState.is(player, SIREN);
+        boolean isSiren = MythState.matches(player, SIREN);
         if (player.containerMenu instanceof SmithingMenu smithingMenu) {
             handleSirenSmithing(player, smithingMenu, isSiren);
         }
@@ -127,7 +127,7 @@ public final class SirenMythHandler {
             return;
         }
 
-        if (!MythState.is(player, SIREN)) {
+        if (!MythState.matches(player, SIREN)) {
             return;
         }
 

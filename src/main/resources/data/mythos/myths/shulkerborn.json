@@ -22,7 +22,11 @@
     "myth.mythos.shulkerborn.guide.feature.shell_path"
   ],
   "guide_crafting": [
-    "myth.mythos.shulkerborn.guide.crafting.resonance_shard"
+    "myth.mythos.shulkerborn.guide.crafting.resonance_shard",
+    "myth.mythos.shulkerborn.guide.crafting.shulker_box",
+    "recipe:mythos:shulker_box",
+    "myth.mythos.shulkerborn.guide.crafting.reinforced_shulker_box",
+    "recipe:mythos:reinforced_shulker_box"
   ],
   "powers": []
 }

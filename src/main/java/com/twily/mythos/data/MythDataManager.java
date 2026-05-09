@@ -90,6 +90,28 @@ public final class MythDataManager {
         return Optional.ofNullable(repository.myths.get(mythId));
     }
 
+    public static boolean matches(Identifier currentMythId, Identifier targetMythId) {
+        if (currentMythId.equals(targetMythId)) {
+            return true;
+        }
+
+        Set<Identifier> visited = new LinkedHashSet<>();
+        Identifier cursor = currentMythId;
+        while (visited.add(cursor)) {
+            MythDefinition definition = repository.myths.get(cursor);
+            if (definition == null || definition.inherits().isEmpty()) {
+                return false;
+            }
+
+            cursor = definition.inherits().get();
+            if (cursor.equals(targetMythId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public static int biomeSpeedAmplifier(Player player, Holder<Biome> biome) {
         int maxAmplifier = -1;
 
@@ -165,15 +187,26 @@ public final class MythDataManager {
     }
 
     private static List<MythPowerDefinition> powersFor(Identifier mythId) {
-        MythDefinition definition = repository.myths.get(mythId);
-        if (definition == null) {
-            return List.of();
-        }
-
-        return definition.powers().stream()
+        LinkedHashSet<Identifier> powerIds = new LinkedHashSet<>();
+        collectInheritedPowers(mythId, powerIds, new LinkedHashSet<>());
+        return powerIds.stream()
             .map(repository.powers::get)
             .filter(Objects::nonNull)
             .toList();
+    }
+
+    private static void collectInheritedPowers(Identifier mythId, Set<Identifier> powerIds, Set<Identifier> visitedMyths) {
+        if (!visitedMyths.add(mythId)) {
+            return;
+        }
+
+        MythDefinition definition = repository.myths.get(mythId);
+        if (definition == null) {
+            return;
+        }
+
+        definition.inherits().ifPresent(parent -> collectInheritedPowers(parent, powerIds, visitedMyths));
+        powerIds.addAll(definition.powers());
     }
 
     private static final class MythReloadListener extends SimplePreparableReloadListener<MythRepository> {

@@ -30,7 +30,7 @@ public final class HumanTradeOverlay {
         }
 
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.player == null || !(MythState.is(minecraft.player, HUMAN) || minecraft.player.hasEffect(MobEffects.HERO_OF_THE_VILLAGE))) {
+        if (minecraft.player == null || !(MythState.matches(minecraft.player, HUMAN) || minecraft.player.hasEffect(MobEffects.HERO_OF_THE_VILLAGE))) {
             return;
         }
 

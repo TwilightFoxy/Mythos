@@ -95,6 +95,14 @@ public final class MythosAttachments {
             .build()
     );
 
+    public static final Supplier<AttachmentType<Boolean>> ARCH_FAIRY_SMALL = ATTACHMENT_TYPES.register(
+        "arch_fairy_small",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("small"))
+            .copyOnDeath()
+            .build()
+    );
+
     public static final Supplier<AttachmentType<Boolean>> KITSUNE_MASKED = ATTACHMENT_TYPES.register(
         "kitsune_masked",
         () -> AttachmentType.builder(() -> false)
@@ -128,6 +136,13 @@ public final class MythosAttachments {
         "kitsune_wrath_cooldown",
         () -> AttachmentType.builder(() -> 0)
             .serialize(Codec.INT.fieldOf("wrath_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> FEMBOY_LOGIN_LIGHTNING_ENABLED = ATTACHMENT_TYPES.register(
+        "femboy_login_lightning_enabled",
+        () -> AttachmentType.builder(() -> true)
+            .serialize(Codec.BOOL.fieldOf("enabled"))
             .build()
     );
 

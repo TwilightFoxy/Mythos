@@ -59,7 +59,7 @@ public final class DwarvenAleItem extends Item {
             livingEntity.addEffect(new MobEffectInstance(MythosEffects.DWARVEN_ALE, ALE_DURATION_TICKS, 0, false, true, true));
             livingEntity.removeEffect(MythosEffects.DWARF_ALE_WITHDRAWAL);
             livingEntity.removeEffect(MythosEffects.DWARF_ACUTE_ALE_WITHDRAWAL);
-            if (entity instanceof Player player && MythState.is(player, ELF)) {
+            if (entity instanceof Player player && MythState.matches(player, ELF)) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.NAUSEA, ELF_NAUSEA_TICKS, 0, false, true, true));
             }
             if (entity instanceof Player player) {

@@ -2,6 +2,7 @@ package com.twily.mythos.network;
 
 import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
+import com.twily.mythos.gameplay.ArchFairyMythHandler;
 import com.twily.mythos.gameplay.FairyMythHandler;
 import com.twily.mythos.gameplay.KitsuneMythHandler;
 import com.twily.mythos.gameplay.OniMythHandler;
@@ -29,6 +30,7 @@ public final class MythosNetwork {
         registrar.playToClient(OpenMythGuidePayload.TYPE, OpenMythGuidePayload.STREAM_CODEC);
         registrar.playToClient(OpenMythSelectionPayload.TYPE, OpenMythSelectionPayload.STREAM_CODEC);
         registrar.playToServer(ChooseMythPayload.TYPE, ChooseMythPayload.STREAM_CODEC, MythosNetwork::handleChooseMyth);
+        registrar.playToServer(ToggleArchFairySizePayload.TYPE, ToggleArchFairySizePayload.STREAM_CODEC, MythosNetwork::handleToggleArchFairySize);
         registrar.playToServer(ToggleFairyFlightModePayload.TYPE, ToggleFairyFlightModePayload.STREAM_CODEC, MythosNetwork::handleToggleFairyFlightMode);
         registrar.playToServer(UseFairyVisionPayload.TYPE, UseFairyVisionPayload.STREAM_CODEC, MythosNetwork::handleUseFairyVision);
         registrar.playToServer(UseKitsuneActionPayload.TYPE, UseKitsuneActionPayload.STREAM_CODEC, MythosNetwork::handleUseKitsuneAction);
@@ -81,6 +83,15 @@ public final class MythosNetwork {
             Player contextPlayer = context.player();
             if (contextPlayer instanceof ServerPlayer player) {
                 FairyMythHandler.toggleFlightMode(player);
+            }
+        });
+    }
+
+    private static void handleToggleArchFairySize(ToggleArchFairySizePayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (contextPlayer instanceof ServerPlayer player) {
+                ArchFairyMythHandler.toggleSize(player);
             }
         });
     }

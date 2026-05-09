@@ -19,7 +19,9 @@
   ],
   "guide_crafting": [
     "myth.mythos.dwarf.guide.crafting.dwarven_ale",
-    "myth.mythos.dwarf.guide.crafting.tempered_pickaxe"
+    "recipe:mythos:dwarven_ale",
+    "myth.mythos.dwarf.guide.crafting.tempered_pickaxe",
+    "recipe:mythos:dwarven_pickaxe_tempering"
   ],
   "powers": []
 }

@@ -1,0 +1,13 @@
+{
+  "hidden": true,
+  "inherits": "mythos:fairy",
+  "icon": "minecraft:feather",
+  "order": 47,
+  "description": "myth.mythos.arch_fairy.description",
+  "growth": "myth.mythos.fairy.growth",
+  "advantages": [],
+  "disadvantages": [],
+  "guide_features": [],
+  "guide_crafting": [],
+  "powers": []
+}

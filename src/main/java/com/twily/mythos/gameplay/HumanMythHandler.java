@@ -45,7 +45,7 @@ public final class HumanMythHandler {
             return;
         }
 
-        if (MythState.is(player, HUMAN) && player.tickCount % 20 == 0) {
+        if (MythState.matches(player, HUMAN) && player.tickCount % 20 == 0) {
             player.addEffect(new MobEffectInstance(MobEffects.HERO_OF_THE_VILLAGE, HERO_DURATION, HERO_LEVEL, true, false, true));
         }
 
@@ -63,7 +63,7 @@ public final class HumanMythHandler {
         }
 
         Player player = event.getEntity();
-        if (!MythState.is(player, HUMAN) || !(event.getTarget() instanceof AbstractVillager villager)) {
+        if (!MythState.matches(player, HUMAN) || !(event.getTarget() instanceof AbstractVillager villager)) {
             return;
         }
 

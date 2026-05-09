@@ -47,7 +47,7 @@ public final class SirenElixirItem extends Item {
             livingEntity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, ELIXIR_DURATION_TICKS, 0, false, true, true));
             if (entity instanceof Player player) {
                 player.setData(MythosAttachments.SIREN_DRY_TICKS, SIREN_DRY_MAX_TICKS);
-                if (MythState.is(player, SIREN)) {
+                if (MythState.matches(player, SIREN)) {
                     player.addEffect(new MobEffectInstance(MythosEffects.SIREN_ELIXIR_GRACE, ELIXIR_DURATION_TICKS, 0, false, true, true));
                 }
             }

@@ -50,7 +50,7 @@ public final class OniMythHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        boolean isOni = MythState.is(player, ONI);
+        boolean isOni = MythState.matches(player, ONI);
 
         if (player.level().isClientSide()) {
             return;
@@ -85,7 +85,7 @@ public final class OniMythHandler {
 
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
-        if (!(event.getSource().getEntity() instanceof Player player) || !MythState.is(player, ONI)) {
+        if (!(event.getSource().getEntity() instanceof Player player) || !MythState.matches(player, ONI)) {
             return;
         }
 
@@ -101,7 +101,7 @@ public final class OniMythHandler {
     }
 
     public static void activateBattleForm(net.minecraft.server.level.ServerPlayer player) {
-        if (!MythState.is(player, ONI)) {
+        if (!MythState.matches(player, ONI)) {
             return;
         }
 

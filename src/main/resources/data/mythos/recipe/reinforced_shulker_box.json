@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "SNS",
+    " R "
+  ],
+  "key": {
+    "S": "#minecraft:shulker_boxes",
+    "R": "mythos:resonance_shard",
+    "N": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "id": "mythos:reinforced_shulker_box",
+    "count": 1
+  }
+}

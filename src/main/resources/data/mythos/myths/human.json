@@ -17,6 +17,9 @@
     "myth.mythos.human.guide.feature.extended_trades",
     "myth.mythos.human.guide.feature.trade_insight"
   ],
-  "guide_crafting": [],
+  "guide_crafting": [
+    "myth.mythos.human.guide.crafting.mythos_guide",
+    "recipe:mythos:mythos_guide"
+  ],
   "powers": []
 }

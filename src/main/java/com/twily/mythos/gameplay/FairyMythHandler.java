@@ -13,12 +13,14 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -26,6 +28,9 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.Consumables;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -47,8 +52,13 @@ public final class FairyMythHandler {
     private static final int FAIRY_VISION_RADIUS = 5;
     private static final int FAIRY_VISION_DURATION_TICKS = 20 * 60 * 3;
     private static final int FAIRY_VISION_COOLDOWN_TICKS = 20 * 30;
+    private static final int FAIRY_FLOWER_FOOD = 2;
+    private static final float FAIRY_FLOWER_SATURATION = 0.1F;
     private static final String FAIRY_BOOTS_MARKER = "mythos_fairy_boots";
     private static final String FAIRY_WINGS_MARKER = "mythos_fairy_wings";
+    private static final String FAIRY_FLOWER_MARKER = "mythos_fairy_flower_edible";
+    private static final FoodProperties FAIRY_FLOWER_PROPERTIES = new FoodProperties(FAIRY_FLOWER_FOOD, FAIRY_FLOWER_SATURATION, false);
+    private static final Consumable FAIRY_FLOWER_CONSUMABLE = Consumables.DEFAULT_FOOD;
 
     private FairyMythHandler() {
     }
@@ -56,9 +66,10 @@ public final class FairyMythHandler {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        boolean isFairy = MythState.is(player, FAIRY);
+        boolean isFairy = MythState.matches(player, FAIRY);
         boolean lowFlightAvailable = isFairy && hasSupportNearby(player, FAIRY_FLIGHT_RANGE);
         boolean fairyElytraMode = player.getData(MythosAttachments.FAIRY_ELYTRA_MODE);
+        syncFairyFlowerEdibility(player, isFairy);
 
         if (!player.level().isClientSide()) {
             tickFairyVisionCooldown(player);
@@ -97,17 +108,17 @@ public final class FairyMythHandler {
     @SubscribeEvent
     public static void onLivingDamage(LivingDamageEvent.Pre event) {
         if (event.getSource().is(DamageTypes.FLY_INTO_WALL) && event.getEntity() instanceof Player fairy
-            && MythState.is(fairy, FAIRY) && fairy.getData(MythosAttachments.FAIRY_ELYTRA_MODE)) {
+            && MythState.matches(fairy, FAIRY) && fairy.getData(MythosAttachments.FAIRY_ELYTRA_MODE)) {
             event.setNewDamage(0.0F);
             return;
         }
 
-        if (event.getSource().is(DamageTypeTags.IS_FALL) && event.getEntity() instanceof Player fairy && MythState.is(fairy, FAIRY)) {
+        if (event.getSource().is(DamageTypeTags.IS_FALL) && event.getEntity() instanceof Player fairy && MythState.matches(fairy, FAIRY)) {
             event.setNewDamage(0.0F);
             return;
         }
 
-        if (!(event.getSource().getEntity() instanceof Player player) || !MythState.is(player, FAIRY)) {
+        if (!(event.getSource().getEntity() instanceof Player player) || !MythState.matches(player, FAIRY)) {
             return;
         }
 
@@ -117,7 +128,7 @@ public final class FairyMythHandler {
     }
 
     public static void activateFairyVision(ServerPlayer player) {
-        if (!MythState.is(player, FAIRY)) {
+        if (!MythState.matches(player, FAIRY)) {
             return;
         }
 
@@ -135,7 +146,7 @@ public final class FairyMythHandler {
     }
 
     public static void toggleFlightMode(ServerPlayer player) {
-        if (!MythState.is(player, FAIRY)) {
+        if (!MythState.matches(player, FAIRY)) {
             return;
         }
 
@@ -361,6 +372,46 @@ public final class FairyMythHandler {
             smithingMenu.getSlot(SmithingMenu.RESULT_SLOT).set(ItemStack.EMPTY);
             smithingMenu.broadcastChanges();
         }
+    }
+
+    private static boolean isFairyFlower(ItemStack stack) {
+        return stack.is(ItemTags.FLOWERS) || stack.is(Items.WITHER_ROSE);
+    }
+
+    private static void syncFairyFlowerEdibility(Player player, boolean isFairy) {
+        ItemStack mainHand = player.getMainHandItem();
+        ItemStack offHand = player.getOffhandItem();
+        int inventorySize = player.getInventory().getContainerSize();
+
+        for (int slot = 0; slot < inventorySize; slot++) {
+            ItemStack stack = player.getInventory().getItem(slot);
+            boolean shouldBeEdible = isFairy && isFairyFlower(stack) && (stack == mainHand || stack == offHand);
+            if (shouldBeEdible) {
+                applyFairyFlowerComponents(stack);
+            } else {
+                stripFairyFlowerComponents(stack);
+            }
+        }
+    }
+
+    private static void applyFairyFlowerComponents(ItemStack stack) {
+        if (!isFairyFlower(stack)) {
+            return;
+        }
+
+        stack.set(DataComponents.FOOD, FAIRY_FLOWER_PROPERTIES);
+        stack.set(DataComponents.CONSUMABLE, FAIRY_FLOWER_CONSUMABLE);
+        MythItemMarkerHelper.setMarker(stack, FAIRY_FLOWER_MARKER);
+    }
+
+    private static void stripFairyFlowerComponents(ItemStack stack) {
+        if (!MythItemMarkerHelper.hasMarker(stack, FAIRY_FLOWER_MARKER)) {
+            return;
+        }
+
+        stack.remove(DataComponents.FOOD);
+        stack.remove(DataComponents.CONSUMABLE);
+        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> tag.remove(FAIRY_FLOWER_MARKER));
     }
 
     private static boolean hasSupportNearby(Player player, int maxDistance) {

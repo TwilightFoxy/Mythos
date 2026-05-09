@@ -43,7 +43,7 @@ public final class SlimeDisguiseLayer extends RenderLayer<AvatarRenderState, Pla
         }
 
         Entity entity = minecraft.level.getEntity(state.id);
-        if (!(entity instanceof AbstractClientPlayer player) || !MythState.is(player, SLIME)) {
+        if (!(entity instanceof AbstractClientPlayer player) || !MythState.matches(player, SLIME)) {
             return;
         }
 

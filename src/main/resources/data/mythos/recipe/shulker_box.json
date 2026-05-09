@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ARA",
+    "SCS",
+    "ASA"
+  ],
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "R": "mythos:resonance_shard",
+    "S": "minecraft:slime_ball",
+    "C": "minecraft:chest"
+  },
+  "result": {
+    "id": "minecraft:shulker_box",
+    "count": 1
+  }
+}

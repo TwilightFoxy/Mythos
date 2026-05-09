@@ -5,6 +5,7 @@ import com.twily.mythos.data.MythItemMarkerHelper;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.registry.MythosAttachments;
 import com.twily.mythos.registry.MythosEffects;
+import com.twily.mythos.registry.MythosItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import java.util.List;
@@ -51,7 +53,7 @@ public final class DwarfMythHandler {
             return;
         }
 
-        if (MythState.is(player, DWARF)) {
+        if (MythState.matches(player, DWARF)) {
             int hasteAmplifier = player.getBlockY() < 0 ? 1 : 0;
             player.addEffect(new MobEffectInstance(MobEffects.HASTE, 40, hasteAmplifier, false, true, true));
 
@@ -79,7 +81,7 @@ public final class DwarfMythHandler {
         }
 
         if (player.containerMenu instanceof SmithingMenu smithingMenu) {
-            handleSmithing(player, smithingMenu, MythState.is(player, DWARF));
+            handleSmithing(player, smithingMenu, MythState.matches(player, DWARF));
         }
     }
 
@@ -90,6 +92,19 @@ public final class DwarfMythHandler {
         player.removeEffect(MythosEffects.DWARF_ACUTE_ALE_WITHDRAWAL);
         player.removeEffect(MobEffects.BLINDNESS);
         syncAleSlowness(player, false);
+    }
+
+    @SubscribeEvent
+    public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+        if (!event.getCrafting().is(MythosItems.DWARVEN_ALE.get())) {
+            return;
+        }
+
+        if (removeSingleItem(event.getInventory(), Items.GLASS_BOTTLE)) {
+            return;
+        }
+
+        removeSingleItem(event.getEntity().getInventory(), Items.GLASS_BOTTLE);
     }
 
     private static void syncAleSlowness(net.minecraft.world.entity.player.Player player, boolean active) {
@@ -187,5 +202,16 @@ public final class DwarfMythHandler {
             smithingMenu.getSlot(SmithingMenu.RESULT_SLOT).set(ItemStack.EMPTY);
             smithingMenu.broadcastChanges();
         }
+    }
+
+    private static boolean removeSingleItem(net.minecraft.world.Container container, net.minecraft.world.item.Item item) {
+        for (int slot = 0; slot < container.getContainerSize(); slot++) {
+            ItemStack stack = container.getItem(slot);
+            if (stack.is(item)) {
+                container.removeItem(slot, 1);
+                return true;
+            }
+        }
+        return false;
     }
 }

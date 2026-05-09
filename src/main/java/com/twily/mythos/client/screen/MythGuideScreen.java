@@ -8,16 +8,27 @@ import com.twily.mythos.client.OniActionKeyHandler;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythGuideEntry;
+import com.twily.mythos.registry.MythosItems;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
+import java.util.Optional;
 
 @OnlyIn(Dist.CLIENT)
 public final class MythGuideScreen extends Screen {
@@ -33,6 +44,10 @@ public final class MythGuideScreen extends Screen {
     private static final int CRAFT_TEXT = 0xFFFFD37A;
     private static final int DOT_ACTIVE = 0xFF9146FF;
     private static final int DOT_INACTIVE = 0x803B4051;
+    private static final Identifier SLOT_SPRITE = Identifier.fromNamespaceAndPath("minecraft", "container/slot");
+    private static final int RECIPE_CARD_FILL = 0xCC1A1D26;
+    private static final int RECIPE_CARD_BORDER = 0xFF4A4F63;
+    private static final int RECIPE_CARD_HEADER = 0xFF252934;
 
     private final List<MythGuideEntry> myths;
     private final Identifier currentMyth;
@@ -169,7 +184,7 @@ public final class MythGuideScreen extends Screen {
         y = drawSection(graphics, Component.translatable("gui.mythos.advantages"), selected.advantages(), textX, y, contentWidth, POSITIVE_TEXT);
         y = drawSection(graphics, Component.translatable("gui.mythos.disadvantages"), selected.disadvantages(), textX, y, contentWidth, NEGATIVE_TEXT);
         y = drawSection(graphics, Component.translatable("gui.mythos.guide.features"), selected.features(), textX, y, contentWidth, FEATURE_TEXT);
-        drawSection(graphics, Component.translatable("gui.mythos.guide.crafting"), selected.crafting(), textX, y, contentWidth, CRAFT_TEXT);
+        drawCraftingSection(graphics, Component.translatable("gui.mythos.guide.crafting"), selected.crafting(), textX, y, contentWidth);
         graphics.disableScissor();
 
         if (this.maxScroll() > 0) {
@@ -193,6 +208,23 @@ public final class MythGuideScreen extends Screen {
         graphics.text(this.font, title, x, y, color, false);
         y += 11;
         y = drawBullets(graphics, lines, x, y, width, color, "• ");
+        return y + 4;
+    }
+
+    private int drawCraftingSection(GuiGraphicsExtractor graphics, Component title, List<String> lines, int x, int y, int width) {
+        if (lines.isEmpty()) {
+            return y;
+        }
+
+        graphics.text(this.font, title, x, y, CRAFT_TEXT, false);
+        y += 11;
+        for (String line : lines) {
+            if (isRecipeEntry(line)) {
+                y = drawRecipeCard(graphics, line, x, y, width);
+            } else {
+                y = drawWrappedText(graphics, Component.literal("• ").append(resolveGuideLine(line)), x, y, width, CRAFT_TEXT, 2);
+            }
+        }
         return y + 4;
     }
 
@@ -248,6 +280,56 @@ public final class MythGuideScreen extends Screen {
             graphics.fill(dotX, y, dotX + 6, y + 6, color);
             graphics.outline(dotX, y, 6, 6, 0xFF252934);
         }
+    }
+
+    private int drawRecipeCard(GuiGraphicsExtractor graphics, String entry, int x, int y, int width) {
+        Optional<RecipePreview> recipe = recipeFor(entry);
+        if (recipe.isEmpty()) {
+            return drawWrappedText(graphics, Component.literal("• ").append(Component.literal(entry.substring("recipe:".length()))), x, y, width, CRAFT_TEXT, 2);
+        }
+
+        RecipePreview shaped = recipe.get();
+        ItemStack result = shaped.result();
+        int cardWidth = Math.min(width, 188);
+        int cardHeight = 92;
+
+        graphics.fill(x, y, x + cardWidth, y + cardHeight, RECIPE_CARD_FILL);
+        graphics.outline(x, y, cardWidth, cardHeight, RECIPE_CARD_BORDER);
+        graphics.fill(x, y, x + cardWidth, y + 22, RECIPE_CARD_HEADER);
+        graphics.text(this.font, result.getHoverName(), x + 6, y + 3, CRAFT_TEXT, false);
+        Component method = Component.translatable(shaped.layout() == PreviewLayout.SMITHING
+            ? "gui.mythos.recipe_method.smithing_table"
+            : "gui.mythos.recipe_method.crafting_table");
+        graphics.text(this.font, method, x + 6, y + 12, MUTED_TEXT, false);
+
+        if (shaped.layout() == PreviewLayout.SMITHING) {
+            int leftX = x + 10;
+            int slotY = y + 36;
+            drawSlotWithItem(graphics, shaped.ingredients().get(0), leftX, slotY);
+            drawSlotWithItem(graphics, shaped.ingredients().get(1), leftX + 22, slotY);
+            Component arrow = Component.literal("->");
+            graphics.text(this.font, arrow, x + 85, y + 43, BODY_TEXT, false);
+            int resultSlotX = x + 112;
+            drawSlotWithItem(graphics, result, resultSlotX, slotY);
+        } else {
+            int gridX = x + 6;
+            int gridY = y + 28;
+            for (int row = 0; row < 3; row++) {
+                for (int column = 0; column < 3; column++) {
+                    int slotX = gridX + column * 18;
+                    int slotY = gridY + row * 18;
+                    drawSlotWithItem(graphics, ingredientAt(shaped.ingredients(), row * 3 + column), slotX, slotY);
+                }
+            }
+
+            Component arrow = Component.literal("->");
+            graphics.text(this.font, arrow, x + 85, y + 53, BODY_TEXT, false);
+            int resultSlotX = x + 112;
+            int resultSlotY = y + 46;
+            drawSlotWithItem(graphics, result, resultSlotX, resultSlotY);
+        }
+
+        return y + cardHeight + 4;
     }
 
     private Identifier mythLogoTexture(Identifier mythId) {
@@ -308,7 +390,7 @@ public final class MythGuideScreen extends Screen {
         height += measureSection(Component.translatable("gui.mythos.advantages"), selected.advantages(), contentWidth);
         height += measureSection(Component.translatable("gui.mythos.disadvantages"), selected.disadvantages(), contentWidth);
         height += measureSection(Component.translatable("gui.mythos.guide.features"), selected.features(), contentWidth);
-        height += measureSection(Component.translatable("gui.mythos.guide.crafting"), selected.crafting(), contentWidth);
+        height += measureCraftingSection(Component.translatable("gui.mythos.guide.crafting"), selected.crafting(), contentWidth);
         return height;
     }
 
@@ -320,6 +402,20 @@ public final class MythGuideScreen extends Screen {
         int height = 11;
         for (String lineKey : lines) {
             height += measureWrappedText(Component.literal("• ").append(resolveGuideLine(lineKey)), width, 2);
+        }
+        return height + 4;
+    }
+
+    private int measureCraftingSection(Component title, List<String> lines, int width) {
+        if (lines.isEmpty()) {
+            return 0;
+        }
+
+        int height = 11;
+        for (String line : lines) {
+            height += isRecipeEntry(line)
+                ? 96
+                : measureWrappedText(Component.literal("• ").append(resolveGuideLine(line)), width, 2);
         }
         return height + 4;
     }
@@ -348,5 +444,177 @@ public final class MythGuideScreen extends Screen {
                 Component.translatable(lineKey, OniActionKeyHandler.battleFormKeyName());
             default -> Component.translatable(lineKey);
         };
+    }
+
+    private boolean isRecipeEntry(String entry) {
+        return entry.startsWith("recipe:");
+    }
+
+    private Optional<RecipePreview> recipeFor(String entry) {
+        if (!isRecipeEntry(entry)) {
+            return Optional.empty();
+        }
+
+        Identifier recipeId = Identifier.tryParse(entry.substring("recipe:".length()));
+        if (recipeId == null) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(switch (recipeId.toString()) {
+            case "mythos:mythos_guide" -> craftingPreview(
+                new ItemStack(MythosItems.MYTHOS_GUIDE.get()),
+                new ItemStack(Items.BOOK),
+                new ItemStack(Items.LAPIS_LAZULI)
+            );
+            case "mythos:dwarven_ale" -> craftingPreview(
+                new ItemStack(MythosItems.DWARVEN_ALE.get()),
+                new ItemStack(Items.HONEY_BOTTLE),
+                new ItemStack(Items.WHEAT),
+                new ItemStack(Items.WHEAT)
+            );
+            case "mythos:dwarven_pickaxe_tempering" -> smithingPreview(
+                dwarvenPickaxePreview(),
+                enchanted(new ItemStack(Items.DIAMOND_PICKAXE)),
+                new ItemStack(Items.NETHERITE_INGOT)
+            );
+            case "mythos:looting_bow_upgrade" -> smithingPreview(
+                elvenBowPreview(),
+                new ItemStack(Items.BOW),
+                new ItemStack(Items.NETHERITE_INGOT)
+            );
+            case "mythos:fairy_boots" -> smithingPreview(
+                fairyBootsPreview(Items.LEATHER_BOOTS),
+                new ItemStack(Items.LEATHER_BOOTS),
+                new ItemStack(Items.WIND_CHARGE)
+            );
+            case "mythos:fairy_minecart" -> smithingPreview(
+                new ItemStack(MythosItems.FAIRY_MINECART.get()),
+                new ItemStack(Items.MINECART),
+                new ItemStack(Items.WIND_CHARGE)
+            );
+            case "mythos:fox_lantern" -> smithingPreview(
+                new ItemStack(MythosItems.FOX_LANTERN.get()),
+                new ItemStack(Items.LANTERN),
+                new ItemStack(Items.GLOW_INK_SAC)
+            );
+            case "mythos:siren_elixir" -> smithingPreview(
+                sirenElixirPreview(),
+                PotionContents.createItemStack(Items.POTION, Potions.WATER),
+                new ItemStack(Items.NAUTILUS_SHELL)
+            );
+            case "mythos:rage_talisman" -> smithingPreview(
+                new ItemStack(MythosItems.RAGE_TALISMAN.get()),
+                new ItemStack(Items.PAPER),
+                new ItemStack(Items.NETHER_WART)
+            );
+            case "mythos:clinging_gel" -> craftingPreview(
+                new ItemStack(MythosItems.CLINGING_GEL.get()),
+                PotionContents.createItemStack(Items.POTION, Potions.OOZING),
+                new ItemStack(Items.HONEY_BLOCK)
+            );
+            case "mythos:shulker_box" -> gridPreview(
+                new ItemStack(Items.SHULKER_BOX),
+                List.of(
+                    new ItemStack(Items.AMETHYST_SHARD),
+                    new ItemStack(MythosItems.RESONANCE_SHARD.get()),
+                    new ItemStack(Items.AMETHYST_SHARD),
+                    new ItemStack(Items.SLIME_BALL),
+                    new ItemStack(Items.CHEST),
+                    new ItemStack(Items.SLIME_BALL),
+                    new ItemStack(Items.AMETHYST_SHARD),
+                    new ItemStack(Items.SLIME_BALL),
+                    new ItemStack(Items.AMETHYST_SHARD)
+                )
+            );
+            case "mythos:reinforced_shulker_box" -> gridPreview(
+                new ItemStack(MythosItems.REINFORCED_SHULKER_BOX.get()),
+                List.of(
+                    ItemStack.EMPTY,
+                    new ItemStack(MythosItems.RESONANCE_SHARD.get()),
+                    ItemStack.EMPTY,
+                    new ItemStack(Items.SHULKER_BOX),
+                    new ItemStack(Items.NETHERITE_INGOT),
+                    new ItemStack(Items.SHULKER_BOX),
+                    ItemStack.EMPTY,
+                    new ItemStack(MythosItems.RESONANCE_SHARD.get()),
+                    ItemStack.EMPTY
+                )
+            );
+            default -> null;
+        });
+    }
+
+    private void drawSlotWithItem(GuiGraphicsExtractor graphics, ItemStack stack, int x, int y) {
+        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_SPRITE, x, y, 18, 18);
+        if (!stack.isEmpty()) {
+            graphics.item(stack, x + 1, y + 1);
+            graphics.itemDecorations(this.font, stack, x + 1, y + 1);
+        }
+    }
+
+    private ItemStack ingredientAt(List<ItemStack> ingredients, int index) {
+        return index < ingredients.size() ? ingredients.get(index) : ItemStack.EMPTY;
+    }
+
+    private RecipePreview craftingPreview(ItemStack result, ItemStack... ingredients) {
+        return gridPreview(result, List.of(ingredients));
+    }
+
+    private RecipePreview gridPreview(ItemStack result, List<ItemStack> ingredients) {
+        return new RecipePreview(result, ingredients, PreviewLayout.GRID);
+    }
+
+    private RecipePreview smithingPreview(ItemStack result, ItemStack base, ItemStack addition) {
+        return new RecipePreview(result, List.of(base, addition), PreviewLayout.SMITHING);
+    }
+
+    private ItemStack count(ItemStack stack, int count) {
+        ItemStack result = stack.copy();
+        result.setCount(count);
+        return result;
+    }
+
+    private ItemStack enchanted(ItemStack stack) {
+        ItemStack result = stack.copy();
+        if (this.minecraft.level != null) {
+            var registry = this.minecraft.level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            result.enchant(registry.getOrThrow(Enchantments.EFFICIENCY), 4);
+        }
+        return result;
+    }
+
+    private ItemStack named(ItemStack stack, String key, ChatFormatting color) {
+        ItemStack result = stack.copy();
+        result.set(DataComponents.CUSTOM_NAME, Component.translatable(key).withStyle(color));
+        return result;
+    }
+
+    private ItemStack fairyBootsPreview(net.minecraft.world.item.Item item) {
+        return named(new ItemStack(item), "item.mythos.fairy_boots", ChatFormatting.LIGHT_PURPLE);
+    }
+
+    private ItemStack dwarvenPickaxePreview() {
+        return named(enchanted(new ItemStack(Items.DIAMOND_PICKAXE)), "item.mythos.dwarven_pickaxe", ChatFormatting.BLUE);
+    }
+
+    private ItemStack elvenBowPreview() {
+        ItemStack bow = named(new ItemStack(Items.BOW), "item.mythos.elven_bow", ChatFormatting.GREEN);
+        if (this.minecraft.level != null) {
+            var registry = this.minecraft.level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+            bow.enchant(registry.getOrThrow(Enchantments.LOOTING), 3);
+        }
+        return bow;
+    }
+
+    private ItemStack sirenElixirPreview() {
+        return named(new ItemStack(MythosItems.SIREN_ELIXIR.get()), "item.mythos.siren_elixir", ChatFormatting.AQUA);
+    }
+
+    private enum PreviewLayout {
+        GRID,
+        SMITHING
+    }
+
+    private record RecipePreview(ItemStack result, List<ItemStack> ingredients, PreviewLayout layout) {
     }
 }

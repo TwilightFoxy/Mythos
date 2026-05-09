@@ -61,7 +61,7 @@ public final class KitsuneAdornmentLayer extends RenderLayer<AvatarRenderState, 
         }
 
         Entity entity = minecraft.level.getEntity(state.id);
-        if (!(entity instanceof Player player) || !MythState.is(player, KITSUNE)) {
+        if (!(entity instanceof Player player) || !MythState.matches(player, KITSUNE)) {
             return;
         }
 
