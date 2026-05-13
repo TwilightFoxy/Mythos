@@ -1,6 +1,7 @@
 package com.twily.mythos;
 
 import com.twily.mythos.client.ArchFairySizeKeyHandler;
+import com.twily.mythos.client.FirebornActionKeyHandler;
 import com.twily.mythos.client.HumanTradeOverlay;
 import com.twily.mythos.client.FairyFlightModeKeyHandler;
 import com.twily.mythos.client.FairyVisionKeyHandler;
@@ -55,6 +56,7 @@ public final class Mythos {
             modBus.addListener(MythosClientNetworking::registerClientPayloads);
             modBus.addListener(MythosKeyCategory::register);
             modBus.addListener(ArchFairySizeKeyHandler::registerKeyMappings);
+            modBus.addListener(FirebornActionKeyHandler::registerKeyMappings);
             modBus.addListener(FairyFlightModeKeyHandler::registerKeyMappings);
             modBus.addListener(FairyVisionKeyHandler::registerKeyMappings);
             modBus.addListener(KitsuneActionKeyHandler::registerKeyMappings);
@@ -67,6 +69,7 @@ public final class Mythos {
             modBus.addListener((FMLClientSetupEvent event) -> ShulkerBoxTooltipCompat.onClientSetup(event));
             NeoForge.EVENT_BUS.register(new HumanTradeOverlay());
             NeoForge.EVENT_BUS.register(ArchFairySizeKeyHandler.Handler.class);
+            NeoForge.EVENT_BUS.register(FirebornActionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(FairyFlightModeKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(FairyVisionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(KitsuneActionKeyHandler.Handler.class);

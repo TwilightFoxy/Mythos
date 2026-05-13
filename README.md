@@ -17,7 +17,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 ## Current Version
 
-- `0.7.8`
+- `0.7.12`
 
 ## Core Systems
 
@@ -159,6 +159,18 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - can forge an `Ethereal Candle`
 - `Ethereal Candle` grants temporary ghostly scaffolding that appears under the user while moving
 
+### Fireborn
+
+- replaces normal hunger gameplay with a `5`-stage Heat resource
+- is always immune to fire, lava, and magma
+- can eat coal and charcoal, absorb lava buckets, and passively recover heat from fire, campfires, and lava
+- becomes heavily debilitated below stable heat and loses access to abilities there
+- gains visible speed and strength at high heat
+- unlocks `Fireball` and `Fire Ring` at heated and overheated stages
+- gets one effectively free cast when the heat bar is completely full
+- can walk on lava and sink through it while sneaking
+- can forge an `Ifrit Lighter`
+
 ## Myth Items and Utilities
 
 Current myth-specific gear and utilities include:
@@ -175,6 +187,7 @@ Current myth-specific gear and utilities include:
 - `Resonance Shard`
 - `Reinforced Shulker Box`
 - `Ethereal Candle`
+- `Ifrit Lighter`
 - `Myth Sphere`
 - `Tome of Mythos`
 

@@ -95,6 +95,22 @@ public final class MythosAttachments {
             .build()
     );
 
+    public static final Supplier<AttachmentType<Integer>> FIREBORN_HEAT = ATTACHMENT_TYPES.register(
+        "fireborn_heat",
+        () -> AttachmentType.builder(() -> 50)
+            .serialize(Codec.INT.fieldOf("heat"))
+            .sync((holder, player) -> true, ByteBufCodecs.INT)
+            .copyOnDeath()
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> FIREBORN_STAGE = ATTACHMENT_TYPES.register(
+        "fireborn_stage",
+        () -> AttachmentType.builder(() -> 2)
+            .serialize(Codec.INT.fieldOf("stage"))
+            .build()
+    );
+
     public static final Supplier<AttachmentType<Boolean>> ARCH_FAIRY_SMALL = ATTACHMENT_TYPES.register(
         "arch_fairy_small",
         () -> AttachmentType.builder(() -> false)

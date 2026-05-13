@@ -3,6 +3,7 @@ package com.twily.mythos.client.screen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.twily.mythos.client.FairyVisionKeyHandler;
 import com.twily.mythos.client.FairyFlightModeKeyHandler;
+import com.twily.mythos.client.FirebornActionKeyHandler;
 import com.twily.mythos.client.KitsuneActionKeyHandler;
 import com.twily.mythos.client.OniActionKeyHandler;
 import com.twily.mythos.client.SpiritActionKeyHandler;
@@ -443,6 +444,10 @@ public final class MythGuideScreen extends Screen {
                 Component.translatable(lineKey, KitsuneActionKeyHandler.dashKeyName());
             case "myth.mythos.oni.guide.feature.battle_form" ->
                 Component.translatable(lineKey, OniActionKeyHandler.battleFormKeyName());
+            case "myth.mythos.fireborn.guide.feature.fireball" ->
+                Component.translatable(lineKey, FirebornActionKeyHandler.fireballKeyName());
+            case "myth.mythos.fireborn.guide.feature.fire_ring" ->
+                Component.translatable(lineKey, FirebornActionKeyHandler.ringKeyName());
             case "myth.mythos.spirit.guide.feature.phase_dash" ->
                 Component.translatable(lineKey, SpiritActionKeyHandler.phaseKeyName());
             default -> Component.translatable(lineKey);
@@ -519,6 +524,11 @@ public final class MythGuideScreen extends Screen {
                 new ItemStack(MythosItems.ETHEREAL_CANDLE.get()),
                 new ItemStack(Items.SOUL_LANTERN),
                 new ItemStack(Items.PHANTOM_MEMBRANE)
+            );
+            case "mythos:ifrit_lighter" -> smithingPreview(
+                new ItemStack(MythosItems.IFRIT_LIGHTER.get()),
+                new ItemStack(Items.FLINT_AND_STEEL),
+                new ItemStack(Items.BLAZE_POWDER)
             );
             case "mythos:shulker_box" -> gridPreview(
                 new ItemStack(Items.SHULKER_BOX),

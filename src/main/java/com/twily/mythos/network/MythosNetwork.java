@@ -4,6 +4,7 @@ import com.twily.mythos.Mythos;
 import com.twily.mythos.data.MythDataManager;
 import com.twily.mythos.gameplay.ArchFairyMythHandler;
 import com.twily.mythos.gameplay.FairyMythHandler;
+import com.twily.mythos.gameplay.FirebornMythHandler;
 import com.twily.mythos.gameplay.KitsuneMythHandler;
 import com.twily.mythos.gameplay.OniMythHandler;
 import com.twily.mythos.gameplay.ShulkerbornInventoryHandler;
@@ -34,6 +35,7 @@ public final class MythosNetwork {
         registrar.playToServer(ToggleArchFairySizePayload.TYPE, ToggleArchFairySizePayload.STREAM_CODEC, MythosNetwork::handleToggleArchFairySize);
         registrar.playToServer(ToggleFairyFlightModePayload.TYPE, ToggleFairyFlightModePayload.STREAM_CODEC, MythosNetwork::handleToggleFairyFlightMode);
         registrar.playToServer(UseFairyVisionPayload.TYPE, UseFairyVisionPayload.STREAM_CODEC, MythosNetwork::handleUseFairyVision);
+        registrar.playToServer(UseFirebornActionPayload.TYPE, UseFirebornActionPayload.STREAM_CODEC, MythosNetwork::handleUseFirebornAction);
         registrar.playToServer(UseKitsuneActionPayload.TYPE, UseKitsuneActionPayload.STREAM_CODEC, MythosNetwork::handleUseKitsuneAction);
         registrar.playToServer(UseOniActionPayload.TYPE, UseOniActionPayload.STREAM_CODEC, MythosNetwork::handleUseOniAction);
         registrar.playToServer(UseSpiritActionPayload.TYPE, UseSpiritActionPayload.STREAM_CODEC, MythosNetwork::handleUseSpiritAction);
@@ -109,6 +111,22 @@ public final class MythosNetwork {
                 case "toggle_mask" -> KitsuneMythHandler.toggleMask(player);
                 case "dash" -> KitsuneMythHandler.performDash(player);
                 case "foxfire" -> KitsuneMythHandler.castFoxfire(player);
+                default -> {
+                }
+            }
+        });
+    }
+
+    private static void handleUseFirebornAction(UseFirebornActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (!(contextPlayer instanceof ServerPlayer player)) {
+                return;
+            }
+
+            switch (payload.action()) {
+                case "fireball" -> FirebornMythHandler.castFireball(player);
+                case "ring" -> FirebornMythHandler.castFireRing(player);
                 default -> {
                 }
             }

@@ -1,0 +1,31 @@
+{
+  "icon": "minecraft:fire_charge",
+  "order": 90,
+  "complexity": 4,
+  "description": "myth.mythos.fireborn.description",
+  "growth": "myth.mythos.fireborn.growth",
+  "advantages": [
+    "myth.mythos.fireborn.advantage.fire_immunity",
+    "myth.mythos.fireborn.advantage.heat_resource",
+    "myth.mythos.fireborn.advantage.max_heat"
+  ],
+  "disadvantages": [
+    "myth.mythos.fireborn.disadvantage.cooling",
+    "myth.mythos.fireborn.disadvantage.low_heat"
+  ],
+  "guide_features": [
+    "myth.mythos.fireborn.guide.feature.full_height",
+    "myth.mythos.fireborn.guide.feature.heat_resource",
+    "myth.mythos.fireborn.guide.feature.heat_fuel",
+    "myth.mythos.fireborn.guide.feature.max_heat",
+    "myth.mythos.fireborn.guide.feature.fireball",
+    "myth.mythos.fireborn.guide.feature.fire_ring",
+    "myth.mythos.fireborn.guide.feature.lava_walk",
+    "myth.mythos.fireborn.guide.feature.ifrit_lighter"
+  ],
+  "guide_crafting": [
+    "myth.mythos.fireborn.guide.crafting.ifrit_lighter",
+    "recipe:mythos:ifrit_lighter"
+  ],
+  "powers": []
+}
