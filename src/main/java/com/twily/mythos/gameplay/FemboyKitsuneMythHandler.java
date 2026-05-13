@@ -69,7 +69,19 @@ public final class FemboyKitsuneMythHandler {
             return;
         }
 
-        player.setItemInHand(hand, createFemboyMilk());
+        ItemStack milk = createFemboyMilk();
+        if (player.getAbilities().instabuild) {
+            if (!player.getInventory().add(milk.copy())) {
+                player.drop(milk.copy(), false);
+            }
+        } else if (stack.getCount() == 1) {
+            player.setItemInHand(hand, milk);
+        } else {
+            stack.shrink(1);
+            if (!player.getInventory().add(milk.copy())) {
+                player.drop(milk.copy(), false);
+            }
+        }
         player.containerMenu.broadcastChanges();
         player.level().playSound(null, player.blockPosition(), SoundEvents.COW_MILK, SoundSource.PLAYERS, 1.0F, 1.0F);
         event.setCanceled(true);

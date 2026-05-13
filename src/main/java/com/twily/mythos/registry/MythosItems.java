@@ -3,6 +3,7 @@ package com.twily.mythos.registry;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.world.item.DwarvenAleItem;
 import com.twily.mythos.world.item.ClingingGelItem;
+import com.twily.mythos.world.item.EtherealCandleItem;
 import com.twily.mythos.world.item.FoilBlockItem;
 import com.twily.mythos.world.item.KitsuneTailTunerItem;
 import com.twily.mythos.world.item.MythSphereItem;
@@ -44,6 +45,7 @@ public final class MythosItems {
     private static final ResourceKey<Item> RAGE_TALISMAN_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "rage_talisman"));
     private static final ResourceKey<Item> CLINGING_GEL_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "clinging_gel"));
     private static final ResourceKey<Item> RESONANCE_SHARD_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "resonance_shard"));
+    private static final ResourceKey<Item> ETHEREAL_CANDLE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "ethereal_candle"));
 
     public static final DeferredItem<Item> DWARVEN_ALE = ITEMS.register(
         "dwarven_ale",
@@ -166,6 +168,15 @@ public final class MythosItems {
                 .setId(RESONANCE_SHARD_KEY)
                 .stacksTo(16)
                 .rarity(Rarity.RARE)
+        )
+    );
+    public static final DeferredItem<Item> ETHEREAL_CANDLE = ITEMS.register(
+        "ethereal_candle",
+        () -> new EtherealCandleItem(
+            new Item.Properties()
+                .setId(ETHEREAL_CANDLE_KEY)
+                .stacksTo(16)
+                .rarity(Rarity.UNCOMMON)
         )
     );
     public static final DeferredItem<Item> REINFORCED_SHULKER_BOX = ITEMS.register(

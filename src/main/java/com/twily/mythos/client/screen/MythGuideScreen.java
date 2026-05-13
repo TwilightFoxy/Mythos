@@ -5,6 +5,7 @@ import com.twily.mythos.client.FairyVisionKeyHandler;
 import com.twily.mythos.client.FairyFlightModeKeyHandler;
 import com.twily.mythos.client.KitsuneActionKeyHandler;
 import com.twily.mythos.client.OniActionKeyHandler;
+import com.twily.mythos.client.SpiritActionKeyHandler;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythGuideEntry;
@@ -442,6 +443,8 @@ public final class MythGuideScreen extends Screen {
                 Component.translatable(lineKey, KitsuneActionKeyHandler.dashKeyName());
             case "myth.mythos.oni.guide.feature.battle_form" ->
                 Component.translatable(lineKey, OniActionKeyHandler.battleFormKeyName());
+            case "myth.mythos.spirit.guide.feature.phase_dash" ->
+                Component.translatable(lineKey, SpiritActionKeyHandler.phaseKeyName());
             default -> Component.translatable(lineKey);
         };
     }
@@ -511,6 +514,11 @@ public final class MythGuideScreen extends Screen {
                 new ItemStack(MythosItems.CLINGING_GEL.get()),
                 PotionContents.createItemStack(Items.POTION, Potions.OOZING),
                 new ItemStack(Items.HONEY_BLOCK)
+            );
+            case "mythos:ethereal_candle" -> smithingPreview(
+                new ItemStack(MythosItems.ETHEREAL_CANDLE.get()),
+                new ItemStack(Items.SOUL_LANTERN),
+                new ItemStack(Items.PHANTOM_MEMBRANE)
             );
             case "mythos:shulker_box" -> gridPreview(
                 new ItemStack(Items.SHULKER_BOX),

@@ -103,6 +103,98 @@ public final class MythosAttachments {
             .build()
     );
 
+    public static final Supplier<AttachmentType<Boolean>> SPIRIT_FORM_ACTIVE = ATTACHMENT_TYPES.register(
+        "spirit_form_active",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("active"))
+            .sync((holder, player) -> true, ByteBufCodecs.BOOL)
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> SPIRIT_IN_MATTER_TICKS = ATTACHMENT_TYPES.register(
+        "spirit_in_matter_ticks",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("in_matter_ticks"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> SPIRIT_SNEAK_WAS_DOWN = ATTACHMENT_TYPES.register(
+        "spirit_sneak_was_down",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("sneak_was_down"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> SPIRIT_PHASE_COOLDOWN = ATTACHMENT_TYPES.register(
+        "spirit_phase_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("phase_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> SPIRIT_PHASE_TICKS = ATTACHMENT_TYPES.register(
+        "spirit_phase_ticks",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("phase_ticks"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Double>> SPIRIT_PHASE_TARGET_X = ATTACHMENT_TYPES.register(
+        "spirit_phase_target_x",
+        () -> AttachmentType.builder(() -> 0.0D)
+            .serialize(Codec.DOUBLE.fieldOf("phase_target_x"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Double>> SPIRIT_PHASE_TARGET_Y = ATTACHMENT_TYPES.register(
+        "spirit_phase_target_y",
+        () -> AttachmentType.builder(() -> 0.0D)
+            .serialize(Codec.DOUBLE.fieldOf("phase_target_y"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Double>> SPIRIT_PHASE_TARGET_Z = ATTACHMENT_TYPES.register(
+        "spirit_phase_target_z",
+        () -> AttachmentType.builder(() -> 0.0D)
+            .serialize(Codec.DOUBLE.fieldOf("phase_target_z"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Double>> SPIRIT_PHASE_START_X = ATTACHMENT_TYPES.register(
+        "spirit_phase_start_x",
+        () -> AttachmentType.builder(() -> 0.0D)
+            .serialize(Codec.DOUBLE.fieldOf("phase_start_x"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Double>> SPIRIT_PHASE_START_Y = ATTACHMENT_TYPES.register(
+        "spirit_phase_start_y",
+        () -> AttachmentType.builder(() -> 0.0D)
+            .serialize(Codec.DOUBLE.fieldOf("phase_start_y"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Double>> SPIRIT_PHASE_START_Z = ATTACHMENT_TYPES.register(
+        "spirit_phase_start_z",
+        () -> AttachmentType.builder(() -> 0.0D)
+            .serialize(Codec.DOUBLE.fieldOf("phase_start_z"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> SPIRIT_PHASE_FALL_IMMUNITY = ATTACHMENT_TYPES.register(
+        "spirit_phase_fall_immunity",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("phase_fall_immunity"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> SPIRIT_STEPS_TICKS = ATTACHMENT_TYPES.register(
+        "spirit_steps_ticks",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("spirit_steps_ticks"))
+            .build()
+    );
+
     public static final Supplier<AttachmentType<Boolean>> KITSUNE_MASKED = ATTACHMENT_TYPES.register(
         "kitsune_masked",
         () -> AttachmentType.builder(() -> false)

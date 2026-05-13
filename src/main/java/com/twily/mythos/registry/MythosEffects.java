@@ -95,6 +95,10 @@ public final class MythosEffects {
         "shulkerborn_overloaded",
         () -> new SimpleDisplayEffect(MobEffectCategory.NEUTRAL, 0x7C68C1)
     );
+    public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SPIRIT_ETHEREAL_STEPS = MOB_EFFECTS.register(
+        "spirit_ethereal_steps",
+        () -> new SimpleDisplayEffect(MobEffectCategory.BENEFICIAL, 0xA8E6FF)
+    );
 
     private MythosEffects() {
     }

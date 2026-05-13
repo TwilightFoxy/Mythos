@@ -4,6 +4,7 @@ import com.twily.mythos.Mythos;
 import com.twily.mythos.world.block.FoxLanternBlock;
 import com.twily.mythos.world.block.KitsuneFireBlock;
 import com.twily.mythos.world.block.ReinforcedShulkerBoxBlock;
+import com.twily.mythos.world.block.SpiritStepBlock;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -47,6 +48,19 @@ public final class MythosBlocks {
     );
 
     public static final DeferredBlock<Block> REINFORCED_SHULKER_BOX = registerReinforcedShulkerBox("reinforced_shulker_box", null);
+    public static final DeferredBlock<Block> SPIRIT_STEP = BLOCKS.register(
+        "spirit_step",
+        () -> new SpiritStepBlock(
+            BlockBehaviour.Properties.of()
+                .setId(blockKey("spirit_step"))
+                .strength(0.2F)
+                .noOcclusion()
+                .noLootTable()
+                .isSuffocating((state, level, pos) -> false)
+                .isViewBlocking((state, level, pos) -> false)
+                .lightLevel(state -> 6)
+        )
+    );
 
     private MythosBlocks() {
     }

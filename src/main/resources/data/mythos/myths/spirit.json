@@ -1,0 +1,28 @@
+{
+  "icon": "minecraft:ghast_tear",
+  "order": 80,
+  "complexity": 3,
+  "description": "myth.mythos.spirit.description",
+  "growth": "myth.mythos.spirit.growth",
+  "advantages": [
+    "myth.mythos.spirit.advantage.night_power",
+    "myth.mythos.spirit.advantage.phase_dash",
+    "myth.mythos.spirit.advantage.ethereal_candle"
+  ],
+  "disadvantages": [
+    "myth.mythos.spirit.disadvantage.daylight_weakness",
+    "myth.mythos.spirit.disadvantage.day_transparency"
+  ],
+  "guide_features": [
+    "myth.mythos.spirit.guide.feature.full_height",
+    "myth.mythos.spirit.guide.feature.night_power",
+    "myth.mythos.spirit.guide.feature.phase_dash",
+    "myth.mythos.spirit.guide.feature.day_transparency",
+    "myth.mythos.spirit.guide.feature.ethereal_candle"
+  ],
+  "guide_crafting": [
+    "myth.mythos.spirit.guide.crafting.ethereal_candle",
+    "recipe:mythos:ethereal_candle"
+  ],
+  "powers": []
+}

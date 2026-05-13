@@ -17,7 +17,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 ## Current Version
 
-- `0.6.56`
+- `0.7.8`
 
 ## Core Systems
 
@@ -37,6 +37,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - an in-game book explains each myth in plain language
 - the guide includes strengths, weaknesses, crafting, controls, edge cases, and exact values
 - myth crafting pages now show visual recipe cards for crafting table and smithing table workflows
+- recipe cards also show where the item is made
 - selection stays brief, while the book gives the full breakdown
 - growth is shown as a separate section instead of being buried inside strengths
 
@@ -101,7 +102,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 - can toggle mask and tails together
 - at night, the mask unlocks night powers such as foxfire and heavenly wrath
-- has a directional dash that works even during the day
+- has a directional dash with a `4` second cooldown that works even during the day
 - has reduced defense and reduced melee damage
 - can forge a placed `Fox Lantern`
 - mask and tail colors can be customized from the client config screen
@@ -148,6 +149,16 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - can craft a pre-End shulker box and upgrade it into a `Reinforced Shulker Box`
 - reinforced shulkers support colors, hopper interaction, loot preservation, and tooltip previews
 
+### Spirit
+
+- deals `+30%` damage at night with normal defense
+- keeps normal damage during the day, but loses `30%` armor and `30%` armor toughness
+- becomes visibly ghostlike during the day
+- uses a hold-and-release `Phase Transition` that previews the exit point before teleporting
+- applies brief darkness during the transition and short fall / wall-impact protection afterward
+- can forge an `Ethereal Candle`
+- `Ethereal Candle` grants temporary ghostly scaffolding that appears under the user while moving
+
 ## Myth Items and Utilities
 
 Current myth-specific gear and utilities include:
@@ -163,6 +174,7 @@ Current myth-specific gear and utilities include:
 - `Clinging Gel`
 - `Resonance Shard`
 - `Reinforced Shulker Box`
+- `Ethereal Candle`
 - `Myth Sphere`
 - `Tome of Mythos`
 
@@ -176,6 +188,13 @@ Current myth-specific gear and utilities include:
 
 - `arch_fairy`
   A hidden fairy variant that can manually shrink into a tiny speed-boosted form.
+
+## Testing Workflow
+
+- significant gameplay changes are built before handoff
+- test jars are copied into the dedicated Modrinth profile at:
+  `/Users/twilightfoxy/Library/Application Support/ModrinthApp/profiles/26.1 ресурспак тест/mods/`
+- the previous active Mythos jar is disabled so the profile always runs a single current build
 
 ## Project Layout
 

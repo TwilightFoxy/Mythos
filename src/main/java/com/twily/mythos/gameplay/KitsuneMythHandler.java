@@ -46,7 +46,7 @@ public final class KitsuneMythHandler {
     private static final double KITSUNE_DEFENSE_REDUCTION = -0.3D;
     private static final int MASK_DURATION_TICKS = 220;
     private static final int INVISIBILITY_DURATION_TICKS = 40;
-    private static final int DASH_COOLDOWN_TICKS = 20 * 8;
+    private static final int DASH_COOLDOWN_TICKS = 20 * 4;
     private static final int DASH_IMMUNITY_TICKS = 20;
     private static final int FOXFIRE_COOLDOWN_TICKS = 20 * 4;
     private static final int WRATH_COOLDOWN_TICKS = 20 * 12;

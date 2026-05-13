@@ -7,6 +7,7 @@ import com.twily.mythos.gameplay.FairyMythHandler;
 import com.twily.mythos.gameplay.KitsuneMythHandler;
 import com.twily.mythos.gameplay.OniMythHandler;
 import com.twily.mythos.gameplay.ShulkerbornInventoryHandler;
+import com.twily.mythos.gameplay.SpiritMythHandler;
 import com.twily.mythos.myth.MythState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,6 +36,7 @@ public final class MythosNetwork {
         registrar.playToServer(UseFairyVisionPayload.TYPE, UseFairyVisionPayload.STREAM_CODEC, MythosNetwork::handleUseFairyVision);
         registrar.playToServer(UseKitsuneActionPayload.TYPE, UseKitsuneActionPayload.STREAM_CODEC, MythosNetwork::handleUseKitsuneAction);
         registrar.playToServer(UseOniActionPayload.TYPE, UseOniActionPayload.STREAM_CODEC, MythosNetwork::handleUseOniAction);
+        registrar.playToServer(UseSpiritActionPayload.TYPE, UseSpiritActionPayload.STREAM_CODEC, MythosNetwork::handleUseSpiritAction);
         registrar.playToServer(ClickShulkerbornSlotPayload.TYPE, ClickShulkerbornSlotPayload.STREAM_CODEC, MythosNetwork::handleClickShulkerbornSlot);
     }
 
@@ -118,6 +120,15 @@ public final class MythosNetwork {
             Player contextPlayer = context.player();
             if (contextPlayer instanceof ServerPlayer player) {
                 OniMythHandler.activateBattleForm(player);
+            }
+        });
+    }
+
+    private static void handleUseSpiritAction(UseSpiritActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (contextPlayer instanceof ServerPlayer player) {
+                SpiritMythHandler.performPhaseTransition(player);
             }
         });
     }

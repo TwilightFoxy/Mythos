@@ -36,6 +36,7 @@ public final class MythosClientRendering {
                 renderer.addLayer(new KitsuneAdornmentLayer(renderer, event.getEntityModels()));
                 renderer.addLayer(new OniAdornmentLayer(renderer));
                 renderer.addLayer(new SlimeDisguiseLayer(renderer, event.getEntityModels()));
+                renderer.addLayer(new SpiritGhostLayer(renderer));
             }
         }
     }

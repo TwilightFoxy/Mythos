@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smithing_transform",
+  "base": "minecraft:soul_lantern",
+  "addition": "minecraft:phantom_membrane",
+  "result": {
+    "id": "mythos:ethereal_candle"
+  }
+}
