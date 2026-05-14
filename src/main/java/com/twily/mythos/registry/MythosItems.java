@@ -11,6 +11,7 @@ import com.twily.mythos.world.item.MythSphereItem;
 import com.twily.mythos.world.item.MythosGuideItem;
 import com.twily.mythos.world.item.RageTalismanItem;
 import com.twily.mythos.world.item.SirenElixirItem;
+import com.twily.mythos.world.item.StarAnchorItem;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -25,6 +26,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -48,6 +50,9 @@ public final class MythosItems {
     private static final ResourceKey<Item> RESONANCE_SHARD_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "resonance_shard"));
     private static final ResourceKey<Item> ETHEREAL_CANDLE_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "ethereal_candle"));
     private static final ResourceKey<Item> IFRIT_LIGHTER_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "ifrit_lighter"));
+    private static final ResourceKey<Item> STAR_ANCHOR_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "star_anchor"));
+    private static final ResourceKey<Item> BOUND_STAR_ANCHOR_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "bound_star_anchor"));
+    private static final ResourceKey<Item> ASTRAL_LANTERN_KEY = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "astral_lantern"));
 
     public static final DeferredItem<Item> DWARVEN_ALE = ITEMS.register(
         "dwarven_ale",
@@ -190,6 +195,37 @@ public final class MythosItems {
                 .rarity(Rarity.UNCOMMON)
         )
     );
+    public static final DeferredItem<Item> STAR_ANCHOR = ITEMS.register(
+        "star_anchor",
+        () -> new StarAnchorItem(
+            false,
+            new Item.Properties()
+                .setId(STAR_ANCHOR_KEY)
+                .stacksTo(1)
+                .rarity(Rarity.RARE)
+        )
+    );
+    public static final DeferredItem<Item> BOUND_STAR_ANCHOR = ITEMS.register(
+        "bound_star_anchor",
+        () -> new StarAnchorItem(
+            true,
+            new Item.Properties()
+                .setId(BOUND_STAR_ANCHOR_KEY)
+                .stacksTo(1)
+                .rarity(Rarity.RARE)
+                .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+        )
+    );
+    public static final DeferredItem<Item> ASTRAL_LANTERN = ITEMS.register(
+        "astral_lantern",
+        () -> new BlockItem(
+            MythosBlocks.ASTRAL_LANTERN.get(),
+            new Item.Properties()
+                .setId(ASTRAL_LANTERN_KEY)
+                .stacksTo(16)
+                .rarity(Rarity.UNCOMMON)
+        )
+    );
     public static final DeferredItem<Item> REINFORCED_SHULKER_BOX = ITEMS.register(
         "reinforced_shulker_box",
         () -> new FoilBlockItem(
@@ -215,6 +251,35 @@ public final class MythosItems {
     public static Item[] reinforcedShulkerBoxItems() {
         ArrayList<Item> items = new ArrayList<>(1 + DYED_REINFORCED_SHULKER_BOXES.size());
         items.add(REINFORCED_SHULKER_BOX.get());
+        for (DeferredItem<Item> item : DYED_REINFORCED_SHULKER_BOXES.values()) {
+            items.add(item.get());
+        }
+        return items.toArray(Item[]::new);
+    }
+
+    public static Item[] creativeTabItems() {
+        ArrayList<Item> items = new ArrayList<>(List.of(
+            MYTHOS_GUIDE.get(),
+            MYTH_SPHERE.get(),
+            DWARVEN_ALE.get(),
+            FAIRY_MINECART.get(),
+            KITSUNE_MASK_VISUAL.get(),
+            KITSUNE_TAIL_VISUAL.get(),
+            KITSUNE_FOXFIRE_VISUAL.get(),
+            ONI_MASK_VISUAL.get(),
+            KITSUNE_TAIL_TUNER.get(),
+            FOX_LANTERN.get(),
+            SIREN_ELIXIR.get(),
+            RAGE_TALISMAN.get(),
+            CLINGING_GEL.get(),
+            RESONANCE_SHARD.get(),
+            ETHEREAL_CANDLE.get(),
+            IFRIT_LIGHTER.get(),
+            STAR_ANCHOR.get(),
+            BOUND_STAR_ANCHOR.get(),
+            ASTRAL_LANTERN.get(),
+            REINFORCED_SHULKER_BOX.get()
+        ));
         for (DeferredItem<Item> item : DYED_REINFORCED_SHULKER_BOXES.values()) {
             items.add(item.get());
         }

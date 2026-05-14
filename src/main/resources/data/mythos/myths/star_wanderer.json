@@ -1,0 +1,38 @@
+{
+  "icon": "minecraft:nether_star",
+  "order": 110,
+  "complexity": 5,
+  "description": "myth.mythos.star_wanderer.description",
+  "growth": "myth.mythos.star_wanderer.growth",
+  "advantages": [
+    "myth.mythos.star_wanderer.advantage.star_energy",
+    "myth.mythos.star_wanderer.advantage.star_step",
+    "myth.mythos.star_wanderer.advantage.star_wave",
+    "myth.mythos.star_wanderer.advantage.star_artifacts"
+  ],
+  "disadvantages": [
+    "myth.mythos.star_wanderer.disadvantage.no_sleep",
+    "myth.mythos.star_wanderer.disadvantage.starless_realms",
+    "myth.mythos.star_wanderer.disadvantage.supernova"
+  ],
+  "guide_features": [
+    "myth.mythos.star_wanderer.guide.feature.full_height",
+    "myth.mythos.star_wanderer.guide.feature.unlock",
+    "myth.mythos.star_wanderer.guide.feature.star_energy",
+    "myth.mythos.star_wanderer.guide.feature.star_step",
+    "myth.mythos.star_wanderer.guide.feature.falling_star",
+    "myth.mythos.star_wanderer.guide.feature.star_wave",
+    "myth.mythos.star_wanderer.guide.feature.no_sleep",
+    "myth.mythos.star_wanderer.guide.feature.supernova",
+    "myth.mythos.star_wanderer.guide.feature.starless_realms",
+    "myth.mythos.star_wanderer.guide.feature.star_anchor",
+    "myth.mythos.star_wanderer.guide.feature.astral_lantern"
+  ],
+  "guide_crafting": [
+    "myth.mythos.star_wanderer.guide.crafting.star_anchor",
+    "recipe:mythos:star_anchor",
+    "myth.mythos.star_wanderer.guide.crafting.astral_lantern",
+    "recipe:mythos:astral_lantern"
+  ],
+  "powers": []
+}

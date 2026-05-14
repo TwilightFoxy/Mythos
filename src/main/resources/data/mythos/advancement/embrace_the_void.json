@@ -1,0 +1,31 @@
+{
+  "parent": "mythos:mythos_root",
+  "display": {
+    "icon": {
+      "id": "minecraft:echo_shard"
+    },
+    "title": {
+      "translate": "advancement.mythos.embrace_the_void.title"
+    },
+    "description": {
+      "translate": "advancement.mythos.embrace_the_void.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "x": 0.0,
+    "y": -3.0
+  },
+  "criteria": {
+    "unlocked": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "unlocked"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

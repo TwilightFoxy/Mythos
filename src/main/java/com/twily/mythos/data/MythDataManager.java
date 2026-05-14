@@ -35,6 +35,8 @@ import java.util.Set;
 public final class MythDataManager {
 
     private static final Identifier RELOAD_LISTENER_ID = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "myth_data");
+    private static final Identifier STAR_WANDERER_ID = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "star_wanderer");
+    private static final Identifier VOID_WANDERER_ID = Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "void_wanderer");
     private static final MythReloadListener RELOAD_LISTENER = new MythReloadListener();
     private static volatile MythRepository repository = MythRepository.empty();
 
@@ -75,6 +77,29 @@ public final class MythDataManager {
     public static boolean selectableInMenu(Identifier mythId) {
         MythDefinition definition = repository.myths.get(mythId);
         return definition != null && !definition.hidden();
+    }
+
+    public static boolean selectableInMenu(Player player, Identifier mythId) {
+        if (!selectableInMenu(mythId)) {
+            return false;
+        }
+
+        if (STAR_WANDERER_ID.equals(mythId)) {
+            return player.getData(com.twily.mythos.registry.MythosAttachments.STAR_WANDERER_UNLOCKED);
+        }
+
+        if (VOID_WANDERER_ID.equals(mythId)) {
+            return player.getData(com.twily.mythos.registry.MythosAttachments.VOID_WANDERER_UNLOCKED);
+        }
+
+        return true;
+    }
+
+    public static List<MythDefinition> selectableMythsInOrder(Player player) {
+        return orderedMyths(repository.myths.values().stream()
+            .filter(definition -> !definition.hidden())
+            .filter(definition -> selectableInMenu(player, definition.id()))
+            .toList());
     }
 
     private static List<MythDefinition> orderedMyths(Collection<MythDefinition> definitions) {

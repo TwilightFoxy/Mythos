@@ -84,7 +84,9 @@ public final class FairyMythHandler {
                     player.setData(MythosAttachments.FAIRY_ELYTRA_MODE, false);
                     fairyElytraMode = false;
                 }
-                syncFairyFlight(player, false, false);
+                if (!MythState.matches(player, VoidWandererMythHandler.VOID_WANDERER_ID)) {
+                    syncFairyFlight(player, false, false);
+                }
                 return;
             }
 

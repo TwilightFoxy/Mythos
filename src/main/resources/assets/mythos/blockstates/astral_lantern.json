@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "hanging=false,range=0": {
+      "model": "minecraft:block/lantern"
+    },
+    "hanging=false,range=1": {
+      "model": "minecraft:block/lantern"
+    },
+    "hanging=false,range=2": {
+      "model": "minecraft:block/lantern"
+    },
+    "hanging=false,range=3": {
+      "model": "minecraft:block/lantern"
+    },
+    "hanging=true,range=0": {
+      "model": "minecraft:block/lantern_hanging"
+    },
+    "hanging=true,range=1": {
+      "model": "minecraft:block/lantern_hanging"
+    },
+    "hanging=true,range=2": {
+      "model": "minecraft:block/lantern_hanging"
+    },
+    "hanging=true,range=3": {
+      "model": "minecraft:block/lantern_hanging"
+    }
+  }
+}

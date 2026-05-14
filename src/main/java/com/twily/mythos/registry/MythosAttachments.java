@@ -111,6 +111,68 @@ public final class MythosAttachments {
             .build()
     );
 
+    public static final Supplier<AttachmentType<Boolean>> STAR_WANDERER_UNLOCKED = ATTACHMENT_TYPES.register(
+        "star_wanderer_unlocked",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("unlocked"))
+            .copyOnDeath()
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> STAR_WANDERER_ENERGY = ATTACHMENT_TYPES.register(
+        "star_wanderer_energy",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("energy"))
+            .sync((holder, player) -> true, ByteBufCodecs.INT)
+            .copyOnDeath()
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> STAR_WANDERER_STEP_COOLDOWN = ATTACHMENT_TYPES.register(
+        "star_wanderer_step_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("step_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> STAR_WANDERER_STRIKE_COOLDOWN = ATTACHMENT_TYPES.register(
+        "star_wanderer_strike_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("strike_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> STAR_WANDERER_WAVE_COOLDOWN = ATTACHMENT_TYPES.register(
+        "star_wanderer_wave_cooldown",
+        () -> AttachmentType.builder(() -> 0)
+            .serialize(Codec.INT.fieldOf("wave_cooldown"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> STAR_WANDERER_BEAM_ACTIVE = ATTACHMENT_TYPES.register(
+        "star_wanderer_beam_active",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("beam_active"))
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Boolean>> VOID_WANDERER_UNLOCKED = ATTACHMENT_TYPES.register(
+        "void_wanderer_unlocked",
+        () -> AttachmentType.builder(() -> false)
+            .serialize(Codec.BOOL.fieldOf("unlocked"))
+            .copyOnDeath()
+            .build()
+    );
+
+    public static final Supplier<AttachmentType<Integer>> VOID_WANDERER_ENERGY = ATTACHMENT_TYPES.register(
+        "void_wanderer_energy",
+        () -> AttachmentType.builder(() -> 50)
+            .serialize(Codec.INT.fieldOf("energy"))
+            .sync((holder, player) -> true, ByteBufCodecs.INT)
+            .copyOnDeath()
+            .build()
+    );
+
     public static final Supplier<AttachmentType<Boolean>> ARCH_FAIRY_SMALL = ATTACHMENT_TYPES.register(
         "arch_fairy_small",
         () -> AttachmentType.builder(() -> false)

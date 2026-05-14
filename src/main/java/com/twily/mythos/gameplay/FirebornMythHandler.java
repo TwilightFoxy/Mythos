@@ -74,12 +74,12 @@ public final class FirebornMythHandler {
     private static final int LAVA_BUCKET_HEAT = MAX_HEAT;
     private static final int FIREBALL_HEAT_COST = 10;
     private static final int FIRE_RING_HEAT_COST = 20;
-    private static final double EXTINGUISHING_SPEED = -0.35D;
+    private static final double EXTINGUISHING_SPEED = -0.60D;
     private static final double EXTINGUISHING_DAMAGE = -0.35D;
     private static final double SMOLDERING_SPEED = -0.15D;
     private static final double SMOLDERING_DAMAGE = -0.15D;
     private static final double HEATED_SPEED = 0.10D;
-    private static final double OVERHEATED_SPEED = 0.20D;
+    private static final double OVERHEATED_SPEED = 0.30D;
     private static final String FIREBORN_FUEL_MARKER = "mythos_fireborn_fuel";
     private static final FoodProperties FIREBORN_FUEL_PROPERTIES = new FoodProperties(0, 0.0F, true);
     private static final Consumable FIREBORN_FUEL_CONSUMABLE = Consumables.DEFAULT_FOOD;
@@ -238,7 +238,7 @@ public final class FirebornMythHandler {
         int heat = player.getData(MythosAttachments.FIREBORN_HEAT);
 
         if (player.tickCount % activeDrainInterval(player) == 0) {
-            heat--;
+            heat += player.level().dimension() == Level.NETHER ? 1 : -1;
         }
 
         if (isRainCooling(player) && player.tickCount % RAIN_DRAIN_INTERVAL == 0) {

@@ -9,6 +9,7 @@ import com.twily.mythos.gameplay.KitsuneMythHandler;
 import com.twily.mythos.gameplay.OniMythHandler;
 import com.twily.mythos.gameplay.ShulkerbornInventoryHandler;
 import com.twily.mythos.gameplay.SpiritMythHandler;
+import com.twily.mythos.gameplay.StarWandererMythHandler;
 import com.twily.mythos.myth.MythState;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,6 +40,7 @@ public final class MythosNetwork {
         registrar.playToServer(UseKitsuneActionPayload.TYPE, UseKitsuneActionPayload.STREAM_CODEC, MythosNetwork::handleUseKitsuneAction);
         registrar.playToServer(UseOniActionPayload.TYPE, UseOniActionPayload.STREAM_CODEC, MythosNetwork::handleUseOniAction);
         registrar.playToServer(UseSpiritActionPayload.TYPE, UseSpiritActionPayload.STREAM_CODEC, MythosNetwork::handleUseSpiritAction);
+        registrar.playToServer(UseStarWandererActionPayload.TYPE, UseStarWandererActionPayload.STREAM_CODEC, MythosNetwork::handleUseStarWandererAction);
         registrar.playToServer(ClickShulkerbornSlotPayload.TYPE, ClickShulkerbornSlotPayload.STREAM_CODEC, MythosNetwork::handleClickShulkerbornSlot);
     }
 
@@ -50,7 +52,7 @@ public final class MythosNetwork {
     }
 
     public static void openSelection(ServerPlayer player, boolean canClose) {
-        List<MythSelectionEntry> myths = MythDataManager.visibleMythsInOrder().stream()
+        List<MythSelectionEntry> myths = MythDataManager.selectableMythsInOrder(player).stream()
             .map(MythSelectionEntry::fromDefinition)
             .toList();
         PacketDistributor.sendToPlayer(player, new OpenMythSelectionPayload(myths, MythState.get(player), canClose));
@@ -63,7 +65,7 @@ public final class MythosNetwork {
                 return;
             }
 
-            if (!MythDataManager.selectableInMenu(payload.mythId()) || MythState.NONE.equals(payload.mythId())) {
+            if (!MythDataManager.selectableInMenu(player, payload.mythId()) || MythState.NONE.equals(payload.mythId())) {
                 player.sendSystemMessage(Component.translatable("command.mythos.unknown_myth", payload.mythId().toString()));
                 return;
             }
@@ -147,6 +149,24 @@ public final class MythosNetwork {
             Player contextPlayer = context.player();
             if (contextPlayer instanceof ServerPlayer player) {
                 SpiritMythHandler.performPhaseTransition(player);
+            }
+        });
+    }
+
+    private static void handleUseStarWandererAction(UseStarWandererActionPayload payload, IPayloadContext context) {
+        context.enqueueWork(() -> {
+            Player contextPlayer = context.player();
+            if (!(contextPlayer instanceof ServerPlayer player)) {
+                return;
+            }
+
+            switch (payload.action()) {
+                case "step" -> StarWandererMythHandler.performStarStep(player);
+                case "beam_start" -> StarWandererMythHandler.setBeamActive(player, true);
+                case "beam_stop" -> StarWandererMythHandler.setBeamActive(player, false);
+                case "wave" -> StarWandererMythHandler.castStarWave(player);
+                default -> {
+                }
             }
         });
     }

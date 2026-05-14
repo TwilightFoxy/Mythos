@@ -1,6 +1,7 @@
 package com.twily.mythos.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
+import com.twily.mythos.Mythos;
+import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.UseKitsuneActionPayload;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -8,47 +9,26 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.lwjgl.glfw.GLFW;
 
 public final class KitsuneActionKeyHandler {
 
-    private static final KeyMapping TOGGLE_MASK_KEY = new KeyMapping(
-        "key.mythos.kitsune_mask",
-        InputConstants.Type.KEYSYM,
-        GLFW.GLFW_KEY_G,
-        MythosKeyCategory.MYTHOS
-    );
-    private static final KeyMapping DASH_KEY = new KeyMapping(
-        "key.mythos.kitsune_dash",
-        InputConstants.Type.KEYSYM,
-        GLFW.GLFW_KEY_R,
-        MythosKeyCategory.MYTHOS
-    );
-    private static final KeyMapping FOXFIRE_KEY = new KeyMapping(
-        "key.mythos.kitsune_foxfire",
-        InputConstants.Type.KEYSYM,
-        GLFW.GLFW_KEY_B,
-        MythosKeyCategory.MYTHOS
-    );
+    private static final net.minecraft.resources.Identifier KITSUNE_ID = net.minecraft.resources.Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "kitsune");
     private KitsuneActionKeyHandler() {
     }
 
     public static void registerKeyMappings(net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent event) {
-        event.register(TOGGLE_MASK_KEY);
-        event.register(DASH_KEY);
-        event.register(FOXFIRE_KEY);
     }
 
     public static Component maskKeyName() {
-        return TOGGLE_MASK_KEY.getTranslatedKeyMessage();
+        return MythosSkillKeys.skill1Name();
     }
 
     public static Component dashKeyName() {
-        return DASH_KEY.getTranslatedKeyMessage();
+        return MythosSkillKeys.skill2Name();
     }
 
     public static Component foxfireKeyName() {
-        return FOXFIRE_KEY.getTranslatedKeyMessage();
+        return MythosSkillKeys.skill3Name();
     }
 
     public static final class Handler {
@@ -59,17 +39,17 @@ public final class KitsuneActionKeyHandler {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.player == null || minecraft.screen != null) {
+            if (minecraft.player == null || minecraft.screen != null || !MythState.matches(minecraft.player, KITSUNE_ID)) {
                 return;
             }
 
-            while (TOGGLE_MASK_KEY.consumeClick()) {
+            while (MythosSkillKeys.skill1().consumeClick()) {
                 ClientPacketDistributor.sendToServer(new UseKitsuneActionPayload("toggle_mask"));
             }
-            while (DASH_KEY.consumeClick()) {
+            while (MythosSkillKeys.skill2().consumeClick()) {
                 ClientPacketDistributor.sendToServer(new UseKitsuneActionPayload("dash"));
             }
-            while (FOXFIRE_KEY.consumeClick()) {
+            while (MythosSkillKeys.skill3().consumeClick()) {
                 ClientPacketDistributor.sendToServer(new UseKitsuneActionPayload("foxfire"));
             }
         }

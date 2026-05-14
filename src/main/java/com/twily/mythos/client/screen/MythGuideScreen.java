@@ -7,6 +7,7 @@ import com.twily.mythos.client.FirebornActionKeyHandler;
 import com.twily.mythos.client.KitsuneActionKeyHandler;
 import com.twily.mythos.client.OniActionKeyHandler;
 import com.twily.mythos.client.SpiritActionKeyHandler;
+import com.twily.mythos.client.StarWandererActionKeyHandler;
 import com.twily.mythos.Mythos;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.MythGuideEntry;
@@ -450,6 +451,12 @@ public final class MythGuideScreen extends Screen {
                 Component.translatable(lineKey, FirebornActionKeyHandler.ringKeyName());
             case "myth.mythos.spirit.guide.feature.phase_dash" ->
                 Component.translatable(lineKey, SpiritActionKeyHandler.phaseKeyName());
+            case "myth.mythos.star_wanderer.guide.feature.star_step" ->
+                Component.translatable(lineKey, StarWandererActionKeyHandler.stepKeyName());
+            case "myth.mythos.star_wanderer.guide.feature.falling_star" ->
+                Component.translatable(lineKey, StarWandererActionKeyHandler.strikeKeyName());
+            case "myth.mythos.star_wanderer.guide.feature.star_wave" ->
+                Component.translatable(lineKey, StarWandererActionKeyHandler.waveKeyName());
             default -> Component.translatable(lineKey);
         };
     }
@@ -499,6 +506,16 @@ public final class MythGuideScreen extends Screen {
                 new ItemStack(MythosItems.FAIRY_MINECART.get()),
                 new ItemStack(Items.MINECART),
                 new ItemStack(Items.WIND_CHARGE)
+            );
+            case "mythos:star_anchor" -> smithingPreview(
+                new ItemStack(MythosItems.STAR_ANCHOR.get()),
+                new ItemStack(Items.RECOVERY_COMPASS),
+                new ItemStack(Items.ENDER_PEARL)
+            );
+            case "mythos:astral_lantern" -> smithingPreview(
+                new ItemStack(MythosItems.ASTRAL_LANTERN.get()),
+                new ItemStack(Items.LANTERN),
+                new ItemStack(Items.AMETHYST_SHARD)
             );
             case "mythos:fox_lantern" -> smithingPreview(
                 new ItemStack(MythosItems.FOX_LANTERN.get()),

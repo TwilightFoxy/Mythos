@@ -2,6 +2,7 @@ package com.twily.mythos;
 
 import com.twily.mythos.client.ArchFairySizeKeyHandler;
 import com.twily.mythos.client.FirebornActionKeyHandler;
+import com.twily.mythos.client.StarWandererActionKeyHandler;
 import com.twily.mythos.client.HumanTradeOverlay;
 import com.twily.mythos.client.FairyFlightModeKeyHandler;
 import com.twily.mythos.client.FairyVisionKeyHandler;
@@ -14,6 +15,7 @@ import com.twily.mythos.client.MythosClientNetworking;
 import com.twily.mythos.client.MythosClientTintSources;
 import com.twily.mythos.client.ShulkerbornInventoryOverlay;
 import com.twily.mythos.client.ShulkerBoxTooltipCompat;
+import com.twily.mythos.client.MythosSkillKeys;
 import com.twily.mythos.client.config.MythosClientConfig;
 import com.twily.mythos.gameplay.SlimeMythHandler;
 import com.twily.mythos.data.MythDataManager;
@@ -21,6 +23,7 @@ import com.twily.mythos.network.MythosNetwork;
 import com.twily.mythos.registry.MythosAttachments;
 import com.twily.mythos.registry.MythosBlockEntities;
 import com.twily.mythos.registry.MythosBlocks;
+import com.twily.mythos.registry.MythosCreativeTabs;
 import com.twily.mythos.registry.MythosEntities;
 import com.twily.mythos.registry.MythosEffects;
 import com.twily.mythos.registry.MythosItems;
@@ -46,6 +49,7 @@ public final class Mythos {
         MythosBlockEntities.register(modBus);
         modBus.addListener(MythosBlockEntities::addValidBlocks);
         MythosBlocks.register(modBus);
+        MythosCreativeTabs.register(modBus);
         MythosEntities.register(modBus);
         modBus.addListener(MythosEntities::registerAttributes);
         MythosEffects.register(modBus);
@@ -55,13 +59,7 @@ public final class Mythos {
             modContainer.registerExtensionPoint(IConfigScreenFactory.class, (IConfigScreenFactory) (container, parent) -> new ConfigurationScreen(container, parent));
             modBus.addListener(MythosClientNetworking::registerClientPayloads);
             modBus.addListener(MythosKeyCategory::register);
-            modBus.addListener(ArchFairySizeKeyHandler::registerKeyMappings);
-            modBus.addListener(FirebornActionKeyHandler::registerKeyMappings);
-            modBus.addListener(FairyFlightModeKeyHandler::registerKeyMappings);
-            modBus.addListener(FairyVisionKeyHandler::registerKeyMappings);
-            modBus.addListener(KitsuneActionKeyHandler::registerKeyMappings);
-            modBus.addListener(OniActionKeyHandler::registerKeyMappings);
-            modBus.addListener(SpiritActionKeyHandler::registerKeyMappings);
+            modBus.addListener(MythosSkillKeys::registerKeyMappings);
             modBus.addListener(MythosClientRendering::registerRenderers);
             modBus.addListener(MythosClientRendering::registerLayerDefinitions);
             modBus.addListener(MythosClientRendering::addLayers);
@@ -75,6 +73,7 @@ public final class Mythos {
             NeoForge.EVENT_BUS.register(KitsuneActionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(OniActionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(SpiritActionKeyHandler.Handler.class);
+            NeoForge.EVENT_BUS.register(StarWandererActionKeyHandler.Handler.class);
             NeoForge.EVENT_BUS.register(new ShulkerbornInventoryOverlay());
             // Tail debug bindings are intentionally disabled in normal builds.
             // To bring them back for asset tuning, re-enable KitsuneTailDebugKeyHandler here.

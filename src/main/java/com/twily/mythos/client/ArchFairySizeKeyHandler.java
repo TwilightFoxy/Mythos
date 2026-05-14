@@ -1,6 +1,7 @@
 package com.twily.mythos.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
+import com.twily.mythos.Mythos;
+import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.ToggleArchFairySizePayload;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -9,26 +10,18 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.lwjgl.glfw.GLFW;
-
 public final class ArchFairySizeKeyHandler {
 
-    private static final KeyMapping ARCH_FAIRY_SIZE_KEY = new KeyMapping(
-        "key.mythos.arch_fairy_size",
-        InputConstants.Type.KEYSYM,
-        GLFW.GLFW_KEY_X,
-        MythosKeyCategory.MYTHOS
-    );
+    private static final net.minecraft.resources.Identifier ARCH_FAIRY_ID = net.minecraft.resources.Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "arch_fairy");
 
     private ArchFairySizeKeyHandler() {
     }
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        event.register(ARCH_FAIRY_SIZE_KEY);
     }
 
     public static Component keyName() {
-        return ARCH_FAIRY_SIZE_KEY.getTranslatedKeyMessage();
+        return MythosSkillKeys.skill3Name();
     }
 
     public static final class Handler {
@@ -39,11 +32,11 @@ public final class ArchFairySizeKeyHandler {
         @SubscribeEvent
         public static void onKeyInput(InputEvent.Key event) {
             Minecraft minecraft = Minecraft.getInstance();
-            if (minecraft.player == null || minecraft.screen != null) {
+            if (minecraft.player == null || minecraft.screen != null || !MythState.is(minecraft.player, ARCH_FAIRY_ID)) {
                 return;
             }
 
-            while (ARCH_FAIRY_SIZE_KEY.consumeClick()) {
+            while (MythosSkillKeys.skill3().consumeClick()) {
                 ClientPacketDistributor.sendToServer(new ToggleArchFairySizePayload());
             }
         }

@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "id": "mythos:mythos_guide"
+    },
+    "title": {
+      "translate": "advancement.mythos.root.title"
+    },
+    "description": {
+      "translate": "advancement.mythos.root.description"
+    },
+    "background": "minecraft:gui/advancements/backgrounds/end",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "opened": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "requirements": [
+    [
+      "opened"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

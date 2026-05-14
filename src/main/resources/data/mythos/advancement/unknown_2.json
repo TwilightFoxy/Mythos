@@ -1,0 +1,31 @@
+{
+  "parent": "mythos:mythos_root",
+  "display": {
+    "icon": {
+      "id": "minecraft:knowledge_book"
+    },
+    "title": {
+      "translate": "advancement.mythos.unknown_2.title"
+    },
+    "description": {
+      "translate": "advancement.mythos.unknown_2.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "x": 2.598,
+    "y": -1.5
+  },
+  "criteria": {
+    "unlocked": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "unlocked"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

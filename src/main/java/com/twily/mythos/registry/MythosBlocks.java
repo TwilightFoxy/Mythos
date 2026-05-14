@@ -1,6 +1,7 @@
 package com.twily.mythos.registry;
 
 import com.twily.mythos.Mythos;
+import com.twily.mythos.world.block.AstralLanternBlock;
 import com.twily.mythos.world.block.FoxLanternBlock;
 import com.twily.mythos.world.block.KitsuneFireBlock;
 import com.twily.mythos.world.block.ReinforcedShulkerBoxBlock;
@@ -44,6 +45,14 @@ public final class MythosBlocks {
             BlockBehaviour.Properties.ofFullCopy(Blocks.SOUL_LANTERN)
                 .setId(blockKey("fox_lantern"))
                 .lightLevel(state -> 12)
+        )
+    );
+    public static final DeferredBlock<Block> ASTRAL_LANTERN = BLOCKS.register(
+        "astral_lantern",
+        () -> new AstralLanternBlock(
+            BlockBehaviour.Properties.ofFullCopy(Blocks.LANTERN)
+                .setId(blockKey("astral_lantern"))
+                .lightLevel(state -> 14)
         )
     );
 

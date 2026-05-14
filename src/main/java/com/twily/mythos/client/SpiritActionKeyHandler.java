@@ -1,6 +1,5 @@
 package com.twily.mythos.client;
 
-import com.mojang.blaze3d.platform.InputConstants;
 import com.twily.mythos.gameplay.SpiritMythHandler;
 import com.twily.mythos.myth.MythState;
 import com.twily.mythos.network.UseSpiritActionPayload;
@@ -14,28 +13,19 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.Optional;
 
 public final class SpiritActionKeyHandler {
 
-    private static final KeyMapping SPIRIT_PHASE_KEY = new KeyMapping(
-        "key.mythos.spirit_phase",
-        InputConstants.Type.KEYSYM,
-        GLFW.GLFW_KEY_R,
-        MythosKeyCategory.MYTHOS
-    );
-
     private SpiritActionKeyHandler() {
     }
 
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        event.register(SPIRIT_PHASE_KEY);
     }
 
     public static Component phaseKeyName() {
-        return SPIRIT_PHASE_KEY.getTranslatedKeyMessage();
+        return MythosSkillKeys.skill1Name();
     }
 
     public static final class Handler {
@@ -49,7 +39,7 @@ public final class SpiritActionKeyHandler {
         public static void onClientTick(ClientTickEvent.Post event) {
             Minecraft minecraft = Minecraft.getInstance();
             Player player = minecraft.player;
-            boolean held = SPIRIT_PHASE_KEY.isDown();
+            boolean held = MythosSkillKeys.skill1().isDown();
 
             if (player == null) {
                 wasHeld = false;

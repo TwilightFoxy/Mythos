@@ -37,6 +37,7 @@ public final class MythosClientRendering {
                 renderer.addLayer(new OniAdornmentLayer(renderer));
                 renderer.addLayer(new SlimeDisguiseLayer(renderer, event.getEntityModels()));
                 renderer.addLayer(new SpiritGhostLayer(renderer));
+                renderer.addLayer(new StarWandererHaloLayer(renderer));
             }
         }
     }

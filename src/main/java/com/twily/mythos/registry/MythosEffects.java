@@ -2,10 +2,14 @@ package com.twily.mythos.registry;
 
 import com.twily.mythos.Mythos;
 import com.twily.mythos.world.effect.DwarvenAleEffect;
+import com.twily.mythos.world.effect.SimpleAttributeDisplayEffect;
 import com.twily.mythos.world.effect.SimpleDisplayEffect;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -98,6 +102,17 @@ public final class MythosEffects {
     public static final DeferredHolder<MobEffect, SimpleDisplayEffect> SPIRIT_ETHEREAL_STEPS = MOB_EFFECTS.register(
         "spirit_ethereal_steps",
         () -> new SimpleDisplayEffect(MobEffectCategory.BENEFICIAL, 0xA8E6FF)
+    );
+    public static final DeferredHolder<MobEffect, SimpleAttributeDisplayEffect> STAR_WANDERER_ASCENT = MOB_EFFECTS.register(
+        "star_wanderer_ascent",
+        () -> new SimpleAttributeDisplayEffect(
+            MobEffectCategory.BENEFICIAL,
+            0xBDEBFF,
+            Attributes.MOVEMENT_SPEED,
+            Identifier.fromNamespaceAndPath(Mythos.MOD_ID, "star_wanderer_ascent"),
+            0.2D,
+            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+        )
     );
 
     private MythosEffects() {

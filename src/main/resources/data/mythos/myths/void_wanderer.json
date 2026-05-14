@@ -1,0 +1,32 @@
+{
+  "icon": "minecraft:echo_shard",
+  "order": 111,
+  "complexity": 5,
+  "description": "myth.mythos.void_wanderer.description",
+  "growth": "myth.mythos.void_wanderer.growth",
+  "advantages": [
+    "myth.mythos.void_wanderer.advantage.void_energy",
+    "myth.mythos.void_wanderer.advantage.void_flight",
+    "myth.mythos.void_wanderer.advantage.regen",
+    "myth.mythos.void_wanderer.advantage.undead_neutral",
+    "myth.mythos.void_wanderer.advantage.void_respawn"
+  ],
+  "disadvantages": [
+    "myth.mythos.void_wanderer.disadvantage.no_food",
+    "myth.mythos.void_wanderer.disadvantage.no_sleep"
+  ],
+  "guide_features": [
+    "myth.mythos.void_wanderer.guide.feature.full_height",
+    "myth.mythos.void_wanderer.guide.feature.unlock",
+    "myth.mythos.void_wanderer.guide.feature.void_energy",
+    "myth.mythos.void_wanderer.guide.feature.void_flight",
+    "myth.mythos.void_wanderer.guide.feature.no_food",
+    "myth.mythos.void_wanderer.guide.feature.regen",
+    "myth.mythos.void_wanderer.guide.feature.undead_neutral",
+    "myth.mythos.void_wanderer.guide.feature.banish",
+    "myth.mythos.void_wanderer.guide.feature.no_sleep",
+    "myth.mythos.void_wanderer.guide.feature.void_respawn"
+  ],
+  "guide_crafting": [],
+  "powers": []
+}

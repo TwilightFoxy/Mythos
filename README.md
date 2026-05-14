@@ -17,7 +17,7 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 
 ## Current Version
 
-- `0.7.12`
+- `0.7.54`
 
 ## Core Systems
 
@@ -41,6 +41,12 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - selection stays brief, while the book gives the full breakdown
 - growth is shown as a separate section instead of being buried inside strengths
 
+### Shared Skill Keys
+
+- myth abilities now use shared `Skill 1`, `Skill 2`, and `Skill 3` keybinds
+- this keeps the controls menu compact instead of listing separate bindings for every myth
+- guide text maps each myth's abilities onto those shared slots
+
 ### Client Configuration
 
 - Mythos exposes a built-in NeoForge config screen from the mod list
@@ -60,6 +66,14 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - forging is handled through custom smithing logic where needed
 - smithing access is limited by myth where appropriate
 - reinforced shulker boxes use their own container line, loot handling, recolors, and tooltip support
+- a dedicated `Mythos` creative tab groups the mod's items together for testing and admin use
+
+### Mythic Unlocks
+
+- some myths are no longer available from the start
+- mythic advancements can permanently unlock rare myths for a specific player
+- unlocked mythic myths then appear in normal myth selection for that player
+- the advancement tab already includes the first celestial and abyssal unlocks
 
 ## Current Myths
 
@@ -171,6 +185,26 @@ Inspired by the general idea of fantasy origins and races, the mod builds its ow
 - can walk on lava and sink through it while sneaking
 - can forge an `Ifrit Lighter`
 
+### Star Wanderer
+
+- is a mythic sky myth unlocked through a height-based mythic advancement
+- stores up to `200` star energy charged under a clear night sky
+- never takes fall damage
+- gains speed at `25%` energy and regeneration at `75%`
+- uses `Star Step`, a held `Star Beam`, and `Star Wave`
+- dies in a `Supernova` that consumes remaining energy
+- can forge a `Star Anchor` and an `Astral Lantern`
+
+### Void Wanderer
+
+- is a mythic abyss myth unlocked through a depth-based mythic advancement
+- replaces hunger with a `Void` bar that charges in darkness
+- gains regeneration from `50%` Void and keeps undead neutral until provoked
+- can banish zombie and skeleton families with right-click, spending Void and healing slightly
+- can use creative-style flight near support, with night-time free flight in the Overworld
+- cannot sleep, cannot bind beds or anchors, and tries to respawn near the place of death
+- now has its own shadowy particle identity
+
 ## Myth Items and Utilities
 
 Current myth-specific gear and utilities include:
@@ -188,8 +222,12 @@ Current myth-specific gear and utilities include:
 - `Reinforced Shulker Box`
 - `Ethereal Candle`
 - `Ifrit Lighter`
+- `Star Anchor`
+- `Bound Star Anchor`
+- `Astral Lantern`
 - `Myth Sphere`
 - `Tome of Mythos`
+- `Soulbound` enchanted book support when the external graves datapack is present
 
 ## Hidden Variants
 
@@ -201,6 +239,14 @@ Current myth-specific gear and utilities include:
 
 - `arch_fairy`
   A hidden fairy variant that can manually shrink into a tiny speed-boosted form.
+
+## Mythic Advancements
+
+- `Infinity Is Not the Limit`
+  Unlocks the `Star Wanderer` by reaching the high celestial threshold in the Overworld.
+
+- `Where Light Dies`
+  Unlocks the `Void Wanderer` by descending to the deep abyssal threshold underground.
 
 ## Testing Workflow
 
